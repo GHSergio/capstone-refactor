@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography, IconButton } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import image1 from "../assets/image1.png";
-import image2 from "../assets/image2.png";
-import image3 from "../assets/image3.png";
+import image1 from "../../assets/image1.png";
+import image2 from "../../assets/image2.png";
+import image3 from "../../assets/image3.png";
 
 interface ImageCarouselProps {
   isPaused: boolean;
