@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Grid, Box, Typography, CardMedia, Button } from "@mui/material";
 import listNull from "../assets/listNull.png";
 import PodcastCard from "../components/CardComponent";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
+import MoreModal from "../components/MoreModal";
 
 const ListPage: React.FC = () => {
   const currentListId = useSelector(
@@ -12,9 +13,15 @@ const ListPage: React.FC = () => {
   const currentList = useSelector((state: RootState) =>
     state.podcast.lists.find((list) => list.id === currentListId)
   );
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // 控制Modal的狀態
   const handleMoreClick = () => {
-    console.log("更多按鈕被點擊");
+    setIsModalOpen(true);
+  };
+
+  const handleMoreClose = () => {
+    setIsModalOpen(false);
   };
 
   if (!currentList) {
@@ -27,9 +34,9 @@ const ListPage: React.FC = () => {
       <Grid
         container
         sx={{
-          margin: "6rem 1rem 0 1rem ",
           width: "100%",
           height: "100%",
+          margin: "0 auto",
           gap: 2,
           gridTemplateColumns: "repeat(auto-fill, minmax(178px, 1fr))",
         }}
@@ -101,6 +108,14 @@ const ListPage: React.FC = () => {
           </Box>
         )}
       </Grid>
+      {/* 渲染 MoreModal */}
+      {isModalOpen && (
+        <MoreModal
+          isOpen={isModalOpen}
+          onClose={handleMoreClose}
+          show={currentList.shows?.[0]}
+        />
+      )}
     </>
   );
 };

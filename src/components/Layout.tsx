@@ -1,5 +1,5 @@
 import React from "react";
-import { Box } from "@mui/material";
+import { Grid, Box } from "@mui/material";
 import SideBar from "./SideBar";
 import MainContent from "./MainContent";
 import Footer from "./Footer";
@@ -7,29 +7,31 @@ import Footer from "./Footer";
 const Layout: React.FC = () => {
   return (
     <>
-      <Box
+      <Grid
+        container
         width="100vw"
         height="100vh"
         sx={{ display: "flex", alignItems: "center" }}
       >
-        <Box
+        {/* SideBar */}
+        <Grid
+          item
+          xs={2}
           width={260}
           height="100%"
           sx={{ boxShadow: "0px 0px 2px 2px #C7C7C73D" }}
         >
           <SideBar />
-        </Box>
-
-        {/* <Box height="100%" sx={{ flex: 1, display: "flex", flexDirection: "column" }}> */}
-
-        <Box height="100%" sx={{ flex: 1 }}>
+        </Grid>
+        {/* MainContent */}
+        <Grid item xs={7} height="100%">
           <MainContent />
-        </Box>
-
-        <Box width={372} height="100%">
+        </Grid>
+        {/* Footer */}
+        <Grid item xs={3} width={372} height="100%">
           <Footer />
-        </Box>
-      </Box>
+        </Grid>
+      </Grid>
     </>
   );
 };

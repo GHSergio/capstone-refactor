@@ -1,36 +1,77 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
-import { removeEpisodeFromFavorite } from "../slice/podcastSlice";
-import { Box, Typography, Button, CardMedia } from "@mui/material";
+import { Box, Typography, CardMedia, useTheme } from "@mui/material";
+import { setActiveEpisode } from "../slice/podcastSlice";
 import listNull from "../assets/listNull.png";
+import EpisodeList from "../components/EpisodeList";
 const FavoritePage: React.FC = () => {
-  const dispatch = useDispatch();
   const favoriteEpisodes = useSelector(
     (state: RootState) => state.podcast.favoriteEpisodes
   );
+  const activeEpisodeId = useSelector(
+    (state: RootState) => state.podcast.activeEpisodeId
+  );
+  const theme = useTheme();
+  const dispatch = useDispatch();
 
-  const handleRemoveEpisode = (episodeId: string) => {
-    dispatch(removeEpisodeFromFavorite(episodeId));
+  const handleSetActive = (episodeId: string) => {
+    dispatch(setActiveEpisode(episodeId));
   };
 
   return (
     <>
-      <Box sx={{ padding: "1rem" }}>
+      <Box
+        p={1}
+        sx={{
+          maxHeight: "100%",
+          overflowY: "auto",
+          "&::-webkit-scrollbar": {
+            width: "0.5rem",
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "#f1f1f1",
+            borderRadius: "0.5rem",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "#C1C9D3",
+            borderRadius: "0.5rem",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            backgroundColor: "#555",
+            cursor: "pointer",
+          },
+        }}
+      >
         {favoriteEpisodes.length > 0 ? (
-          favoriteEpisodes.map((episode) => (
-            <Box key={episode.id} sx={{ marginBottom: "1rem" }}>
-              <Typography variant="h6">{episode.name}</Typography>
-              <Typography variant="body2">{episode.description}</Typography>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => handleRemoveEpisode(episode.id)}
+          favoriteEpisodes.map((episode) => {
+            const isActive = activeEpisodeId === episode.id;
+            return (
+              <Box
+                key={episode.id}
+                sx={{
+                  width: "100%",
+                  height: "170px",
+                  mb: 3,
+                  p: 3,
+                  borderRadius: 2,
+                  border: isActive
+                    ? `3px solid ${theme.palette.primary.main}`
+                    : "3px solid rgba(0,0,0,0.2)",
+                  position: "relative",
+                  cursor: "pointer",
+                }}
+                onClick={() => handleSetActive(episode.id)}
               >
-                移除收藏
-              </Button>
-            </Box>
-          ))
+                {/* List*/}
+                <EpisodeList
+                  episode={episode}
+                  imageWidth="100%"
+                  descriptionHeight="35px"
+                />
+              </Box>
+            );
+          })
         ) : (
           <Box
             gap={2}
@@ -38,7 +79,6 @@ const FavoritePage: React.FC = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              marginTop: "6rem",
             }}
           >
             <CardMedia

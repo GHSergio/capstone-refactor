@@ -10,10 +10,8 @@ const Footer = () => {
         sx={{
           backgroundColor: "#FFFFFF",
           boxShadow: "16px 16px 40px 0px #C7C7C73D",
-          filter: "blur(24%)",
-          opacity: 0.7,
           borderRadius: "1rem",
-          marginTop: "6rem",
+          marginTop: "5rem",
         }}
       >
         <Player />

@@ -39,7 +39,9 @@ const MainContent = () => {
         </Box>
 
         {/* 動態內容區域 */}
-        <Box>
+        <Box
+          sx={{ width: "95%", margin: "5rem auto 0 auto", overflowY: "auto" }}
+        >
           <Outlet />
         </Box>
       </Box>

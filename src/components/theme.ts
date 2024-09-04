@@ -43,16 +43,27 @@ const theme = createTheme({
       imageCarouselBackGround: imageCarouselBackGround,
     },
   },
-  // typography: {
-  //   fontFamily:
-  //     '"Roboto", "Helvetica", "Arial","Noto Sans TC" "Poppins",sans-serif',
-  //   h5: {
-  //     fontFamily: '"Noto Sans TC", sans-serif',
-  //     fontWeight: 700,
-  //   },
-  //   body2: {
-  //     fontFamily: '"Poppins", sans-serif',
-  //     fontWeight: 400,
+  // components: {
+  //   MuiCssBaseline: {
+  //     styleOverrides: {
+  //       body: {
+  //         "&::-webkit-scrollbar": {
+  //           width: "0.5rem", // 滾動條寬度
+  //         },
+  //         "&::-webkit-scrollbar-track": {
+  //           backgroundColor: "#f1f1f1",
+  //           borderRadius: "0.5rem", // 背景圓角
+  //         },
+  //         "&::-webkit-scrollbar-thumb": {
+  //           backgroundColor: "#C1C9D3",
+  //           borderRadius: "0.5rem", // 滑塊圓角
+  //         },
+  //         "&::-webkit-scrollbar-thumb:hover": {
+  //           backgroundColor: "#555", // 滑塊懸停顏色
+  //           cursor: "pointer",
+  //         },
+  //       },
+  //     },
   //   },
   // },
 });

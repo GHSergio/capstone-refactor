@@ -38,7 +38,13 @@ const CardComponent: React.FC<CardComponentProps> = ({
           boxShadow: "none",
         }}
       >
-        <CardMedia component="img" height="140" image={image} alt={name} />
+        <CardMedia
+          component="img"
+          height="140"
+          image={image}
+          alt={name}
+          sx={{ borderRadius: "0.5rem" }}
+        />
         <CardContent
           sx={{
             padding: "0.1rem 0",
@@ -73,7 +79,7 @@ const CardComponent: React.FC<CardComponentProps> = ({
           color="secondary"
           onClick={onMoreClick}
           sx={{
-            padding: "0.1rem",
+            padding: "0.1rem ",
             borderRadius: "0.25rem",
             marginTop: "0.25rem",
           }}
@@ -83,6 +89,7 @@ const CardComponent: React.FC<CardComponentProps> = ({
               color: "#FFFFFF",
               fontSize: "0.7rem",
               fontFamily: "Noto Sans TC",
+              lineHeight: "normal",
             }}
           >
             更多

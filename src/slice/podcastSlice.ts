@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-interface Episode {
+export interface Episode {
   id: string;
   name: string;
   image: string;
@@ -10,7 +10,7 @@ interface Episode {
   duration_ms: number;
 }
 
-interface Show {
+export interface Show {
   id: string;
   name: string;
   publish: string;
@@ -19,16 +19,17 @@ interface Show {
   episodes: Episode[];
 }
 
-interface List {
+export interface List {
   id: string;
   name: string;
   shows: Show[];
 }
 
-interface PodcastState {
+export interface PodcastState {
   lists: List[];
   currentListId: string | null;
   favoriteEpisodes: Episode[];
+  activeEpisodeId: string | null;
 }
 
 // 測試用的 show 數據
@@ -44,7 +45,8 @@ const testShows: Show[] = [
         id: "episode1",
         name: "早晨振奮音樂集",
         image: "https://via.placeholder.com/100",
-        description: "這是一個充滿活力的音樂集，適合開始你的一天。",
+        description:
+          "這是一個充滿活力的音樂集，適合開始你的一天。這是一個充滿活力的音樂集，適合開始你的一天。這是一個充滿活力的音樂集，適合開始你的一天。這是一個充滿活力的音樂集，適合開始你的一天。",
         release_date: "2024-09-10",
         duration_ms: 1800000,
       },
@@ -52,7 +54,26 @@ const testShows: Show[] = [
         id: "episode2",
         name: "柔和的早晨旋律",
         image: "https://via.placeholder.com/100",
-        description: "這是一個溫暖的音樂集，適合在通勤路上聆聽。",
+        description:
+          "這是一個溫暖的音樂集，適合在通勤路上聆聽。這是一個溫暖的音樂集，適合在通勤路上聆聽。這是一個溫暖的音樂集，適合在通勤路上聆聽。這是一個溫暖的音樂集，適合在通勤路上聆聽。",
+        release_date: "2024-09-11",
+        duration_ms: 2400000,
+      },
+      {
+        id: "episode3",
+        name: "早晨振奮音樂集",
+        image: "https://via.placeholder.com/100",
+        description:
+          "這是一個充滿活力的音樂集，適合開始你的一天。這是一個充滿活力的音樂集，適合開始你的一天。這是一個充滿活力的音樂集，適合開始你的一天。這是一個充滿活力的音樂集，適合開始你的一天。",
+        release_date: "2024-09-10",
+        duration_ms: 1800000,
+      },
+      {
+        id: "episode4",
+        name: "柔和的早晨旋律",
+        image: "https://via.placeholder.com/100",
+        description:
+          "這是一個溫暖的音樂集，適合在通勤路上聆聽。這是一個溫暖的音樂集，適合在通勤路上聆聽。這是一個溫暖的音樂集，適合在通勤路上聆聽。這是一個溫暖的音樂集，適合在通勤路上聆聽。",
         release_date: "2024-09-11",
         duration_ms: 2400000,
       },
@@ -109,7 +130,7 @@ const testShows: Show[] = [
     ],
   },
   {
-    id: "show1",
+    id: "show4",
     name: "通勤音樂合輯",
     publish: "2024-09-10",
     image: "https://via.placeholder.com/150",
@@ -134,7 +155,7 @@ const testShows: Show[] = [
     ],
   },
   {
-    id: "show2",
+    id: "show5",
     name: "深夜談話",
     publish: "2024-09-12",
     image: "https://via.placeholder.com/150",
@@ -159,7 +180,7 @@ const testShows: Show[] = [
     ],
   },
   {
-    id: "show3",
+    id: "show6",
     name: "科技前瞻",
     publish: "2024-09-14",
     image: "https://via.placeholder.com/150",
@@ -204,7 +225,27 @@ const initialState: PodcastState = {
     },
   ],
   currentListId: "1", // 默認選中第一個清單
-  favoriteEpisodes: [], // 初始化為空
+  favoriteEpisodes: [
+    {
+      id: "episode5",
+      name: "AI的未來",
+      image: "https://via.placeholder.com/100",
+      description:
+        "探討人工智慧的未來發展趨勢。探討人工智慧的未來發展趨勢。探討人工智慧的未來發展趨勢。探討人工智慧的未來發展趨勢。探討人工智慧的未來發展趨勢。探討人工智慧的未來發展趨勢。探討人工智慧的未來發展趨勢。探討人工智慧的未來發展趨勢。探討人工智慧的未來發展趨勢。探討人工智慧的未來發展趨勢。探討人工智慧的未來發展趨勢。",
+      release_date: "2024-09-14",
+      duration_ms: 3000000,
+    },
+    {
+      id: "episode6",
+      name: "區塊鏈技術",
+      image: "https://via.placeholder.com/100",
+      description:
+        "理解區塊鏈的基本概念及其應用。理解區塊鏈的基本概念及其應用。理解區塊鏈的基本概念及其應用。理解區塊鏈的基本概念及其應用。理解區塊鏈的基本概念及其應用。理解區塊鏈的基本概念及其應用。理解區塊鏈的基本概念及其應用。理解區塊鏈的基本概念及其應用。理解區塊鏈的基本概念及其應用。理解區塊鏈的基本概念及其應用。",
+      release_date: "2024-09-15",
+      duration_ms: 2500000,
+    },
+  ],
+  activeEpisodeId: null,
 };
 
 export const fetchPodcast = createAsyncThunk(
@@ -221,6 +262,12 @@ const podcastSlice = createSlice({
   name: "podcast",
   initialState,
   reducers: {
+    setActiveEpisode(state, action: PayloadAction<string>) {
+      state.activeEpisodeId = action.payload;
+    },
+    clearActiveEpisode(state) {
+      state.activeEpisodeId = null;
+    },
     setCurrentListId(state, action: PayloadAction<string>) {
       state.currentListId = action.payload;
     },
@@ -261,22 +308,20 @@ const podcastSlice = createSlice({
         state.currentListId = state.lists.length > 0 ? state.lists[0].id : null;
       }
     },
-    // 添加 episode 到收藏
-    addShowToFavorite(state, action: PayloadAction<Episode>) {
-      // 避免重複添加
-      if (
-        !state.favoriteEpisodes.some(
-          (episode) => episode.id === action.payload.id
-        )
-      ) {
-        state.favoriteEpisodes.push(action.payload);
-      }
-    },
-    // 從收藏中移除 episode
-    removeEpisodeFromFavorite(state, action: PayloadAction<string>) {
-      state.favoriteEpisodes = state.favoriteEpisodes.filter(
-        (episode) => episode.id !== action.payload
+    toggleFavorite(state, action: PayloadAction<Episode>) {
+      const episode = action.payload;
+      const isFavorite = state.favoriteEpisodes.some(
+        (favEpisode) => favEpisode.id === episode.id
       );
+      if (isFavorite) {
+        // 如果已收藏，則取消收藏
+        state.favoriteEpisodes = state.favoriteEpisodes.filter(
+          (favEpisode) => favEpisode.id !== episode.id
+        );
+      } else {
+        // 如果未收藏，則添加到收藏列表
+        state.favoriteEpisodes.push(episode);
+      }
     },
   },
   extraReducers: (builder) => {
@@ -299,8 +344,11 @@ export const {
   addShowToList,
   removeShowFromList,
   removeList,
-  addShowToFavorite,
-  removeEpisodeFromFavorite,
+  // addShowToFavorite,
+  // removeEpisodeFromFavorite,
+  toggleFavorite,
+  setActiveEpisode,
+  clearActiveEpisode,
 } = podcastSlice.actions;
 
 export default podcastSlice.reducer;
