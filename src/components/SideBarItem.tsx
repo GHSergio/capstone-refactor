@@ -8,6 +8,12 @@ import {
   Divider,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../store/store";
+import {
+  setIsActionModalOpen,
+  setIsSearchModalOpen,
+} from "../slice/podcastSlice";
 
 interface SideBarItemProps {
   text: string;
@@ -21,13 +27,21 @@ const SideBarItem: React.FC<SideBarItemProps> = ({
   onClick,
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const dispatch = useDispatch();
+  const { isActionModalOpen } = useSelector(
+    (state: RootState) => state.podcast
+  );
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleClickDropdown = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleClickAction = () => {
+    setIsActionModalOpen(true);
   };
 
   return (
@@ -47,7 +61,7 @@ const SideBarItem: React.FC<SideBarItemProps> = ({
       }}
     >
       <ListItemText primary={text} />
-      <IconButton onClick={handleClick}>
+      <IconButton onClick={handleClickDropdown}>
         <MoreVertIcon sx={{ color: isActive ? "#FEFEFE" : "inherit" }} />
       </IconButton>
       <Menu
@@ -67,7 +81,9 @@ const SideBarItem: React.FC<SideBarItemProps> = ({
         <Divider />
         <MenuItem onClick={handleClose}>刪除分類</MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>新增Podcast</MenuItem>
+        <MenuItem onClick={() => dispatch(setIsSearchModalOpen(true))}>
+          新增Podcast
+        </MenuItem>
       </Menu>
     </MUIListItem>
   );

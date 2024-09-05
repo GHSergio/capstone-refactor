@@ -43,29 +43,18 @@ const theme = createTheme({
       imageCarouselBackGround: imageCarouselBackGround,
     },
   },
-  // components: {
-  //   MuiCssBaseline: {
-  //     styleOverrides: {
-  //       body: {
-  //         "&::-webkit-scrollbar": {
-  //           width: "0.5rem", // 滾動條寬度
-  //         },
-  //         "&::-webkit-scrollbar-track": {
-  //           backgroundColor: "#f1f1f1",
-  //           borderRadius: "0.5rem", // 背景圓角
-  //         },
-  //         "&::-webkit-scrollbar-thumb": {
-  //           backgroundColor: "#C1C9D3",
-  //           borderRadius: "0.5rem", // 滑塊圓角
-  //         },
-  //         "&::-webkit-scrollbar-thumb:hover": {
-  //           backgroundColor: "#555", // 滑塊懸停顏色
-  //           cursor: "pointer",
-  //         },
-  //       },
-  //     },
-  //   },
-  // },
+  typography: {
+    fontFamily: "Noto Sans TC",
+    h6: {
+      fontWeight: 700,
+
+      fontSize: "1.25rem",
+    },
+    body1: {
+      fontWeight: 400,
+      fontSize: "1rem",
+    },
+  },
 });
 
 export default theme;

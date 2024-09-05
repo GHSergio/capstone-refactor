@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Box } from "@mui/material";
+import { Grid } from "@mui/material";
 import SideBar from "./SideBar";
 import MainContent from "./MainContent";
 import Footer from "./Footer";

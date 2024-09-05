@@ -9,12 +9,12 @@ import {
   IconButton,
   useTheme,
 } from "@mui/material";
-import { Show, Episode } from "../slice/podcastSlice";
-import closeIcon from "../assets/closeIcon.png";
-import EpisodeList from "./EpisodeList";
+import { Show, Episode } from "../../slice/podcastSlice";
+import closeIcon from "../../assets/closeIcon.png";
+import EpisodeList from "./../EpisodeList";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../store/store";
-import { setActiveEpisode } from "../slice/podcastSlice";
+import { RootState } from "../../store/store";
+import { setActiveEpisode } from "../../slice/podcastSlice";
 
 interface MoreModalProps {
   isOpen: boolean;

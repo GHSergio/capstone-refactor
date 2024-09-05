@@ -40,7 +40,13 @@ const MainContent = () => {
 
         {/* 動態內容區域 */}
         <Box
-          sx={{ width: "95%", margin: "5rem auto 0 auto", overflowY: "auto" }}
+          sx={{
+            width: "95%",
+            margin: "5rem auto 0 auto",
+            overflowY: "auto",
+
+            height: "100%",
+          }}
         >
           <Outlet />
         </Box>

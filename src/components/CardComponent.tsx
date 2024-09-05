@@ -12,7 +12,7 @@ interface CardComponentProps {
   image: string;
   name: string;
   publish: string;
-  onMoreClick: () => void;
+  onMoreClick?: () => void;
 }
 
 const CardComponent: React.FC<CardComponentProps> = ({
@@ -55,8 +55,6 @@ const CardComponent: React.FC<CardComponentProps> = ({
             component="div"
             sx={{
               fontSize: "0.9rem",
-              fontFamily: "Noto Sans TC",
-              fontWeight: "700",
             }}
           >
             {name}
@@ -66,8 +64,6 @@ const CardComponent: React.FC<CardComponentProps> = ({
             color="text.secondary"
             sx={{
               fontSize: "0.75rem",
-              fontFamily: "Noto Sans TC",
-              fontWeight: "400",
             }}
           >
             {publish}
@@ -87,9 +83,8 @@ const CardComponent: React.FC<CardComponentProps> = ({
           <Typography
             sx={{
               color: "#FFFFFF",
-              fontSize: "0.7rem",
-              fontFamily: "Noto Sans TC",
-              lineHeight: "normal",
+              fontSize: "0.8rem",
+              lineHeight: "1rem",
             }}
           >
             更多

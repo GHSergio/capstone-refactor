@@ -1,32 +1,72 @@
 import React, { useState } from "react";
 import { Grid, Box, Typography, CardMedia, Button } from "@mui/material";
 import listNull from "../assets/listNull.png";
-import PodcastCard from "../components/CardComponent";
-import { useSelector } from "react-redux";
+import CardComponent from "../components/CardComponent";
+import MoreModal from "../components/modals/MoreModal";
+import SearchModal from "../components/modals/SearchModal";
+import ActionModal from "../components/modals/ActionModal";
+
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
-import MoreModal from "../components/MoreModal";
+import {
+  addShowToList,
+  setIsActionModalOpen,
+  setIsSearchModalOpen,
+} from "../slice/podcastSlice";
 
 const ListPage: React.FC = () => {
+  const dispatch = useDispatch();
   const currentListId = useSelector(
     (state: RootState) => state.podcast.currentListId
   );
   const currentList = useSelector((state: RootState) =>
     state.podcast.lists.find((list) => list.id === currentListId)
   );
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const isActionModalOpen = useSelector(
+    (state: RootState) => state.podcast.isActionModalOpen
+  );
+  // const isSearchModalOpen = useSelector(
+  //   (state: RootState) => state.podcast.isSearchModalOpen
+  // );
+
+  const [isMoreModalOpen, setIsMoreModalOpen] = useState(false);
 
   // 控制Modal的狀態
   const handleMoreClick = () => {
-    setIsModalOpen(true);
+    setIsMoreModalOpen(true);
   };
 
   const handleMoreClose = () => {
-    setIsModalOpen(false);
+    setIsMoreModalOpen(false);
   };
 
   if (!currentList) {
     return <div>請選擇一個清單。</div>;
   }
+
+  const handleClickAction = () => {
+    dispatch(setIsActionModalOpen(true));
+  };
+
+  const handleClickSearch = () => {
+    dispatch(setIsSearchModalOpen(true));
+  };
+
+  // const handleSearchModal = () => {
+  //   setIsSearchModalOpen(false);
+  // };
+
+  const handleAddShow = () => {
+    const newShow = {
+      id: "new_podcast",
+      name: "新Podcast",
+      publish: "2024-10-01",
+      image: "https://via.placeholder.com/150",
+      description: "新加入的Podcast",
+      episodes: [],
+    };
+    dispatch(addShowToList({ listId: "1", show: newShow }));
+  };
 
   return (
     <>
@@ -39,6 +79,7 @@ const ListPage: React.FC = () => {
           margin: "0 auto",
           gap: 2,
           gridTemplateColumns: "repeat(auto-fill, minmax(178px, 1fr))",
+          alignContent: "flex-start",
         }}
       >
         {/* 個別卡片 */}
@@ -56,7 +97,7 @@ const ListPage: React.FC = () => {
                 overflow: "hidden", // 確保內部內容遵從圓角效果
               }}
             >
-              <PodcastCard
+              <CardComponent
                 image={show.image || listNull}
                 name={show.name}
                 publish={show.publish}
@@ -93,7 +134,11 @@ const ListPage: React.FC = () => {
                 backgroundColor: "#FF7F50",
                 borderRadius: "8px",
                 padding: "0.7rem 3rem",
+                // &:hover:{
+                //   backgroundColor: "#FF7F50",
+                // }
               }}
+              onClick={handleClickSearch}
             >
               <Typography
                 sx={{
@@ -108,14 +153,19 @@ const ListPage: React.FC = () => {
           </Box>
         )}
       </Grid>
-      {/* 渲染 MoreModal */}
-      {isModalOpen && (
+      {/* 顯示 MoreModal */}
+      {isMoreModalOpen && (
         <MoreModal
-          isOpen={isModalOpen}
+          isOpen={isMoreModalOpen}
           onClose={handleMoreClose}
           show={currentList.shows?.[0]}
         />
       )}
+      {/* 顯示 SearchModal */}
+      <SearchModal />
+
+      {/* 顯示 ActionModal */}
+      {isActionModalOpen && <ActionModal />}
     </>
   );
 };
