@@ -47,12 +47,53 @@ const theme = createTheme({
     fontFamily: "Noto Sans TC",
     h6: {
       fontWeight: 700,
-
       fontSize: "1.25rem",
     },
     body1: {
       fontWeight: 400,
       fontSize: "1rem",
+    },
+  },
+  components: {
+    // searchBar
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#F5F5F5",
+          borderRadius: "1rem",
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: "transparent", // 移除邊框顏色
+          },
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "transparent", // 移除 hover 狀態下的邊框顏色
+          },
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "transparent", // 移除 focused 狀態下的邊框顏色
+          },
+        },
+      },
+    },
+    // scrollbar
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          "&::-webkit-scrollbar": {
+            width: "0.5rem",
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "#f1f1f1",
+            borderRadius: "0.5rem",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "#C1C9D3",
+            borderRadius: "0.5rem",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            backgroundColor: "#555",
+            cursor: "pointer",
+          },
+        },
+      },
     },
   },
 });

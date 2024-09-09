@@ -9,28 +9,49 @@ import {
   IconButton,
   useTheme,
 } from "@mui/material";
-import { Show, Episode } from "../../slice/podcastSlice";
 import closeIcon from "../../assets/closeIcon.png";
 import EpisodeList from "./../EpisodeList";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store/store";
-import { setActiveEpisode } from "../../slice/podcastSlice";
+import {
+  Episode,
+  setActiveEpisode,
+  removeShowFromList,
+} from "../../slice/podcastSlice";
 
 interface MoreModalProps {
   isOpen: boolean;
   onClose: () => void;
-  show: Show;
 }
 
-const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose, show }) => {
+const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
-  const activeEpisodeId = useSelector(
-    (state: RootState) => state.podcast.activeEpisodeId
+  const { currentShowId, lists, activeEpisodeId, currentListId } = useSelector(
+    (state: RootState) => state.podcast
   );
   const theme = useTheme();
 
+  const currentList = lists.find((list) => list.id === currentListId);
+
+  const currentShow = currentList?.shows.find(
+    (show) => show.id === currentShowId
+  );
+
+  console.log(currentShow);
+
   const handleSetActive = (episodeId: string) => {
     dispatch(setActiveEpisode(episodeId));
+  };
+
+  const handleDelete = () => {
+    if (currentListId && currentShowId) {
+      dispatch(
+        removeShowFromList({ listId: currentListId, showId: currentShowId })
+      );
+      onClose();
+    } else {
+      console.error("currentListId 或 currentShowId 為 null，無法刪除");
+    }
   };
 
   return (
@@ -74,8 +95,8 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose, show }) => {
           <Grid item xs={2}>
             <Box
               component="img"
-              src={show.image}
-              alt={show.name}
+              src={currentShow?.image}
+              alt={currentShow?.name}
               sx={{ width: "95%", borderRadius: 2 }}
             />
           </Grid>
@@ -84,17 +105,17 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose, show }) => {
               variant="h6"
               component="h2"
               gutterBottom
-              sx={{ fontFamily: "Noto Sans TC", fontWeight: "500" }}
+              sx={{ fontWeight: "500" }}
             >
-              {show.name}
+              {currentShow?.name}
             </Typography>
             <Typography
               variant="subtitle1"
               color="text.secondary"
               gutterBottom
-              sx={{ fontFamily: "Noto Sans TC", fontWeight: "400" }}
+              sx={{ fontWeight: "400" }}
             >
-              {show.publish}
+              {currentShow?.publish}
             </Typography>
             <Typography
               variant="body2"
@@ -121,7 +142,7 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose, show }) => {
                 },
               }}
             >
-              {show.description}
+              {currentShow?.description}
             </Typography>
 
             {/* 刪除按鈕 */}
@@ -138,6 +159,7 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose, show }) => {
                 fontSize: "1rem",
                 fontFamily: "Noto Sans TC",
               }}
+              onClick={handleDelete}
             >
               刪除
             </Button>
@@ -169,7 +191,7 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose, show }) => {
             },
           }}
         >
-          {show.episodes.map((episode: Episode) => {
+          {currentShow?.episodes.map((episode: Episode) => {
             const isActive = activeEpisodeId === episode.id;
             return (
               <Box

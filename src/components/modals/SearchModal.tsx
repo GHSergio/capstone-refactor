@@ -32,7 +32,6 @@ const SearchModal = () => {
   const { isSearchModalOpen, filteredShows, selectedShows, currentListId } =
     useSelector((state: RootState) => state.podcast);
 
-  console.log(currentListId);
   const [searchTerm, setSearchTerm] = useState("");
   const handleSearchModalClose = () => {
     dispatch(setIsSearchModalOpen(false));
@@ -79,15 +78,6 @@ const SearchModal = () => {
           flexDirection: "column",
         }}
       >
-        {/* Modal Content */}
-        {/* <Box
-          sx={{
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
-          }}
-        > */}
         {/* Header */}
         <Box
           sx={{
@@ -101,8 +91,6 @@ const SearchModal = () => {
             variant="h6"
             sx={{
               width: "100%",
-              fontFamily: "Noto Sans TC",
-              fontWeight: "700",
               fontSize: "1.2rem",
             }}
           >
@@ -136,21 +124,6 @@ const SearchModal = () => {
                   <SearchIcon sx={{ color: "#ACADB9" }} />
                 </InputAdornment>
               ),
-            }}
-            sx={{
-              bgcolor: "#F5F5F5",
-              borderRadius: "1rem",
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: "transparent", // 移除邊框顏色
-                },
-                "&:hover fieldset": {
-                  borderColor: "transparent", // 移除 hover 時的邊框顏色變化
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "transparent", // 移除 focused 時的邊框顏色變化
-                },
-              },
             }}
           />
         </Box>
@@ -268,7 +241,6 @@ const SearchModal = () => {
             確認新增
           </Button>
         </Box>
-        {/* </Box> */}
       </Box>
     </Modal>
   );

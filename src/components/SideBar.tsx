@@ -2,15 +2,15 @@ import React from "react";
 import { Box, Divider } from "@mui/material";
 import Logo from "../assets/Logo.png";
 import SideBarItem from "./SideBarItem";
+import SidebarAddItem from "./SidebarAddItem";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
 import { setCurrentListId } from "../slice/podcastSlice";
 
 const Sidebar: React.FC = () => {
   const dispatch = useDispatch();
-  const lists = useSelector((state: RootState) => state.podcast.lists);
-  const currentListId = useSelector(
-    (state: RootState) => state.podcast.currentListId
+  const { lists, currentListId } = useSelector(
+    (state: RootState) => state.podcast
   );
 
   return (
@@ -43,11 +43,14 @@ const Sidebar: React.FC = () => {
             onClick={() => dispatch(setCurrentListId(list.id))}
           />
         ))}
+        {/* 收藏清單 */}
         <SideBarItem
           text="收藏清單"
           isActive={currentListId === "favorites"}
           onClick={() => dispatch(setCurrentListId("favorites"))}
         />
+        {/* 新增分類的按鈕 */}
+        <SidebarAddItem />
       </Box>
     </Box>
   );

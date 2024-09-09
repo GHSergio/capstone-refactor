@@ -8,17 +8,17 @@ import {
   Divider,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../store/store";
+import { useDispatch } from "react-redux";
 import {
-  setIsActionModalOpen,
   setIsSearchModalOpen,
+  setIsActionModalOpen,
+  setCurrentAction,
 } from "../slice/podcastSlice";
 
 interface SideBarItemProps {
-  text: string;
-  isActive: boolean;
-  onClick: () => void;
+  text?: string;
+  isActive?: boolean;
+  onClick?: () => void;
 }
 
 const SideBarItem: React.FC<SideBarItemProps> = ({
@@ -28,9 +28,6 @@ const SideBarItem: React.FC<SideBarItemProps> = ({
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const dispatch = useDispatch();
-  const { isActionModalOpen } = useSelector(
-    (state: RootState) => state.podcast
-  );
 
   const handleClickDropdown = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -40,8 +37,21 @@ const SideBarItem: React.FC<SideBarItemProps> = ({
     setAnchorEl(null);
   };
 
-  const handleClickAction = () => {
-    setIsActionModalOpen(true);
+  const handleEdit = () => {
+    dispatch(setCurrentAction("edit"));
+    dispatch(setIsActionModalOpen(true));
+    setAnchorEl(null);
+  };
+
+  const handleDelete = () => {
+    dispatch(setCurrentAction("delete"));
+    dispatch(setIsActionModalOpen(true));
+    setAnchorEl(null);
+  };
+
+  const handleAddShows = () => {
+    dispatch(setIsSearchModalOpen(true));
+    setAnchorEl(null);
   };
 
   return (
@@ -58,33 +68,38 @@ const SideBarItem: React.FC<SideBarItemProps> = ({
           backgroundColor: "#dddddd",
         },
         cursor: "pointer",
+        margin: "0.5rem 0",
       }}
     >
       <ListItemText primary={text} />
-      <IconButton onClick={handleClickDropdown}>
-        <MoreVertIcon sx={{ color: isActive ? "#FEFEFE" : "inherit" }} />
-      </IconButton>
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-      >
-        <MenuItem onClick={handleClose}>編輯名稱</MenuItem>
-        <Divider />
-        <MenuItem onClick={handleClose}>刪除分類</MenuItem>
-        <Divider />
-        <MenuItem onClick={() => dispatch(setIsSearchModalOpen(true))}>
-          新增Podcast
-        </MenuItem>
-      </Menu>
+      {text !== "收藏清單" && (
+        <>
+          <IconButton onClick={handleClickDropdown}>
+            <MoreVertIcon sx={{ color: isActive ? "#FEFEFE" : "inherit" }} />
+          </IconButton>
+
+          {/* DropDown */}
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+          >
+            <MenuItem onClick={handleEdit}>編輯名稱</MenuItem>
+            <Divider />
+            <MenuItem onClick={handleDelete}>刪除分類</MenuItem>
+            <Divider />
+            <MenuItem onClick={handleAddShows}>新增Podcast</MenuItem>
+          </Menu>
+        </>
+      )}
     </MUIListItem>
   );
 };

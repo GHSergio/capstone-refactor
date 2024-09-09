@@ -31,188 +31,16 @@ export interface PodcastState {
   currentListId: string | null;
   favoriteEpisodes: Episode[];
   activeEpisodeId: string | null;
+  currentPlayer: Episode | null;
   // 管理 新增|編輯|刪除 分類
   isActionModalOpen: boolean;
   currentAction: string | null;
   // 是否打開Search Modal
   isSearchModalOpen: boolean;
+  currentShowId: string | null;
   filteredShows: Show[];
   selectedShows: Show[];
 }
-
-// 測試用的 show 數據
-const testShows: Show[] = [
-  {
-    id: "show1",
-    name: "通勤音樂合輯",
-    publish: "2024-09-10",
-    image: "https://via.placeholder.com/150",
-    description: "這是為了通勤準備的音樂合輯，讓你的早晨更加愉快。",
-    episodes: [
-      {
-        id: "episode1",
-        name: "早晨振奮音樂集",
-        image: "https://via.placeholder.com/100",
-        description:
-          "這是一個充滿活力的音樂集，適合開始你的一天。這是一個充滿活力的音樂集，適合開始你的一天。這是一個充滿活力的音樂集，適合開始你的一天。這是一個充滿活力的音樂集，適合開始你的一天。",
-        release_date: "2024-09-10",
-        duration_ms: 1800000,
-      },
-      {
-        id: "episode2",
-        name: "柔和的早晨旋律",
-        image: "https://via.placeholder.com/100",
-        description:
-          "這是一個溫暖的音樂集，適合在通勤路上聆聽。這是一個溫暖的音樂集，適合在通勤路上聆聽。這是一個溫暖的音樂集，適合在通勤路上聆聽。這是一個溫暖的音樂集，適合在通勤路上聆聽。",
-        release_date: "2024-09-11",
-        duration_ms: 2400000,
-      },
-      {
-        id: "episode3",
-        name: "早晨振奮音樂集",
-        image: "https://via.placeholder.com/100",
-        description:
-          "這是一個充滿活力的音樂集，適合開始你的一天。這是一個充滿活力的音樂集，適合開始你的一天。這是一個充滿活力的音樂集，適合開始你的一天。這是一個充滿活力的音樂集，適合開始你的一天。",
-        release_date: "2024-09-10",
-        duration_ms: 1800000,
-      },
-      {
-        id: "episode4",
-        name: "柔和的早晨旋律",
-        image: "https://via.placeholder.com/100",
-        description:
-          "這是一個溫暖的音樂集，適合在通勤路上聆聽。這是一個溫暖的音樂集，適合在通勤路上聆聽。這是一個溫暖的音樂集，適合在通勤路上聆聽。這是一個溫暖的音樂集，適合在通勤路上聆聽。",
-        release_date: "2024-09-11",
-        duration_ms: 2400000,
-      },
-    ],
-  },
-  {
-    id: "show2",
-    name: "深夜談話",
-    publish: "2024-09-12",
-    image: "https://via.placeholder.com/150",
-    description: "在深夜裡，我們聊聊生活和未來。",
-    episodes: [
-      {
-        id: "episode3",
-        name: "夢想與現實的碰撞",
-        image: "https://via.placeholder.com/100",
-        description: "討論夢想和現實的差距以及如何面對。",
-        release_date: "2024-09-12",
-        duration_ms: 3600000,
-      },
-      {
-        id: "episode4",
-        name: "午夜音樂欣賞",
-        image: "https://via.placeholder.com/100",
-        description: "在夜晚聆聽一些舒緩的音樂，讓心靈得到放鬆。",
-        release_date: "2024-09-13",
-        duration_ms: 2700000,
-      },
-    ],
-  },
-  {
-    id: "show3",
-    name: "科技前瞻",
-    publish: "2024-09-14",
-    image: "https://via.placeholder.com/150",
-    description: "最新的科技新聞和趨勢分析。",
-    episodes: [
-      {
-        id: "episode5",
-        name: "AI的未來",
-        image: "https://via.placeholder.com/100",
-        description: "探討人工智慧的未來發展趨勢。",
-        release_date: "2024-09-14",
-        duration_ms: 3000000,
-      },
-      {
-        id: "episode6",
-        name: "區塊鏈技術",
-        image: "https://via.placeholder.com/100",
-        description: "理解區塊鏈的基本概念及其應用。",
-        release_date: "2024-09-15",
-        duration_ms: 2500000,
-      },
-    ],
-  },
-  {
-    id: "show4",
-    name: "通勤音樂合輯",
-    publish: "2024-09-10",
-    image: "https://via.placeholder.com/150",
-    description: "這是為了通勤準備的音樂合輯，讓你的早晨更加愉快。",
-    episodes: [
-      {
-        id: "episode1",
-        name: "早晨振奮音樂集",
-        image: "https://via.placeholder.com/100",
-        description: "這是一個充滿活力的音樂集，適合開始你的一天。",
-        release_date: "2024-09-10",
-        duration_ms: 1800000,
-      },
-      {
-        id: "episode2",
-        name: "柔和的早晨旋律",
-        image: "https://via.placeholder.com/100",
-        description: "這是一個溫暖的音樂集，適合在通勤路上聆聽。",
-        release_date: "2024-09-11",
-        duration_ms: 2400000,
-      },
-    ],
-  },
-  {
-    id: "show5",
-    name: "深夜談話",
-    publish: "2024-09-12",
-    image: "https://via.placeholder.com/150",
-    description: "在深夜裡，我們聊聊生活和未來。",
-    episodes: [
-      {
-        id: "episode3",
-        name: "夢想與現實的碰撞",
-        image: "https://via.placeholder.com/100",
-        description: "討論夢想和現實的差距以及如何面對。",
-        release_date: "2024-09-12",
-        duration_ms: 3600000,
-      },
-      {
-        id: "episode4",
-        name: "午夜音樂欣賞",
-        image: "https://via.placeholder.com/100",
-        description: "在夜晚聆聽一些舒緩的音樂，讓心靈得到放鬆。",
-        release_date: "2024-09-13",
-        duration_ms: 2700000,
-      },
-    ],
-  },
-  {
-    id: "show6",
-    name: "科技前瞻",
-    publish: "2024-09-14",
-    image: "https://via.placeholder.com/150",
-    description: "最新的科技新聞和趨勢分析。",
-    episodes: [
-      {
-        id: "episode5",
-        name: "AI的未來",
-        image: "https://via.placeholder.com/100",
-        description: "探討人工智慧的未來發展趨勢。",
-        release_date: "2024-09-14",
-        duration_ms: 3000000,
-      },
-      {
-        id: "episode6",
-        name: "區塊鏈技術",
-        image: "https://via.placeholder.com/100",
-        description: "理解區塊鏈的基本概念及其應用。",
-        release_date: "2024-09-15",
-        duration_ms: 2500000,
-      },
-    ],
-  },
-];
 
 const initialState: PodcastState = {
   // 虛擬的 Show 列表
@@ -483,10 +311,12 @@ const initialState: PodcastState = {
     },
   ],
   activeEpisodeId: null,
+  currentPlayer: null,
   isActionModalOpen: false,
   currentAction: null,
   isSearchModalOpen: false,
-  filteredShows: [], // 篩選後的結果
+  currentShowId: null,
+  filteredShows: [],
   selectedShows: [],
 };
 
@@ -504,7 +334,20 @@ const podcastSlice = createSlice({
   name: "podcast",
   initialState,
   reducers: {
+    // 播放器 相關
+    // 設置當前播放的 Episode
+    setCurrentPlayer(state, action: PayloadAction<Episode>) {
+      state.currentPlayer = action.payload;
+    },
+    // 清空當前播放的 Episode
+    clearCurrentPlayer(state) {
+      state.currentPlayer = null;
+    },
+
     // MoreModal 相關
+    setCurrentShow(state, action: PayloadAction<string | null>) {
+      state.currentShowId = action.payload;
+    },
     setActiveEpisode(state, action: PayloadAction<string>) {
       state.activeEpisodeId = action.payload;
     },
@@ -535,12 +378,25 @@ const podcastSlice = createSlice({
     setCurrentListId(state, action: PayloadAction<string>) {
       state.currentListId = action.payload;
     },
-    addList(state, action: PayloadAction<{ id: string; name: string }>) {
+    addList(state, action: PayloadAction<{ name: string }>) {
+      //新增的清單ID為Lists長度+1
+      const newId = (state.lists.length + 1).toString();
+
       state.lists.push({
-        id: action.payload.id,
+        id: newId,
         name: action.payload.name,
         shows: [],
       });
+    },
+    editListName(
+      state,
+      action: PayloadAction<{ listId: string; newName: string }>
+    ) {
+      const { listId, newName } = action.payload;
+      const list = state.lists.find((list) => list.id === listId);
+      if (list) {
+        list.name = newName;
+      }
     },
     removeList(state, action: PayloadAction<string>) {
       state.lists = state.lists.filter((list) => list.id !== action.payload);
@@ -560,6 +416,7 @@ const podcastSlice = createSlice({
         list.shows.push(...shows);
       }
     },
+
     removeShowFromList(
       state,
       action: PayloadAction<{ listId: string; showId: string }>
@@ -633,11 +490,15 @@ export const {
   setCurrentListId,
   setIsActionModalOpen,
   setCurrentAction,
+
   addList,
+  editListName,
+  removeList,
+
   addShowToList,
   removeShowFromList,
-  removeList,
   toggleFavorite,
+  setCurrentShow,
   setActiveEpisode,
   clearActiveEpisode,
   setIsSearchModalOpen,
@@ -645,6 +506,9 @@ export const {
   setSelectedShows,
   toggleSelectShow,
   clearSelectedShows,
+
+  setCurrentPlayer,
+  clearCurrentPlayer,
 } = podcastSlice.actions;
 
 export default podcastSlice.reducer;
