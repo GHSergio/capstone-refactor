@@ -28,9 +28,8 @@ const MainContent = () => {
         {/* 問候 */}
         <Box sx={{ position: "absolute", top: "2rem", left: "1.5rem" }}>
           <Typography
+            variant="h6"
             sx={{
-              fontFamily: "Noto Sans TC",
-              fontWeight: "700",
               fontSize: "1.5rem",
             }}
           >

@@ -32,6 +32,12 @@ export interface PodcastState {
   favoriteEpisodes: Episode[];
   activeEpisodeId: string | null;
   currentPlayer: Episode | null;
+  userProfile: any;
+  playlists: any[];
+  searchResults: any[];
+  currentShow: Show | null;
+  loading: boolean;
+  error: string | null | undefined;
   // 管理 新增|編輯|刪除 分類
   isActionModalOpen: boolean;
   currentAction: string | null;
@@ -312,6 +318,12 @@ const initialState: PodcastState = {
   ],
   activeEpisodeId: null,
   currentPlayer: null,
+  userProfile: null, // 初始化 userProfile
+  playlists: [], // 初始化 playlists
+  searchResults: [], // 初始化 searchResults
+  currentShow: null,
+  loading: false,
+  error: null,
   isActionModalOpen: false,
   currentAction: null,
   isSearchModalOpen: false,
@@ -320,6 +332,16 @@ const initialState: PodcastState = {
   selectedShows: [],
 };
 
+// Spotify API 基礎 URL
+const baseUrl = import.meta.env.VITE_SPOTIFY_API_BASE_URI;
+const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
+const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
+const redirectUri = import.meta.env.VITE_SPOTIFY_REDIRECT_URI;
+
+// Helper function: 獲取 accessToken
+const getSpotifyAccessToken = () => localStorage.getItem("access_token");
+
+// 定義 Spotify API 請求
 export const fetchPodcast = createAsyncThunk(
   "podcast/fetchPodcast",
   async (podcastId: number) => {
@@ -327,6 +349,77 @@ export const fetchPodcast = createAsyncThunk(
       `/api/podcasts/${podcastId}`
     );
     return response.data;
+  }
+);
+
+// 獲取使用者資訊
+export const fetchUserProfile = createAsyncThunk(
+  "spotify/fetchUserProfile",
+  async () => {
+    const token = getSpotifyAccessToken();
+    const userProfileEndpoint = baseUrl + "/v1/me";
+    const response = await axios.get(userProfileEndpoint, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(response);
+    return response.data;
+  }
+);
+
+// 獲取指定的 Show 和 Episode
+export const fetchShowWithEpisodes = createAsyncThunk(
+  "spotify/fetchShowWithEpisodes",
+  async (showId: string) => {
+    const token = getSpotifyAccessToken();
+    const uri = `${baseUrl}/v1/shows/${showId}`;
+    const response = await axios.get(uri, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  }
+);
+
+// 搜索 Shows
+export const searchShows = createAsyncThunk(
+  "spotify/searchShows",
+  async (query: string) => {
+    const token = getSpotifyAccessToken();
+    const url = `${baseUrl}/v1/search`;
+    const params = {
+      q: query,
+      type: "show",
+      limit: 15,
+    };
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params,
+    });
+    console.log(response);
+    return response.data.shows.items;
+  }
+);
+
+// 獲取使用者的播放列表
+export const fetchUserPlaylists = createAsyncThunk(
+  "spotify/fetchUserPlaylists",
+  async () => {
+    const token = getSpotifyAccessToken();
+    const url = `${baseUrl}/v1/me/playlists`;
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data.items.map((playlist: any) => ({
+      id: playlist.id,
+      name: playlist.name,
+    }));
   }
 );
 
@@ -346,7 +439,7 @@ const podcastSlice = createSlice({
 
     // MoreModal 相關
     setCurrentShow(state, action: PayloadAction<string | null>) {
-      state.currentShowId = action.payload;
+      state.currentShowId = action.payload ?? null;
     },
     setActiveEpisode(state, action: PayloadAction<string>) {
       state.activeEpisodeId = action.payload;
@@ -472,6 +565,7 @@ const podcastSlice = createSlice({
       }
     },
   },
+  // 處理Async
   extraReducers: (builder) => {
     builder
       .addCase(
@@ -482,6 +576,58 @@ const podcastSlice = createSlice({
       )
       .addCase(fetchPodcast.rejected, (_, action) => {
         console.error("API獲取失敗", action.error);
+      })
+      // 處理 fetchUserProfile
+      .addCase(fetchUserProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUserProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userProfile = action.payload;
+      })
+      .addCase(fetchUserProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      // 處理 fetchShowWithEpisodes
+      .addCase(fetchShowWithEpisodes.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchShowWithEpisodes.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentShow = action.payload;
+      })
+      .addCase(fetchShowWithEpisodes.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      // 處理 searchShows
+      .addCase(searchShows.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(searchShows.fulfilled, (state, action) => {
+        state.loading = false;
+        state.searchResults = action.payload;
+      })
+      .addCase(searchShows.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Search failed";
+      })
+      // 處理 fetchUserPlaylists
+      .addCase(fetchUserPlaylists.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUserPlaylists.fulfilled, (state, action) => {
+        state.loading = false;
+        state.playlists = action.payload;
+      })
+      .addCase(fetchUserPlaylists.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
       });
   },
 });

@@ -3,5 +3,15 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "compilerOptions": {
+    "types": ["node", "react", "react-dom"],
+    "allowJs": true, // 允許解析 JavaScript 文件
+    "checkJs": false, // 避免檢查 JavaScript 文件中的錯誤
+    "declaration": true, // 允許生成型別聲明
+    "moduleResolution": "node", // 使用 Node.js 的模組解析策略
+    "esModuleInterop": true // 支持與 CommonJS 的互操作性
+  },
+  // "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }

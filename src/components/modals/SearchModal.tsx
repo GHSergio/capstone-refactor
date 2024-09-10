@@ -16,7 +16,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../store/store";
+import { RootState, AppDispatch } from "../../store/store";
 import {
   setIsSearchModalOpen,
   filterShowsByKeyword,
@@ -24,15 +24,25 @@ import {
   clearSelectedShows,
   addShowToList,
   Show,
-  // setSelectedShows,
+  searchShows,
 } from "../../slice/podcastSlice";
 
 const SearchModal = () => {
-  const dispatch = useDispatch();
-  const { isSearchModalOpen, filteredShows, selectedShows, currentListId } =
-    useSelector((state: RootState) => state.podcast);
+  // const dispatch: AppDispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const {
+    isSearchModalOpen,
+    filteredShows,
+    selectedShows,
+    currentListId,
+    searchResults,
+  } = useSelector((state: RootState) => state.podcast);
 
   const [searchTerm, setSearchTerm] = useState("");
+
+  console.log("searchResults:", searchResults);
+
   const handleSearchModalClose = () => {
     dispatch(setIsSearchModalOpen(false));
     dispatch(clearSelectedShows());
@@ -50,7 +60,11 @@ const SearchModal = () => {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const keyword = e.target.value;
     setSearchTerm(keyword);
-    dispatch(filterShowsByKeyword(keyword));
+    // dispatch(filterShowsByKeyword(keyword));
+    // 調用 searchShows 進行 API 搜索
+    if (keyword.length > 0) {
+      dispatch(searchShows(keyword)); // 發送 API 搜索請求
+    }
   };
 
   const handleShowSelect = (show: Show) => {
@@ -137,8 +151,8 @@ const SearchModal = () => {
             overflowY: "auto",
           }}
         >
-          {filteredShows.length > 0 ? (
-            filteredShows.map((show) => (
+          {searchResults.length > 0 ? (
+            searchResults.map((show) => (
               <Grid
                 m={1}
                 key={show.id}

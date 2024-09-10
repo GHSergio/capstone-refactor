@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import ImageCarousel from "../components/LoginPage/ImageCarousel";
 import Logo from "../assets/Logo.png";
+import { loginWithSpotifyClick } from "../api/Author"; // 引入 login 函數
 
 const LoginPage: React.FC = () => {
   const [isPaused, setIsPaused] = useState(false);
@@ -12,6 +13,10 @@ const LoginPage: React.FC = () => {
 
   const handleMouseLeave = () => {
     setIsPaused(false); // 恢復自動輪播
+  };
+
+  const handleLoginClick = () => {
+    loginWithSpotifyClick(); // 觸發 Spotify 授權
   };
 
   return (
@@ -92,6 +97,7 @@ const LoginPage: React.FC = () => {
               // xl: "2.5rem",
             },
           }}
+          onClick={handleLoginClick}
         >
           <Button
             sx={{
