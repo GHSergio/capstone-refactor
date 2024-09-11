@@ -19,29 +19,27 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../store/store";
 import {
   setIsSearchModalOpen,
-  filterShowsByKeyword,
   toggleSelectShow,
   clearSelectedShows,
-  addShowToList,
-  Show,
   searchShows,
 } from "../../slice/podcastSlice";
-
+import {
+  addTrackToPlaylist,
+  removeTrackFromPlaylist,
+} from "../../slice/userSlice";
+import { Show } from "../../slice/types";
 const SearchModal = () => {
   // const dispatch: AppDispatch = useDispatch();
   const dispatch = useDispatch<AppDispatch>();
 
-  const {
-    isSearchModalOpen,
-    filteredShows,
-    selectedShows,
-    currentListId,
-    searchResults,
-  } = useSelector((state: RootState) => state.podcast);
+  const { isSearchModalOpen, selectedShows, searchResults } = useSelector(
+    (state: RootState) => state.podcast
+  );
+  const { currentListId } = useSelector((state: RootState) => state.user);
 
   const [searchTerm, setSearchTerm] = useState("");
 
-  console.log("searchResults:", searchResults);
+  // console.log("searchResults:", searchResults);
 
   const handleSearchModalClose = () => {
     dispatch(setIsSearchModalOpen(false));
@@ -51,7 +49,9 @@ const SearchModal = () => {
   // 將選中的 shows 添加到當前 list
   const handleConfirmAdd = () => {
     if (currentListId) {
-      dispatch(addShowToList({ listId: currentListId, shows: selectedShows }));
+      dispatch(
+        addShowToPlaylist({ playlistId: currentListId, show: selectedShows })
+      );
     }
     dispatch(setIsSearchModalOpen(false));
     dispatch(clearSelectedShows());
@@ -216,7 +216,7 @@ const SearchModal = () => {
                           fontWeight: "400",
                         }}
                       >
-                        {show.publish}
+                        {show.publisher}
                       </Typography>
                     </CardContent>
                   </Card>

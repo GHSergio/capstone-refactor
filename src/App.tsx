@@ -16,9 +16,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
 
 function AppRouter() {
-  const currentListId = useSelector(
-    (state: RootState) => state.podcast.currentListId
-  );
+  const { currentListId } = useSelector((state: RootState) => state.user);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -31,14 +29,17 @@ function AppRouter() {
       currentPath === "/login" || currentPath === "/callback";
 
     if (!isExemptPath) {
-      // 只在當前路徑不是 list 或 favorite 並且不在豁免路徑時才進行導航
-      if (currentListId === "favorites" && currentPath !== "/favorite") {
-        navigate("/favorite");
-      } else if (currentListId !== "favorites" && currentPath !== "/list") {
-        navigate("/list");
+      // 根據 currentListId 來導航，只在需要導航時才執行
+      if (currentListId === "favorites" && currentPath !== "/main/favorite") {
+        navigate("/main/favorite");
+      } else if (
+        currentListId !== "favorites" &&
+        currentPath !== "/main/list"
+      ) {
+        navigate("/main/list");
       }
     }
-  }, [currentListId, navigate, location]);
+  }, [currentListId, navigate, location.pathname]);
 
   return (
     <Routes>

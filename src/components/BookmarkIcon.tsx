@@ -4,7 +4,7 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 
 interface BookmarkButtonProps {
-  isFavorite: boolean;
+  isFavorite: boolean | undefined;
   onToggleFavorite: () => void;
 }
 

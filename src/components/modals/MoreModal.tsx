@@ -13,12 +13,9 @@ import closeIcon from "../../assets/closeIcon.png";
 import EpisodeList from "./../EpisodeList";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store/store";
-import {
-  Episode,
-  setActiveEpisode,
-  removeShowFromList,
-} from "../../slice/podcastSlice";
-
+import { setActiveEpisode } from "../../slice/podcastSlice";
+// import { removeShowFromPlaylist } from "../../slice/userSlice";
+import { Episode } from "../../slice/types";
 interface MoreModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -26,12 +23,15 @@ interface MoreModalProps {
 
 const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
-  const { currentShowId, lists, activeEpisodeId, currentListId } = useSelector(
+  const { currentShowId, activeEpisodeId } = useSelector(
     (state: RootState) => state.podcast
+  );
+  const { playlists, currentListId } = useSelector(
+    (state: RootState) => state.user
   );
   const theme = useTheme();
 
-  const currentList = lists.find((list) => list.id === currentListId);
+  const currentList = playlists?.find((list) => list.id === currentListId);
 
   const currentShow = currentList?.shows.find(
     (show) => show.id === currentShowId
@@ -46,7 +46,10 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
   const handleDelete = () => {
     if (currentListId && currentShowId) {
       dispatch(
-        removeShowFromList({ listId: currentListId, showId: currentShowId })
+        removeShowFromPlaylist({
+          playlistId: currentListId,
+          showId: currentShowId,
+        })
       );
       onClose();
     } else {
@@ -115,7 +118,7 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
               gutterBottom
               sx={{ fontWeight: "400" }}
             >
-              {currentShow?.publish}
+              {currentShow?.publisher}
             </Typography>
             <Typography
               variant="body2"

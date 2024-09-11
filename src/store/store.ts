@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import podcastReducer from "../slice/podcastSlice";
+import userReducer from "../slice/userSlice";
 
 export const store = configureStore({
   reducer: {
     podcast: podcastReducer,
+    user: userReducer,
   },
 });
 

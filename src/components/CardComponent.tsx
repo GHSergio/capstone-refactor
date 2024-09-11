@@ -7,20 +7,14 @@ import {
   Button,
   Box,
 } from "@mui/material";
+import { Show } from "../slice/types";
 
 interface CardComponentProps {
-  image: string;
-  name: string;
-  publish: string;
+  show: Show;
   onMoreClick?: () => void;
 }
 
-const CardComponent: React.FC<CardComponentProps> = ({
-  image,
-  name,
-  publish,
-  onMoreClick,
-}) => {
+const CardComponent: React.FC<CardComponentProps> = ({ show, onMoreClick }) => {
   return (
     <Box
       sx={{
@@ -41,8 +35,8 @@ const CardComponent: React.FC<CardComponentProps> = ({
         <CardMedia
           component="img"
           height="140"
-          image={image}
-          alt={name}
+          image={show.image}
+          alt={show.name}
           sx={{ borderRadius: "0.5rem" }}
         />
         <CardContent
@@ -57,7 +51,7 @@ const CardComponent: React.FC<CardComponentProps> = ({
               fontSize: "0.9rem",
             }}
           >
-            {name}
+            {show.name}
           </Typography>
           <Typography
             variant="body2"
@@ -66,7 +60,7 @@ const CardComponent: React.FC<CardComponentProps> = ({
               fontSize: "0.75rem",
             }}
           >
-            {publish}
+            {show.publisher}
           </Typography>
         </CardContent>
 

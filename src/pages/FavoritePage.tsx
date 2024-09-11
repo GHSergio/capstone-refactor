@@ -6,9 +6,7 @@ import { setActiveEpisode } from "../slice/podcastSlice";
 import listNull from "../assets/listNull.png";
 import EpisodeList from "../components/EpisodeList";
 const FavoritePage: React.FC = () => {
-  const favoriteEpisodes = useSelector(
-    (state: RootState) => state.podcast.favoriteEpisodes
-  );
+  const userFavorites = useSelector((state: RootState) => state.user);
   const activeEpisodeId = useSelector(
     (state: RootState) => state.podcast.activeEpisodeId
   );
@@ -43,8 +41,8 @@ const FavoritePage: React.FC = () => {
           },
         }}
       >
-        {favoriteEpisodes.length > 0 ? (
-          favoriteEpisodes.map((episode) => {
+        {userFavorites.length > 0 ? (
+          userFavorites.map((episode) => {
             const isActive = activeEpisodeId === episode.id;
             return (
               <Box

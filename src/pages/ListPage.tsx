@@ -12,11 +12,11 @@ import { setIsSearchModalOpen, setCurrentShow } from "../slice/podcastSlice";
 
 const ListPage: React.FC = () => {
   const dispatch = useDispatch();
-  const { currentListId } = useSelector((state: RootState) => state.podcast);
-
-  const currentList = useSelector((state: RootState) =>
-    state.podcast.lists.find((list) => list.id === currentListId)
+  const { currentListId, playlists } = useSelector(
+    (state: RootState) => state.user
   );
+
+  const currentList = playlists?.find((list) => list.id === currentListId);
 
   const [isMoreModalOpen, setIsMoreModalOpen] = useState(false);
 
@@ -71,7 +71,7 @@ const ListPage: React.FC = () => {
                 <CardComponent
                   image={show.image || listNull}
                   name={show.name}
-                  publish={show.publish}
+                  publisher={show.publisher}
                   onMoreClick={() => handleMoreClick(show.id)}
                 />
               </Grid>

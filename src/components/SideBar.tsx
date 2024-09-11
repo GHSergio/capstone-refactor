@@ -1,17 +1,29 @@
 import React from "react";
-import { Box, Divider } from "@mui/material";
+import { Box, Divider, Typography } from "@mui/material";
 import Logo from "../assets/Logo.png";
 import SideBarItem from "./SideBarItem";
 import SidebarAddItem from "./SidebarAddItem";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
-import { setCurrentListId } from "../slice/podcastSlice";
+import { setCurrentListId } from "../slice/userSlice";
 
 const Sidebar: React.FC = () => {
   const dispatch = useDispatch();
-  const { lists, currentListId } = useSelector(
-    (state: RootState) => state.podcast
+  // 從 userSlice 獲取播放清單和當前選中的清單 ID
+  const { playlists, currentListId } = useSelector(
+    (state: RootState) => state.user
   );
+
+  console.log("播放列表:", playlists);
+
+  // 如果 playlists 為空或未定義，顯示提示
+  if (!playlists || playlists.length === 0) {
+    return (
+      <Box sx={{ padding: "1.5rem" }}>
+        <Typography>無法獲取播放清單</Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -33,14 +45,14 @@ const Sidebar: React.FC = () => {
       {/* 分隔線 */}
       <Divider sx={{ width: "100%", my: "2rem" }} />
 
-      {/* 清單區 */}
+      {/* Spotify 播放清單 */}
       <Box sx={{ width: "100%" }}>
-        {lists.map((list) => (
+        {playlists?.map((playlist) => (
           <SideBarItem
-            key={list.id}
-            text={list.name}
-            isActive={currentListId === list.id}
-            onClick={() => dispatch(setCurrentListId(list.id))}
+            key={playlist.id}
+            text={playlist.name}
+            isActive={currentListId === playlist.id}
+            onClick={() => dispatch(setCurrentListId(playlist.id))}
           />
         ))}
         {/* 收藏清單 */}

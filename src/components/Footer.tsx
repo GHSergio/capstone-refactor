@@ -1,26 +1,35 @@
 import Player from "./Player";
 import { Box, Divider, Typography } from "@mui/material";
 import BookmarkIcon from "./BookmarkIcon";
+import User from "./User";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../store/store";
-import { toggleFavorite } from "../slice/podcastSlice";
+import { RootState, AppDispatch } from "../store/store";
+import { toggleEpisodeFavorite } from "../slice/userSlice";
 const Footer: React.FC = () => {
-  const dispatch = useDispatch();
-  const { favoriteEpisodes, currentPlayer } = useSelector(
-    (state: RootState) => state.podcast
-  );
+  const dispatch: AppDispatch = useDispatch();
+  const { currentPlayer } = useSelector((state: RootState) => state.podcast);
+  const { userFavorites } = useSelector((state: RootState) => state.user);
 
-  console.log("currentPlayer:", currentPlayer);
-  const isFavorite = favoriteEpisodes?.some(
+  // console.log("currentPlayer:", currentPlayer);
+
+  const isFavorite = userFavorites?.some(
     (favEpisode) => favEpisode.id === currentPlayer?.id
   );
 
+  // 處理收藏與取消收藏邏輯
   const handleToggleFavorite = () => {
-    if (currentPlayer !== null) dispatch(toggleFavorite(currentPlayer));
+    if (currentPlayer) {
+      dispatch(toggleEpisodeFavorite(currentPlayer.id));
+    }
   };
 
   return (
     <>
+      {/* User */}
+      <Box sx={{ position: "absolute", top: "40px", right: "60px" }}>
+        <User />
+      </Box>
+
       <Box
         width={312}
         height={596}

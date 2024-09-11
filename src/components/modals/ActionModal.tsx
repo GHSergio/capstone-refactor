@@ -9,20 +9,26 @@ import {
   TextField,
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../store/store";
+import { RootState, AppDispatch } from "../../store/store";
 import {
   setIsActionModalOpen,
-  addList,
-  removeList,
   setCurrentAction,
-  editListName,
 } from "../../slice/podcastSlice";
+import {
+  createUserPlaylist,
+  editUserPlaylistName,
+  deleteUserPlaylist,
+} from "../../slice/userSlice";
 import CloseIcon from "@mui/icons-material/Close";
 
 const ActionModal: React.FC = () => {
-  const dispatch = useDispatch();
-  const { isActionModalOpen, currentAction, currentListId, lists } =
-    useSelector((state: RootState) => state.podcast);
+  const dispatch: AppDispatch = useDispatch();
+  const { isActionModalOpen, currentAction } = useSelector(
+    (state: RootState) => state.podcast
+  );
+  const { currentListId, playlists } = useSelector(
+    (state: RootState) => state.user
+  );
 
   const [inputValue, setInputValue] = useState("");
 
@@ -39,22 +45,22 @@ const ActionModal: React.FC = () => {
 
     if (currentAction === "add") {
       // 新增分類的邏輯
-      dispatch(addList({ name: inputValue }));
+      dispatch(createUserPlaylist(inputValue));
     } else if (currentAction === "edit" && currentListId) {
       // 編輯分類的邏輯
-      dispatch(editListName({ listId: currentListId, newName: inputValue }));
+      dispatch(
+        editUserPlaylistName({ playlistId: currentListId, newName: inputValue })
+      );
     } else if (currentAction === "delete") {
       // 刪除分類的邏輯
       if (currentListId) {
-        dispatch(removeList(currentListId));
+        dispatch(deleteUserPlaylist(currentListId));
       }
     }
     handleClose();
   };
 
-  const currentList = lists.find((list) => list.id === currentListId);
-
-  console.log(lists);
+  const currentList = playlists?.find((list) => list.id === currentListId);
 
   return (
     <Modal open={isActionModalOpen} onClose={handleClose}>

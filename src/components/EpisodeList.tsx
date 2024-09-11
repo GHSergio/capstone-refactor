@@ -1,13 +1,10 @@
 import { Grid, Box, Typography, IconButton } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import {
-  toggleFavorite,
-  Episode,
-  setCurrentPlayer,
-} from "../slice/podcastSlice";
+import { setCurrentPlayer } from "../slice/podcastSlice";
 import player from "../assets/player.png";
 import BookmarkIcon from "./BookmarkIcon";
+import { Episode } from "../slice/types";
 
 interface EpisodeListProps {
   episode: Episode;
@@ -28,18 +25,16 @@ const EpisodeList: React.FC<EpisodeListProps> = ({
   descriptionHeight,
 }) => {
   const dispatch = useDispatch();
-  const favoriteEpisodes = useSelector(
-    (state: RootState) => state.podcast.favoriteEpisodes
-  );
+  const { userFavorites } = useSelector((state: RootState) => state.user);
 
   // 檢查當前單集是否已收藏
-  const isFavorite = favoriteEpisodes.some(
+  const isFavorite = userFavorites?.some(
     (favEpisode) => favEpisode.id === episode.id
   );
 
-  const handleToggleFavorite = () => {
-    dispatch(toggleFavorite(episode));
-  };
+  // const handleToggleFavorite = () => {
+  //   dispatch(toggleFavorite(episode));
+  // };
 
   // 將當前 episode 設為 currentPlayer
   const handleOnClickPlayer = () => {
@@ -52,7 +47,7 @@ const EpisodeList: React.FC<EpisodeListProps> = ({
       <Box sx={{ position: "absolute", top: 10, right: 0 }}>
         <BookmarkIcon
           isFavorite={isFavorite}
-          onToggleFavorite={handleToggleFavorite}
+          // onToggleFavorite={handleToggleFavorite}
         />
       </Box>
 
