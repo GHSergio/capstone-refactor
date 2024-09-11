@@ -32,7 +32,7 @@ export interface UserData {
 interface UserState {
   accessToken: string | null;
   userProfile: UserData | undefined;
-  playlists: Playlist[] | undefined;
+  userPlaylists: Playlist[] | undefined;
   userFavorites: Episode[] | undefined;
   currentListId: string | null;
   error: string | null;
@@ -42,13 +42,13 @@ interface UserState {
 const initialState: UserState = {
   accessToken: null,
   userProfile: undefined,
-  playlists: undefined,
+  userPlaylists: undefined,
   userFavorites: undefined,
   currentListId: "1",
   error: null,
 };
 
-// // 獲取token
+// 獲取token
 // const getSpotifyAccessToken = () => localStorage.getItem("access_token");
 
 // console.log(localStorage.getItem("access_token"));
@@ -56,12 +56,8 @@ const initialState: UserState = {
 // 獲取使用者資訊
 export const fetchUserProfile = createAsyncThunk(
   "spotify/fetchUserProfile",
-  async (_, { getState }) => {
-    // const token = getSpotifyAccessToken();
-    const state = getState() as { user: UserState };
-    const token = state.user.accessToken; // 從 Redux 狀態中獲取
-
-    if (!token) throw new Error("Access token not found");
+  async () => {
+    const token = localStorage.getItem("access_token");
 
     const userProfileEndpoint = baseUrl + "/v1/me";
     const response = await axios.get(userProfileEndpoint, {
@@ -79,12 +75,8 @@ export const fetchUserProfile = createAsyncThunk(
 // 獲取使用者的播放列表
 export const fetchUserPlaylists = createAsyncThunk(
   "spotify/fetchUserPlaylists",
-  async (_, { getState }) => {
-    // const token = getSpotifyAccessToken();
-    const state = getState() as { user: UserState };
-    const token = state.user.accessToken; // 從 Redux 狀態中獲取
-
-    if (!token) throw new Error("Access token not found");
+  async () => {
+    const token = localStorage.getItem("access_token");
 
     const url = `${baseUrl}/v1/me/playlists`;
     const response = await axios.get(url, {
@@ -99,13 +91,11 @@ export const fetchUserPlaylists = createAsyncThunk(
   }
 );
 
+// 獲取使用者播放列表
 export const fetchPlaylistTracks = createAsyncThunk(
   "spotify/fetchPlaylistTracks",
-  async (playlistId: string, { getState }) => {
-    const state = getState() as { user: UserState };
-    const token = state.user.accessToken;
-
-    if (!token) throw new Error("Access token not found");
+  async (playlistId: string) => {
+    const token = localStorage.getItem("access_token");
 
     const url = `${baseUrl}/v1/playlists/${playlistId}/tracks`;
     const response = await axios.get(url, {
@@ -120,12 +110,8 @@ export const fetchPlaylistTracks = createAsyncThunk(
 // 獲取使用者的收藏節目
 export const fetchUserFavorites = createAsyncThunk(
   "user/fetchUserFavorites",
-  async (_, { getState }) => {
-    // const token = getSpotifyAccessToken();
-    const state = getState() as { user: UserState };
-    const token = state.user.accessToken; // 從 Redux 狀態中獲取
-
-    if (!token) throw new Error("Access token not found");
+  async () => {
+    const token = localStorage.getItem("access_token");
 
     const url = `${baseUrl}/v1/me/episodes`;
     const response = await axios.get(url, {
@@ -309,8 +295,11 @@ const userSlice = createSlice({
     setUserData: (state, action: PayloadAction<UserData>) => {
       state.userProfile = action.payload;
     },
-    setPlaylists: (state, action: PayloadAction<Playlist[]>) => {
-      state.playlists = action.payload;
+    setUserPlaylists: (state, action: PayloadAction<Playlist[]>) => {
+      state.userPlaylists = action.payload;
+    },
+    setUserFavorites: (state, action: PayloadAction<Episode[]>) => {
+      state.userFavorites = action.payload;
     },
 
     // 使用者播放清單 相關
@@ -318,7 +307,7 @@ const userSlice = createSlice({
       state,
       action: PayloadAction<{ playlistId: string; newName: string }>
     ) => {
-      const playlist = state.playlists?.find(
+      const playlist = state.userPlaylists?.find(
         (pl) => pl.id === action.payload.playlistId
       );
       if (playlist) {
@@ -327,11 +316,11 @@ const userSlice = createSlice({
     },
 
     addPlaylist: (state, action: PayloadAction<Playlist>) => {
-      state.playlists?.push(action.payload); // 新增播放清單到本地
+      state.userPlaylists?.push(action.payload); // 新增播放清單到本地
     },
 
     removePlaylist: (state, action: PayloadAction<string>) => {
-      state.playlists = state.playlists?.filter(
+      state.userPlaylists = state.userPlaylists?.filter(
         (playlist) => playlist.id !== action.payload
       ); // 從本地移除播放清單
     },
@@ -341,7 +330,7 @@ const userSlice = createSlice({
       state,
       action: PayloadAction<{ playlistId: string; track: any }>
     ) => {
-      const playlist = state.playlists?.find(
+      const playlist = state.userPlaylists?.find(
         (pl) => pl.id === action.payload.playlistId
       );
       if (playlist) {
@@ -356,7 +345,7 @@ const userSlice = createSlice({
       state,
       action: PayloadAction<{ playlistId: string; trackId: string }>
     ) => {
-      const playlist = state.playlists?.find(
+      const playlist = state.userPlaylists?.find(
         (pl) => pl.id === action.payload.playlistId
       );
       if (playlist && playlist.trackItems) {
@@ -400,7 +389,7 @@ const userSlice = createSlice({
         // 將使用者資料存入 localStorage
         localStorage.setItem("user_playlists", JSON.stringify(responseData));
         // 更新全局狀態
-        state.playlists = responseData;
+        state.userPlaylists = responseData;
       })
       .addCase(fetchUserPlaylists.rejected, (state, action) => {
         state.error = action.error.message || "Failed to fetch playlists";
@@ -465,7 +454,8 @@ const userSlice = createSlice({
 export const {
   setAccessToken,
   setUserData,
-  setPlaylists,
+  setUserPlaylists,
+  setUserFavorites,
   addPlaylist,
   updatePlaylistName,
   removePlaylist,

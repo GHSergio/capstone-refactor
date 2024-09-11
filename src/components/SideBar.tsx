@@ -10,14 +10,14 @@ import { setCurrentListId } from "../slice/userSlice";
 const Sidebar: React.FC = () => {
   const dispatch = useDispatch();
   // 從 userSlice 獲取播放清單和當前選中的清單 ID
-  const { playlists, currentListId } = useSelector(
+  const { userPlaylists, currentListId } = useSelector(
     (state: RootState) => state.user
   );
 
-  console.log("播放列表:", playlists);
+  console.log("播放列表:", userPlaylists?.[0]);
 
   // 如果 playlists 為空或未定義，顯示提示
-  if (!playlists || playlists.length === 0) {
+  if (!userPlaylists || userPlaylists.length === 0) {
     return (
       <Box sx={{ padding: "1.5rem" }}>
         <Typography>無法獲取播放清單</Typography>
@@ -47,7 +47,7 @@ const Sidebar: React.FC = () => {
 
       {/* Spotify 播放清單 */}
       <Box sx={{ width: "100%" }}>
-        {playlists?.map((playlist) => (
+        {userPlaylists?.map((playlist) => (
           <SideBarItem
             key={playlist.id}
             text={playlist.name}

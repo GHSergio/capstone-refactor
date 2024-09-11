@@ -25,6 +25,13 @@ const CallbackPage = () => {
     const fetchData = async () => {
       const accessToken = localStorage.getItem("access_token");
 
+      // // 如果 accessToken 不存在，重試數次直到獲取到 token
+      // let retries = 5;
+      // while (!accessToken && retries > 0) {
+      //   await new Promise((resolve) => setTimeout(resolve, 500)); // 等待 500ms
+      //   retries--;
+      // }
+
       if (accessToken) {
         dispatch(setAccessToken(accessToken));
         updateProgress(10);
@@ -40,7 +47,7 @@ const CallbackPage = () => {
           updateProgress(30);
 
           setTimeout(() => {
-            navigate("/main/list");
+            navigate("/main");
           }, 2000);
         } catch (err) {
           setError("獲取資料失敗，請重新嘗試。");
