@@ -15,9 +15,9 @@ import {
   setCurrentAction,
 } from "../../slice/podcastSlice";
 import {
-  createUserPlaylist,
-  editUserPlaylistName,
-  deleteUserPlaylist,
+  createCategory,
+  updateCategory,
+  deleteCategory,
 } from "../../slice/userSlice";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -26,7 +26,7 @@ const ActionModal: React.FC = () => {
   const { isActionModalOpen, currentAction } = useSelector(
     (state: RootState) => state.podcast
   );
-  const { currentListId, playlists } = useSelector(
+  const { currentCategoryId, userCategories } = useSelector(
     (state: RootState) => state.user
   );
 
@@ -39,28 +39,33 @@ const ActionModal: React.FC = () => {
   };
 
   const handleConfirm = () => {
-    if (!currentListId) {
+    if (!currentCategoryId) {
       return;
     }
 
     if (currentAction === "add") {
       // 新增分類的邏輯
-      dispatch(createUserPlaylist(inputValue));
-    } else if (currentAction === "edit" && currentListId) {
+      dispatch(createCategory(inputValue));
+    } else if (currentAction === "edit" && currentCategoryId) {
       // 編輯分類的邏輯
       dispatch(
-        editUserPlaylistName({ playlistId: currentListId, newName: inputValue })
+        updateCategory({
+          categoryId: currentCategoryId,
+          newName: inputValue,
+        })
       );
     } else if (currentAction === "delete") {
       // 刪除分類的邏輯
-      if (currentListId) {
-        dispatch(deleteUserPlaylist(currentListId));
+      if (currentCategoryId) {
+        dispatch(deleteCategory(currentCategoryId));
       }
     }
     handleClose();
   };
 
-  const currentList = playlists?.find((list) => list.id === currentListId);
+  const currentList = userCategories?.find(
+    (list) => list.id === currentCategoryId
+  );
 
   return (
     <Modal open={isActionModalOpen} onClose={handleClose}>

@@ -1,10 +1,11 @@
-import { Grid, Box, Typography, IconButton } from "@mui/material";
+import { Grid, Box, Typography, IconButton, Tooltip } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store/store";
+import { RootState, AppDispatch } from "../store/store";
 import { setCurrentPlayer } from "../slice/podcastSlice";
 import player from "../assets/player.png";
 import BookmarkIcon from "./BookmarkIcon";
 import { Episode } from "../slice/types";
+import { addFavorite, removeFavorite } from "../slice/userSlice";
 
 interface EpisodeListProps {
   episode: Episode;
@@ -14,9 +15,13 @@ interface EpisodeListProps {
 
 // 毫秒轉換時數
 const formatDuration = (duration_ms: number) => {
-  const minutes = Math.floor(duration_ms / 60000);
-  const seconds = Math.floor((duration_ms % 60000) / 1000);
-  return `${minutes}分${seconds}秒`;
+  const hours = Math.floor(duration_ms / 3600000); // 每小時有 3600000 毫秒
+  const minutes = Math.floor((duration_ms % 3600000) / 60000); // 每分鐘有 60000 毫秒
+  const seconds = Math.floor((duration_ms % 60000) / 1000); // 每秒有 1000 毫秒
+  // 根據時數的存在情況，動態顯示
+  return hours > 0
+    ? `${hours}時${minutes}分${seconds}秒`
+    : `${minutes}分${seconds}秒`;
 };
 
 const EpisodeList: React.FC<EpisodeListProps> = ({
@@ -24,7 +29,7 @@ const EpisodeList: React.FC<EpisodeListProps> = ({
   imageWidth,
   descriptionHeight,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const { userFavorites } = useSelector((state: RootState) => state.user);
 
   // 檢查當前單集是否已收藏
@@ -32,11 +37,16 @@ const EpisodeList: React.FC<EpisodeListProps> = ({
     (favEpisode) => favEpisode.id === episode.id
   );
 
-  // const handleToggleFavorite = () => {
-  //   dispatch(toggleFavorite(episode));
-  // };
+  // 處理onClick書籤 根據是否已收藏來添加或移除收藏
+  const handleToggleFavorite = () => {
+    if (isFavorite) {
+      dispatch(removeFavorite(episode.id));
+    } else {
+      dispatch(addFavorite(episode.id));
+    }
+  };
 
-  // 將當前 episode 設為 currentPlayer
+  // 播放器處理
   const handleOnClickPlayer = () => {
     dispatch(setCurrentPlayer(episode));
   };
@@ -47,7 +57,7 @@ const EpisodeList: React.FC<EpisodeListProps> = ({
       <Box sx={{ position: "absolute", top: 10, right: 0 }}>
         <BookmarkIcon
           isFavorite={isFavorite}
-          // onToggleFavorite={handleToggleFavorite}
+          onToggleFavorite={handleToggleFavorite}
         />
       </Box>
 
@@ -57,31 +67,37 @@ const EpisodeList: React.FC<EpisodeListProps> = ({
         <Grid item xs={2}>
           <Box
             component="img"
-            src={episode.image}
+            src={episode.images?.[0]?.url}
             alt={episode.name}
-            sx={{ width: imageWidth, borderRadius: 2 }}
+            sx={{
+              width: imageWidth,
+              borderRadius: 2,
+              boxShadow: "0 0 2px 2px rgba(0,0,0,0.4)",
+            }}
           />
         </Grid>
         {/* 單集內容 */}
         <Grid item xs={9.5} sx={{ marginLeft: "0.5rem" }}>
           {/* 單集標題 */}
           {/* <Box> */}
-          <Typography
-            variant="subtitle1"
-            gutterBottom
-            sx={{
-              fontFamily: "Noto Sans TC",
-              fontWeight: "500",
-              width: "80%",
-              WebkitLineClamp: 1,
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              height: "30px",
-            }}
-          >
-            {episode.name}
-          </Typography>
+          <Tooltip title={episode.name} arrow>
+            <Typography
+              variant="subtitle1"
+              gutterBottom
+              sx={{
+                fontFamily: "Noto Sans TC",
+                fontWeight: "500",
+                width: "80%",
+                WebkitLineClamp: 1,
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                height: "30px",
+              }}
+            >
+              {episode.name}
+            </Typography>
+          </Tooltip>
           {/* </Box> */}
           {/* 單集介紹 */}
           <Box
@@ -89,7 +105,10 @@ const EpisodeList: React.FC<EpisodeListProps> = ({
               width: "100%",
               height: descriptionHeight,
               overflowY: "auto",
-              margin: "0.5rem 0rem",
+              margin: "0.3rem 0rem",
+              boxShadow: "0 0 3px 1px rgba(0,0,0,0.2)",
+              borderRadius: "0.3rem",
+              padding: "0.1rem",
               "&::-webkit-scrollbar": {
                 width: "0.5rem",
               },
@@ -108,12 +127,10 @@ const EpisodeList: React.FC<EpisodeListProps> = ({
             }}
           >
             <Typography
-              variant="body2"
+              variant="body1"
               color="text.secondary"
               gutterBottom
               sx={{
-                fontFamily: "Noto Sans TC",
-                fontWeight: "400",
                 display: "-webkit-box",
                 WebkitBoxOrient: "vertical",
                 overflowY: "auto",
@@ -134,7 +151,8 @@ const EpisodeList: React.FC<EpisodeListProps> = ({
               ></Box>
             </IconButton>
             <Typography variant="caption" color="#93989A">
-              {episode.release_date} · {formatDuration(episode.duration_ms)}
+              {episode.release_date} ·{" "}
+              {formatDuration(Number(episode?.duration_ms))}
             </Typography>
           </Box>
         </Grid>

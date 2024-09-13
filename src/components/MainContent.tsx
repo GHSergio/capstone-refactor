@@ -1,7 +1,11 @@
 import { Box, Typography } from "@mui/material";
-import { Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import ListPage from "../pages/ListPage";
+import FavoritePage from "../pages/FavoritePage";
 
 const MainContent = () => {
+  const { currentCategoryId } = useSelector((state: RootState) => state.user);
   const getGreeting = (): string => {
     const now = new Date();
     const hour = now.getHours();
@@ -40,14 +44,14 @@ const MainContent = () => {
         {/* 動態內容區域 */}
         <Box
           sx={{
-            width: "95%",
+            width: "100%",
+            padding: "1rem",
             margin: "5rem auto 0 auto",
             overflowY: "auto",
-
             height: "100%",
           }}
         >
-          <Outlet />
+          {currentCategoryId === "favorites" ? <FavoritePage /> : <ListPage />}
         </Box>
       </Box>
     </>

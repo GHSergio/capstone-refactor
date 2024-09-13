@@ -12,9 +12,9 @@ import {
 import closeIcon from "../../assets/closeIcon.png";
 import EpisodeList from "./../EpisodeList";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../store/store";
+import { RootState, AppDispatch } from "../../store/store";
 import { setActiveEpisode } from "../../slice/podcastSlice";
-// import { removeShowFromPlaylist } from "../../slice/userSlice";
+import { removeShowFromCategory } from "../../slice/userSlice";
 import { Episode } from "../../slice/types";
 interface MoreModalProps {
   isOpen: boolean;
@@ -22,20 +22,14 @@ interface MoreModalProps {
 }
 
 const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
-  const dispatch = useDispatch();
-  const { currentShowId, activeEpisodeId } = useSelector(
+  const dispatch: AppDispatch = useDispatch();
+  const { currentShow, activeEpisodeId } = useSelector(
     (state: RootState) => state.podcast
   );
-  const { playlists, currentListId } = useSelector(
-    (state: RootState) => state.user
-  );
+  const { currentCategoryId } = useSelector((state: RootState) => state.user);
   const theme = useTheme();
 
-  const currentList = playlists?.find((list) => list.id === currentListId);
-
-  const currentShow = currentList?.shows.find(
-    (show) => show.id === currentShowId
-  );
+  // console.log("當前的Show: ", currentShow);
 
   console.log(currentShow);
 
@@ -44,11 +38,11 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
   };
 
   const handleDelete = () => {
-    if (currentListId && currentShowId) {
+    if (currentCategoryId && currentShow) {
       dispatch(
-        removeShowFromPlaylist({
-          playlistId: currentListId,
-          showId: currentShowId,
+        removeShowFromCategory({
+          categoryId: currentCategoryId,
+          showId: currentShow.id,
         })
       );
       onClose();
@@ -98,36 +92,47 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
           <Grid item xs={2}>
             <Box
               component="img"
-              src={currentShow?.image}
+              src={currentShow?.images?.[0]?.url}
               alt={currentShow?.name}
-              sx={{ width: "95%", borderRadius: 2 }}
+              sx={{
+                width: "95%",
+                borderRadius: 2,
+                boxShadow: "0 0 2px 2px rgba(0,0,0,0.4)",
+              }}
             />
           </Grid>
           <Grid item xs={10}>
+            {/* Podcast頻道名稱 */}
             <Typography
               variant="h6"
-              component="h2"
               gutterBottom
-              sx={{ fontWeight: "500" }}
+              sx={{ fontSize: "1.1rem", width: "90%", margin: 0 }}
             >
               {currentShow?.name}
             </Typography>
+
+            {/* Podcast作者名稱 */}
             <Typography
-              variant="subtitle1"
+              variant="body1"
               color="text.secondary"
               gutterBottom
-              sx={{ fontWeight: "400" }}
+              sx={{ fontSize: "0.9rem", width: "90%", margin: 0 }}
             >
               {currentShow?.publisher}
             </Typography>
+
             <Typography
-              variant="body2"
+              variant="body1"
               color="text.secondary"
               sx={{
-                width: "100%",
-                height: "50px",
+                width: "95%",
+                height: "90px",
                 overflowY: "auto",
-                margin: "0.5rem 0rem",
+                // margin: "0.5rem 0rem",
+                fontSize: "0.8rem",
+                boxShadow: "0 0 3px 1px rgba(0,0,0,0.2)",
+                borderRadius: "0.3rem",
+                padding: "0.1rem",
                 "&::-webkit-scrollbar": {
                   width: "0.5rem",
                 },
@@ -152,12 +157,13 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
             <Button
               variant="outlined"
               sx={{
+                minWidth: "0",
                 color: "#FF5050",
                 borderColor: "#FF5050",
                 position: "absolute",
                 bottom: "0.5rem",
                 right: "0.5rem",
-                padding: "0.2rem 0.5rem",
+                padding: "0.05rem 0.2rem",
                 borderRadius: "0.5rem",
                 fontSize: "1rem",
                 fontFamily: "Noto Sans TC",
@@ -194,7 +200,7 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
             },
           }}
         >
-          {currentShow?.episodes.map((episode: Episode) => {
+          {currentShow?.episodes?.items?.map((episode: Episode) => {
             const isActive = activeEpisodeId === episode.id;
             return (
               <Box
@@ -217,7 +223,7 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
                 <EpisodeList
                   episode={episode}
                   imageWidth="90%"
-                  descriptionHeight="60px"
+                  descriptionHeight="70px"
                 />
               </Box>
             );

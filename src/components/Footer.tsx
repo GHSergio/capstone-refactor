@@ -4,7 +4,7 @@ import BookmarkIcon from "./BookmarkIcon";
 import User from "./User";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
-import { toggleEpisodeFavorite } from "../slice/userSlice";
+// import { toggleEpisodeFavorite } from "../slice/userSlice";
 const Footer: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const { currentPlayer } = useSelector((state: RootState) => state.podcast);
@@ -16,12 +16,12 @@ const Footer: React.FC = () => {
     (favEpisode) => favEpisode.id === currentPlayer?.id
   );
 
-  // 處理收藏與取消收藏邏輯
-  const handleToggleFavorite = () => {
-    if (currentPlayer) {
-      dispatch(toggleEpisodeFavorite(currentPlayer.id));
-    }
-  };
+  // // 處理收藏與取消收藏邏輯
+  // const handleToggleFavorite = () => {
+  //   if (currentPlayer) {
+  //     dispatch(toggleEpisodeFavorite(currentPlayer.id));
+  //   }
+  // };
 
   return (
     <>
@@ -54,7 +54,7 @@ const Footer: React.FC = () => {
           <Box sx={{ position: "absolute", right: 20, top: 0 }}>
             <BookmarkIcon
               isFavorite={isFavorite}
-              onToggleFavorite={handleToggleFavorite}
+              // onToggleFavorite={handleToggleFavorite}
             />
           </Box>
 

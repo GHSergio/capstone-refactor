@@ -1,282 +1,332 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { Show, Episode } from "./types";
+import { Episode, Show } from "./types";
 import axios from "axios";
 
-// Spotify API 基本 URL
-const baseUrl = "https://api.spotify.com";
-
-export interface Playlist {
+export interface Category {
   id: string;
   name: string;
-  description: string;
-  images: { url: string }[];
-  owner: { display_name: string };
-  tracks: {
-    href: string;
-    total: number; // 總曲目數量
-  };
-  trackItems?: any[]; // 動態加載的曲目列表
-}
-
-export interface UserFavorites {
-  episodes: Episode[];
+  savedShows: Show[];
 }
 
 export interface UserData {
   id: string;
   display_name: string;
-  images: { url: string }[]; // 使用者的圖片
+  images: { url: string }[];
   email: string;
 }
 
-interface UserState {
-  accessToken: string | null;
+export interface Favorite {
+  id: string;
+}
+
+interface AlertState {
+  open: boolean;
+  message: string;
+  severity: "success" | "error" | "info" | "warning";
+}
+
+export interface UserState {
+  acToken: string | null;
   userProfile: UserData | undefined;
-  userPlaylists: Playlist[] | undefined;
-  userFavorites: Episode[] | undefined;
-  currentListId: string | null;
-  error: string | null;
+  userCategories: Category[] | undefined;
+  userFavorites: Favorite[] | undefined;
+  currentCategoryId: string | null;
+  showsDetail: Show[]; // 向API獲取分類內的savedShows的Detail
+  episodeDetail: Episode[]; // 向API獲取收藏內EpisodeId的Detail
+  error: string | null | undefined;
+  loading: boolean;
+  alert: AlertState;
 }
 
 // 初始狀態
 const initialState: UserState = {
-  accessToken: null,
   userProfile: undefined,
-  userPlaylists: undefined,
-  userFavorites: undefined,
-  currentListId: "1",
+  acToken: null,
+  userCategories: [],
+  userFavorites: [],
+  currentCategoryId: "1",
+  showsDetail: [],
+  episodeDetail: [],
   error: null,
+  loading: false,
+  alert: {
+    open: false,
+    message: "",
+    severity: "info",
+  },
 };
 
-// 獲取token
-// const getSpotifyAccessToken = () => localStorage.getItem("access_token");
-
-// console.log(localStorage.getItem("access_token"));
+// Spotify API 基本 URL
+const spotifyBaseUrl = import.meta.env.VITE_SPOTIFY_API_BASE_URI;
+const AcBaseUri = import.meta.env.VITE_AC_API_BASE_URI;
 
 // 獲取使用者資訊
 export const fetchUserProfile = createAsyncThunk(
   "spotify/fetchUserProfile",
-  async () => {
+  async (_, { rejectWithValue }) => {
     const token = localStorage.getItem("access_token");
-
-    const userProfileEndpoint = baseUrl + "/v1/me";
-    const response = await axios.get(userProfileEndpoint, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const data = response.data;
-    console.log("使用者資訊: ", data);
-
-    return data;
-  }
-);
-
-// 獲取使用者的播放列表
-export const fetchUserPlaylists = createAsyncThunk(
-  "spotify/fetchUserPlaylists",
-  async () => {
-    const token = localStorage.getItem("access_token");
-
-    const url = `${baseUrl}/v1/me/playlists`;
-    const response = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const data = response.data.items;
-    console.log("使用者清單列表: ", data);
-
-    return data;
-  }
-);
-
-// 獲取使用者播放列表
-export const fetchPlaylistTracks = createAsyncThunk(
-  "spotify/fetchPlaylistTracks",
-  async (playlistId: string) => {
-    const token = localStorage.getItem("access_token");
-
-    const url = `${baseUrl}/v1/playlists/${playlistId}/tracks`;
-    const response = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return { playlistId, tracks: response.data.items }; // 返回曲目列表
-  }
-);
-
-// 獲取使用者的收藏節目
-export const fetchUserFavorites = createAsyncThunk(
-  "user/fetchUserFavorites",
-  async () => {
-    const token = localStorage.getItem("access_token");
-
-    const url = `${baseUrl}/v1/me/episodes`;
-    const response = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const data = response.data.items;
-    console.log("使用者收藏: ", response);
-
-    return data;
-  }
-);
-
-// 新增播放清單
-export const createUserPlaylist = createAsyncThunk(
-  "user/createUserPlaylist",
-  async (playlistName: string, { getState }) => {
-    // const token = getSpotifyAccessToken();
-    const state = getState() as { user: UserState };
-    const token = state.user.accessToken; // 從 Redux 狀態中獲取
-
-    if (!token) throw new Error("Access token not found");
-
-    const url = `${baseUrl}/v1/users/me/playlists`;
-    const response = await axios.post(
-      url,
-      { name: playlistName },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return response.data; // 回傳新增的播放清單
-  }
-);
-
-// 編輯播放清單名稱
-export const editUserPlaylistName = createAsyncThunk(
-  "user/editUserPlaylistName",
-  async (
-    { playlistId, newName }: { playlistId: string; newName: string },
-    { getState }
-  ) => {
-    const state = getState() as { user: UserState };
-    const token = state.user.accessToken; // 從 Redux 狀態中獲取
-
-    if (!token) throw new Error("Access token not found");
-
-    const url = `${baseUrl}/v1/playlists/${playlistId}`;
-    await axios.put(
-      url,
-      { name: newName }, // 發送新的名稱
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return { playlistId, newName }; // 返回修改結果
-  }
-);
-
-// 刪除播放清單
-export const deleteUserPlaylist = createAsyncThunk(
-  "user/deleteUserPlaylist",
-  async (playlistId: string, { getState }) => {
-    // const token = getSpotifyAccessToken();
-    const state = getState() as { user: UserState };
-    const token = state.user.accessToken; // 從 Redux 狀態中獲取
-
-    if (!token) throw new Error("Access token not found");
-
-    const url = `${baseUrl}/v1/playlists/${playlistId}/followers`;
-    await axios.delete(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return playlistId; // 回傳被刪除的播放清單 ID
-  }
-);
-
-// // 收藏節目到使用者收藏
-// export const addShowToFavorites = createAsyncThunk(
-//   "user/addShowToFavorites",
-//   async (showId: string, { getState }) => {
-//     // const token = getSpotifyAccessToken();
-//     const state = getState() as { user: UserState };
-//     const token = state.user.accessToken; // 從 Redux 狀態中獲取
-
-//     if (!token) throw new Error("Access token not found");
-
-//     const url = `${baseUrl}/v1/me/shows?ids=${showId}`;
-//     await axios.put(
-//       url,
-//       {},
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       }
-//     );
-//   }
-// );
-
-// // 從使用者的收藏中移除節目
-// export const removeShowFromFavorites = createAsyncThunk(
-//   "user/removeShowFromFavorites",
-//   async (showId: string, { getState }) => {
-//     // const token = getSpotifyAccessToken();
-//     const state = getState() as { user: UserState };
-//     const token = state.user.accessToken; // 從 Redux 狀態中獲取
-
-//     if (!token) throw new Error("Access token not found");
-//     const url = `${baseUrl}/v1/me/shows?ids=${showId}`;
-//     await axios.delete(url, {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     });
-//   }
-// );
-
-export const toggleEpisodeFavorite = createAsyncThunk(
-  "user/toggleEpisodeFavorite",
-  async (episodeId: string, { getState }) => {
-    const state = getState() as { user: UserState };
-    const token = state.user.accessToken; // 從 Redux 狀態中獲取
-
-    if (!token) throw new Error("Access token not found");
-
-    // 首先檢查是否已收藏該 episode
-    const url = `${baseUrl}/v1/me/episodes/contains?ids=${episodeId}`;
-    const response = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    const isFavorite = response.data[0]; // 如果為 true，表示已收藏
-
-    // 根據收藏狀態決定進行 PUT 或 DELETE 操作
-    if (isFavorite) {
-      // 已收藏，則移除
-      await axios.delete(`${baseUrl}/v1/me/episodes?ids=${episodeId}`, {
+    const userProfileEndpoint = spotifyBaseUrl + "/v1/me";
+    try {
+      const response = await axios.get(userProfileEndpoint, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-    } else {
-      // 未收藏，則新增
-      await axios.put(
-        `${baseUrl}/v1/me/episodes?ids=${episodeId}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const data = response.data;
+      // console.log("使用者資訊: ", data);
+      return data;
+    } catch (error) {
+      console.log("獲取使用者資訊失敗: ", error);
+      return rejectWithValue(error);
     }
+  }
+);
 
-    return { episodeId, isFavorite: !isFavorite }; // 回傳切換後的狀態
+// Spotify API 授權後創建 AC API 帳戶
+export const initializeAccount = createAsyncThunk(
+  "user/initializeAccount",
+  async (_, { rejectWithValue }) => {
+    const spotifyToken = localStorage.getItem("access_token");
+    const url = `${AcBaseUri}/api/users`;
+    const bodyParameters = { spotifyToken };
+    try {
+      const response = await axios.post(url, bodyParameters);
+      const token = response.data.token;
+      // localStorage.setItem("acToken", token);
+      // console.log("創建帳戶response: ", response, token);
+      return token;
+    } catch (error) {
+      console.log("創建AC帳號時發生錯誤: ", error);
+      return rejectWithValue("初始化帳戶失敗");
+    }
+  }
+);
+
+// 獲取收藏節目
+export const fetchUserFavorites = createAsyncThunk(
+  "user/fetchUserFavorites",
+  async (_, { rejectWithValue }) => {
+    const acToken = localStorage.getItem("acToken");
+    const url = `${AcBaseUri}/api/me`;
+    try {
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${acToken}`,
+        },
+      });
+      console.log("收藏: ", response);
+      return response.data.favoriteEpisodeIds;
+    } catch (error) {
+      console.log("獲取收藏失敗: ", error);
+      return rejectWithValue(error);
+    }
+  }
+);
+
+// 獲取分類清單
+export const fetchCategories = createAsyncThunk(
+  "user/fetchCategories",
+  async (_, { rejectWithValue }) => {
+    const acToken = localStorage.getItem("acToken");
+    const url = `${AcBaseUri}/api/categories`;
+    try {
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${acToken}`,
+        },
+      });
+      console.log("獲取分類清單: ", response);
+      return response.data.categories;
+    } catch (error) {
+      console.log("獲取分類清單時發生錯誤: ", error);
+      return rejectWithValue("移除分類清單失敗");
+    }
+  }
+);
+
+// 獲取指定的 Show 資訊
+export const fetchShow = createAsyncThunk(
+  "spotify/fetchShowWithEpisodes",
+  async (showId: string) => {
+    const token = localStorage.getItem("access_token");
+    const uri = `${spotifyBaseUrl}/v1/shows/${showId}`;
+    const response = await axios.get(uri, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  }
+);
+
+// 獲取指定Episode 資訊
+export const fetchEpisodeDetail = createAsyncThunk(
+  "podcast/fetchEpisodeDetail",
+  async (episodeId: string) => {
+    const token = localStorage.getItem("access_token");
+    const url = `${spotifyBaseUrl}/v1/episodes/${episodeId}`;
+    const response = await axios.get(url, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  }
+);
+
+// 添加episode到收藏
+export const addFavorite = createAsyncThunk(
+  "user/addFavorite",
+  async (episodeId: string, { rejectWithValue }) => {
+    const acToken = localStorage.getItem("acToken");
+    const url = `${AcBaseUri}/api/episodes`;
+    const bodyParam = { episodeId };
+    try {
+      const response = await axios.post(url, bodyParam, {
+        headers: {
+          Authorization: `Bearer ${acToken}`,
+        },
+      });
+      console.log("添加episode到收藏: ", response);
+      return { id: episodeId }; // 回傳一個包含id的物件
+    } catch (error) {
+      console.log("添加收藏時發生錯誤: ", error);
+      return rejectWithValue("添加收藏失敗");
+    }
+  }
+);
+
+// 從收藏移除episode
+export const removeFavorite = createAsyncThunk(
+  "user/removeFavorite",
+  async (episodeId: string, { rejectWithValue }) => {
+    const acToken = localStorage.getItem("acToken");
+    const url = `${AcBaseUri}/api/episodes/${episodeId}`;
+    try {
+      await axios.delete(url, {
+        headers: {
+          Authorization: `Bearer ${acToken}`,
+        },
+      });
+      // console.log("被刪除的episodeId: ", episodeId);
+      return episodeId;
+    } catch (error) {
+      console.log("移除收藏時發生錯誤: ", error);
+      return rejectWithValue("移除收藏失敗");
+    }
+  }
+);
+
+// 添加新的分類
+export const createCategory = createAsyncThunk(
+  "user/createCategory",
+  async (newTitle: string, { rejectWithValue }) => {
+    const url = `${AcBaseUri}/api/categories`;
+    const bodyParameters = { name: newTitle };
+    try {
+      const response = await axios.post(url, bodyParameters, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("acToken")}`,
+        },
+      });
+      console.log("新分類清單: ", response);
+      return response.data.category;
+    } catch (error) {
+      console.log("添加分類時發生錯誤: ", error);
+      return rejectWithValue("添加分類失敗");
+    }
+  }
+);
+
+// 刪除分類
+export const deleteCategory = createAsyncThunk(
+  "user/deleteCategory",
+  async (categoryId: string, { rejectWithValue }) => {
+    const url = `${AcBaseUri}/api/categories/${categoryId}`;
+    try {
+      await axios.delete(url, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("acToken")}`,
+        },
+      });
+      return categoryId;
+    } catch (error) {
+      console.log("移除分類時發生錯誤: ", error);
+      return rejectWithValue("移除分類清單失敗");
+    }
+  }
+);
+
+// 修改分類名稱
+export const updateCategory = createAsyncThunk(
+  "user/updateCategory",
+  async (
+    { categoryId, newName }: { categoryId: string; newName: string },
+    { rejectWithValue }
+  ) => {
+    const url = `${AcBaseUri}/api/categories/${categoryId}`;
+    const bodyParameters = { newName };
+    try {
+      await axios.put(url, bodyParameters, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("acToken")}`,
+        },
+      });
+      return { categoryId, newName };
+    } catch (error) {
+      console.log("修改分類名稱時發生錯誤: ", error);
+      return rejectWithValue("修改分類清單失敗");
+    }
+  }
+);
+
+// 添加show到分類
+export const addShowToCategory = createAsyncThunk(
+  "user/addShowToCategory",
+  async (
+    { categoryId, showId }: { categoryId: string; showId: string },
+    { rejectWithValue }
+  ) => {
+    const url = `${AcBaseUri}/api/categories/${categoryId}/shows`;
+    const bodyParam = { showId };
+
+    try {
+      const response = await axios.post(url, bodyParam, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("acToken")}`,
+        },
+      });
+
+      if (response.status === 201 || response.data.success) {
+        return { success: true, showId, categoryId };
+      } else {
+        return rejectWithValue(
+          `Failed with status: ${response.status} - ${response.statusText}`
+        );
+      }
+    } catch (error) {
+      return rejectWithValue(error || "添加分類清單失敗");
+    }
+  }
+);
+
+// 從分類中移除show
+export const removeShowFromCategory = createAsyncThunk(
+  "user/removeShowFromCategory",
+  async (
+    { categoryId, showId }: { categoryId: string; showId: string },
+    { rejectWithValue }
+  ) => {
+    const url = `${AcBaseUri}/api/categories/${categoryId}/shows/${showId}`;
+    try {
+      await axios.delete(url, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("acToken")}`,
+        },
+      });
+      return { categoryId, showId };
+    } catch (error) {
+      console.log("移除節目時發生錯誤: ", error);
+      return rejectWithValue("移除節目失敗");
+    }
   }
 );
 
@@ -285,186 +335,280 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    // 設置當前選中的播放清單 ID
-    setCurrentListId: (state, action: PayloadAction<string>) => {
-      state.currentListId = action.payload;
+    // Card 渲染
+    setShowsDetail(state, action: PayloadAction<Show[]>) {
+      state.showsDetail = action.payload;
     },
-    setAccessToken: (state, action: PayloadAction<string>) => {
-      state.accessToken = action.payload;
+    setAlert(state, action: PayloadAction<AlertState>) {
+      state.alert = action.payload;
+    },
+    clearAlert(state) {
+      state.alert = {
+        open: false,
+        message: "",
+        severity: "info",
+      };
+    },
+    setCurrentCategoryId: (state, action: PayloadAction<string>) => {
+      state.currentCategoryId = action.payload;
     },
     setUserData: (state, action: PayloadAction<UserData>) => {
       state.userProfile = action.payload;
     },
-    setUserPlaylists: (state, action: PayloadAction<Playlist[]>) => {
-      state.userPlaylists = action.payload;
+    setUserCategories: (state, action: PayloadAction<Category[]>) => {
+      state.userCategories = action.payload;
     },
-    setUserFavorites: (state, action: PayloadAction<Episode[]>) => {
+    setUserFavorites: (state, action: PayloadAction<Favorite[]>) => {
       state.userFavorites = action.payload;
     },
-
-    // 使用者播放清單 相關
-    updatePlaylistName: (
-      state,
-      action: PayloadAction<{ playlistId: string; newName: string }>
-    ) => {
-      const playlist = state.userPlaylists?.find(
-        (pl) => pl.id === action.payload.playlistId
-      );
-      if (playlist) {
-        playlist.name = action.payload.newName;
-      }
-    },
-
-    addPlaylist: (state, action: PayloadAction<Playlist>) => {
-      state.userPlaylists?.push(action.payload); // 新增播放清單到本地
-    },
-
-    removePlaylist: (state, action: PayloadAction<string>) => {
-      state.userPlaylists = state.userPlaylists?.filter(
-        (playlist) => playlist.id !== action.payload
-      ); // 從本地移除播放清單
-    },
-
-    // 修改播放清單相關的 reducer
-    addTrackToPlaylist: (
-      state,
-      action: PayloadAction<{ playlistId: string; track: any }>
-    ) => {
-      const playlist = state.userPlaylists?.find(
-        (pl) => pl.id === action.payload.playlistId
-      );
-      if (playlist) {
-        if (!playlist.trackItems) {
-          playlist.trackItems = []; // 如果沒有 trackItems，初始化為空數組
-        }
-        playlist.trackItems.push(action.payload.track); // 把 track 添加到 trackItems 列表中
-      }
-    },
-
-    removeTrackFromPlaylist: (
-      state,
-      action: PayloadAction<{ playlistId: string; trackId: string }>
-    ) => {
-      const playlist = state.userPlaylists?.find(
-        (pl) => pl.id === action.payload.playlistId
-      );
-      if (playlist && playlist.trackItems) {
-        // 從 trackItems 中過濾掉指定的 track
-        playlist.trackItems = playlist.trackItems.filter(
-          (track) => track.id !== action.payload.trackId
-        );
-      }
-    },
-
-    // 收藏相關
-    addEpisodeToFavorites: (state, action: PayloadAction<Episode>) => {
-      state.userFavorites?.push(action.payload);
-    },
-    removeEpisodeFromFavorites: (state, action: PayloadAction<string>) => {
-      state.userFavorites = state.userFavorites?.filter(
-        (episode) => episode.id !== action.payload
-      ); // 根據 ID 移除收藏中的 episode
-    },
   },
-
   extraReducers: (builder) => {
     builder
       // 處理 fetchUserProfile
+      .addCase(fetchUserProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(fetchUserProfile.fulfilled, (state, action) => {
         const responseData = action.payload;
-
         // 將使用者資料存入 localStorage
         localStorage.setItem("user_profile", JSON.stringify(responseData));
         // 更新全局狀態
         state.userProfile = responseData;
       })
       .addCase(fetchUserProfile.rejected, (state, action) => {
-        state.error = action.error.message || "Failed to fetch user profile";
+        state.error = action.payload as string;
+        state.loading = false;
+      });
+    // initializeAccount
+    builder
+      .addCase(initializeAccount.pending, (state) => {
+        state.loading = true;
+        state.error = null;
       })
-
-      // 處理 fetchUserPlaylists
-      .addCase(fetchUserPlaylists.fulfilled, (state, action) => {
-        const responseData = action.payload;
-
-        // 將使用者資料存入 localStorage
-        localStorage.setItem("user_playlists", JSON.stringify(responseData));
-        // 更新全局狀態
-        state.userPlaylists = responseData;
+      .addCase(initializeAccount.fulfilled, (state, action) => {
+        localStorage.setItem("acToken", action.payload);
+        state.loading = false;
       })
-      .addCase(fetchUserPlaylists.rejected, (state, action) => {
-        state.error = action.error.message || "Failed to fetch playlists";
-      })
+      .addCase(initializeAccount.rejected, (state, action) => {
+        state.error = action.payload as string;
+        state.loading = false;
+      });
 
-      // 處理 fetchUserFavorites
+    // fetchUserFavorites
+    builder
+      .addCase(fetchUserFavorites.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(fetchUserFavorites.fulfilled, (state, action) => {
-        const responseData = action.payload;
-
-        // 將使用者資料存入 localStorage
-        localStorage.setItem("user_favorites", JSON.stringify(responseData));
-        // 更新全局狀態
-        state.userFavorites = responseData;
+        state.userFavorites = action.payload;
+        state.loading = false;
+        // 保存到 localStorage
+        localStorage.setItem(
+          "user_favorites",
+          JSON.stringify(state.userFavorites || [])
+        );
       })
       .addCase(fetchUserFavorites.rejected, (state, action) => {
-        state.error = action.error.message || "Failed to fetch favorites";
-      })
-
-      // 處理 播放清單
-      .addCase(createUserPlaylist.fulfilled, (state, action) => {
-        state.playlists?.push(action.payload); // 新增成功後，將清單加入本地
-      })
-      .addCase(deleteUserPlaylist.fulfilled, (state, action) => {
-        state.playlists = state.playlists?.filter(
-          (playlist) => playlist.id !== action.payload
-        ); // 刪除成功後，從本地移除播放清單
-      })
-
-      // 處理 編輯播放清單名稱
-      .addCase(editUserPlaylistName.fulfilled, (state, action) => {
-        const { playlistId, newName } = action.payload;
-        const playlist = state.playlists?.find((pl) => pl.id === playlistId);
-        if (playlist) {
-          playlist.name = newName; // 更新本地播放清單名稱
-        }
-      })
-      // 處理 收藏
-      .addCase(toggleEpisodeFavorite.fulfilled, (state, action) => {
-        const { episodeId, isFavorite } = action.payload;
-        if (isFavorite) {
-          // 如果被加入收藏，則新增到 userFavorites
-          state.userFavorites?.push({ id: episodeId } as Episode);
-        } else {
-          // 否則移除收藏
-          state.userFavorites = state.userFavorites?.filter(
-            (episode) => episode.id !== episodeId
-          );
-        }
-      })
-      // 處理 曲目列表 存入 trackItems
-      .addCase(fetchPlaylistTracks.fulfilled, (state, action) => {
-        const playlist = state.playlists?.find(
-          (pl) => pl.id === action.payload.playlistId
-        );
-        if (playlist) {
-          playlist.trackItems = action.payload.tracks; // 將曲目列表存入 trackItems
-        }
+        state.error = action.payload as string;
+        state.loading = false;
       });
+
+    // fetchCategories
+    builder
+      .addCase(fetchCategories.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCategories.fulfilled, (state, action) => {
+        state.userCategories = action.payload;
+        console.log("接收到的分類?", state.userCategories);
+        state.loading = false;
+        // 保存到 localStorage
+        localStorage.setItem(
+          "user_categories",
+          JSON.stringify(state.userCategories || [])
+        );
+      })
+      .addCase(fetchCategories.rejected, (state, action) => {
+        state.error = action.payload as string;
+        state.loading = false;
+      });
+
+    builder
+      // 處理 fetchShow
+      .addCase(fetchShow.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchShow.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(fetchShow.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
+
+    builder
+      // 處理 fetchEpisodeDetail
+      .addCase(fetchEpisodeDetail.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchEpisodeDetail.fulfilled, (state, action) => {
+        // 檢查 episode 是否已經存在
+        const episodeExists = state.episodeDetail.some(
+          (episode) => episode.id === action.payload.id
+        );
+        // 如果不存在才推入
+        if (!episodeExists) {
+          state.episodeDetail.push(action.payload);
+        }
+      })
+      .addCase(fetchEpisodeDetail.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
+
+    // addFavorite
+    builder
+      .addCase(addFavorite.fulfilled, (state, action) => {
+        const favorite = action.payload as Favorite; // 傳回來的是 Favorite 物件
+
+        state.userFavorites?.push(favorite); // 添加到收藏陣列
+
+        // 更新 localStorage
+        localStorage.setItem(
+          "user_favorites",
+          JSON.stringify(state.userFavorites)
+        );
+        state.alert = {
+          open: true,
+          message: "添加收藏成功！",
+          severity: "success",
+        };
+      })
+      .addCase(addFavorite.rejected, (state) => {
+        state.alert = {
+          open: true,
+          message: "添加收藏失敗！",
+          severity: "error",
+        };
+      });
+
+    // removeFavorite
+    builder
+      .addCase(removeFavorite.fulfilled, (state, action) => {
+        const episodeId = action.payload;
+        // 根據 id 過濾移除收藏的節目
+        state.userFavorites = state.userFavorites?.filter(
+          (favorite) => favorite.id !== episodeId
+        );
+
+        state.episodeDetail = state.episodeDetail?.filter(
+          (episode) => episode.id !== action.payload
+        );
+
+        // 更新 localStorage
+        localStorage.setItem(
+          "user_favorites",
+          JSON.stringify(state.userFavorites)
+        );
+
+        state.alert = {
+          open: true,
+          message: "移除收藏成功！",
+          severity: "success",
+        };
+      })
+      .addCase(removeFavorite.rejected, (state) => {
+        state.alert = {
+          open: true,
+          message: "移除收藏失敗！",
+          severity: "error",
+        };
+      });
+
+    // createCategory
+    builder.addCase(createCategory.fulfilled, (state, action) => {
+      if (state.userCategories) {
+        state.userCategories.push(action.payload);
+      }
+    });
+
+    // updateCategory
+    builder.addCase(updateCategory.fulfilled, (state, action) => {
+      const { categoryId, newName } = action.payload;
+      const category = state.userCategories?.find(
+        (cat) => cat.id === categoryId
+      );
+      if (category) {
+        category.name = newName;
+      }
+    });
+
+    // deleteCategory
+    builder.addCase(deleteCategory.fulfilled, (state, action) => {
+      state.userCategories = state.userCategories?.filter(
+        (cat) => cat.id !== action.payload
+      );
+    });
+
+    // addShowToCategory
+    builder.addCase(addShowToCategory.fulfilled, (state, action) => {
+      const { categoryId, showId } = action.payload;
+      const category = state.userCategories?.find(
+        (cat) => cat.id === categoryId
+      );
+      if (category) {
+        // 確保節目不會重複添加到分類
+        const isAlreadyInCategory = category.savedShows.some(
+          (savedShow) => savedShow.id === showId
+        );
+        if (!isAlreadyInCategory) {
+          category.savedShows.push({ id: showId });
+        }
+        // 更新 localStorage，將整個 userCategories 寫回
+        localStorage.setItem(
+          "user_categories",
+          JSON.stringify(state.userCategories)
+        );
+      }
+    });
+
+    builder.addCase(addShowToCategory.rejected, (state, action) => {
+      state.error = action.error.message;
+    });
+
+    // removeShowFromCategory
+    builder.addCase(removeShowFromCategory.fulfilled, (state, action) => {
+      const { categoryId, showId } = action.payload;
+      const category = state.userCategories?.find(
+        (cat) => cat.id === categoryId
+      );
+      if (category) {
+        category.savedShows = category.savedShows.filter(
+          (show) => show.id !== showId
+        );
+        // 更新 localStorage，將整個 userCategories 寫回
+        localStorage.setItem(
+          "user_categories",
+          JSON.stringify(state.userCategories)
+        );
+      }
+    });
   },
 });
 
 export const {
-  setAccessToken,
   setUserData,
-  setUserPlaylists,
+  setUserCategories,
   setUserFavorites,
-  addPlaylist,
-  updatePlaylistName,
-  removePlaylist,
-  setCurrentListId,
-  // addShowToPlaylist,
-  // removeShowFromPlaylist,
-  addTrackToPlaylist,
-  removeTrackFromPlaylist,
-  addEpisodeToFavorites,
-  removeEpisodeFromFavorites,
+  setCurrentCategoryId,
+  setShowsDetail,
+
+  setAlert,
+  clearAlert,
 } = userSlice.actions;
 export default userSlice.reducer;

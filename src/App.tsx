@@ -3,7 +3,7 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
-  // Navigate,
+  Navigate,
   // useNavigate,
   // useLocation,
 } from "react-router-dom";
@@ -44,6 +44,8 @@ function AppRouter() {
 
   return (
     <Routes>
+      {/* 根路徑 `/` 重定向到 `/login` */}
+      <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/callback" element={<CallbackPage />} />
       <Route path="/main/" element={<MainPage />}>
@@ -53,7 +55,7 @@ function AppRouter() {
       </Route>
 
       {/* 訪問其他都會被導向/ */}
-      {/* <Route path="*" element={<Navigate to="/main/list" replace />} /> */}
+      <Route path="*" element={<Navigate to="/main/list" replace />} />
     </Routes>
   );
 }

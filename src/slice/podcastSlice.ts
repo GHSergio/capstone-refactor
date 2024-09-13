@@ -1,30 +1,34 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { Show, Episode } from "./types";
+import { Episode, Show } from "./types";
 import axios from "axios";
 
 export interface PodcastState {
-  activeEpisodeId: string | null;
-  currentPlayer: Episode | null;
-  searchResults: Show[];
-  currentShow: Show | null;
+  searchResults: Show[]; // 原本應該是要用來顯示searchShows匹配的結果?
+  // selectedShows: { id: string }[]; // Modal內選中的節目，格式 {id: "string"}
+  selectedShows: Show[]; // Modal內挑選要添加到分類的shows
+  // showsDetail: Show[]; // 向API獲取分類內的savedShows的Detail
+  // episodeDetail: Episode[]; // 向API獲取收藏內EpisodeId的Detail
+  currentShow: Show | null; //當前的Show
+  activeEpisodeId: string | null; // 標示active episode
+  currentPlayer: Episode | null; // 當前播放的 episode
   loading: boolean;
   error: string | null | undefined;
   // 管理 新增|編輯|刪除 分類
   isActionModalOpen: boolean;
-  currentAction: string | null;
+  currentAction: string | null; // 當前的Action
   // 是否打開Search Modal
   isSearchModalOpen: boolean;
-  currentShowId: string | null;
-  selectedShows: Show[];
 }
 
 const initialState: PodcastState = {
   searchResults: [],
   selectedShows: [],
+  // showsDetail: [],
+  // episodeDetail: [],
   activeEpisodeId: null,
   currentPlayer: null,
   currentShow: null,
-  currentShowId: null,
+  // currentShowId: null,
   loading: false,
   error: null,
   isActionModalOpen: false,
@@ -33,7 +37,7 @@ const initialState: PodcastState = {
 };
 
 // Spotify API 基礎 URL
-const baseUrl = import.meta.env.VITE_SPOTIFY_API_BASE_URI;
+const spotifyBaseUrl = import.meta.env.VITE_SPOTIFY_API_BASE_URI;
 
 // Helper function: 獲取 accessToken
 const getSpotifyAccessToken = () => localStorage.getItem("access_token");
@@ -43,7 +47,7 @@ export const searchShows = createAsyncThunk(
   "spotify/searchShows",
   async (query: string) => {
     const token = getSpotifyAccessToken();
-    const url = `${baseUrl}/v1/search`;
+    const url = `${spotifyBaseUrl}/v1/search`;
     const params = {
       q: query,
       type: "show",
@@ -55,43 +59,87 @@ export const searchShows = createAsyncThunk(
       },
       params,
     });
-    console.log(response);
+
     return response.data.shows.items;
   }
 );
 
-// 獲取指定的 Show 和 Episode
-export const fetchShowWithEpisodes = createAsyncThunk(
-  "spotify/fetchShowWithEpisodes",
-  async (showId: string) => {
+// // 獲取指定的 Show 資訊
+// export const fetchShow = createAsyncThunk(
+//   "spotify/fetchShowWithEpisodes",
+//   async (showId: string) => {
+//     const token = getSpotifyAccessToken();
+//     const uri = `${spotifyBaseUrl}/v1/shows/${showId}`;
+//     const response = await axios.get(uri, {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//     });
+//     return response.data;
+//   }
+// );
+
+// // 獲取指定Episode 資訊
+// export const fetchEpisodeDetail = createAsyncThunk(
+//   "podcast/fetchEpisodeDetail",
+//   async (episodeId: string) => {
+//     const token = getSpotifyAccessToken();
+//     const url = `${spotifyBaseUrl}/v1/episodes/${episodeId}`;
+//     const response = await axios.get(url, {
+//       headers: { Authorization: `Bearer ${token}` },
+//     });
+//     return response.data;
+//   }
+// );
+
+// 獲取指定的 show 裡面的 Episodes
+export const fetchShowEpisodes = createAsyncThunk(
+  "podcast/fetchShowEpisodes",
+  async (showId: string, { rejectWithValue }) => {
     const token = getSpotifyAccessToken();
-    const uri = `${baseUrl}/v1/shows/${showId}`;
-    const response = await axios.get(uri, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
+    const url = `${spotifyBaseUrl}/v1/shows/${showId}/episodes`;
+    try {
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data.items;
+    } catch (error) {
+      console.error("獲取節目單集失敗: ", error);
+      return rejectWithValue(error);
+    }
   }
 );
 
+// Podcast Slice
 const podcastSlice = createSlice({
   name: "podcast",
   initialState,
   reducers: {
+    // // 移除指定 episodeId 的詳細資料
+    // removeEpisodeDetail(state, action: PayloadAction<string>) {
+    //   // 移除指定 episodeId 的詳細資料
+    //   state.episodeDetail = state.episodeDetail?.filter(
+    //     (episode) => episode.id !== action.payload
+    //   );
+    // },
+
+    // // Card 渲染
+    // setShowsDetail(state, action: PayloadAction<Show[]>) {
+    //   state.showsDetail = action.payload;
+    // },
     // 播放器 相關
-    // 設置當前播放的 Episode
     setCurrentPlayer(state, action: PayloadAction<Episode>) {
       state.currentPlayer = action.payload;
     },
-    // 清空當前播放的 Episode
     clearCurrentPlayer(state) {
       state.currentPlayer = null;
     },
 
     // MoreModal 相關
-    setCurrentShow(state, action: PayloadAction<string | null>) {
-      state.currentShowId = action.payload ?? null;
+    setCurrentShow(state, action: PayloadAction<Show | null>) {
+      state.currentShow = action.payload;
     },
     setActiveEpisode(state, action: PayloadAction<string>) {
       state.activeEpisodeId = action.payload;
@@ -105,10 +153,27 @@ const podcastSlice = createSlice({
       state.isSearchModalOpen = action.payload;
     },
     setSelectedShows(state, action: PayloadAction<Show[]>) {
-      state.selectedShows = action.payload;
+      state.selectedShows = action.payload.id;
+    },
+    toggleSelectShow(state, action: PayloadAction<Show>) {
+      const isAlreadySelected = state.selectedShows.some(
+        (selectedShow) => selectedShow.id === action.payload.id
+      );
+      if (isAlreadySelected) {
+        // 如果已經選中，則取消選中
+        state.selectedShows = state.selectedShows.filter(
+          (selectedShow) => selectedShow.id !== action.payload.id
+        );
+      } else {
+        // 如果沒有選中，則添加
+        state.selectedShows.push(action.payload);
+      }
     },
     clearSelectedShows(state) {
       state.selectedShows = [];
+    },
+    clearSearchResults(state) {
+      state.searchResults = [];
     },
 
     // ActionModal 相關
@@ -118,58 +183,83 @@ const podcastSlice = createSlice({
     setIsActionModalOpen(state, action: PayloadAction<boolean>) {
       state.isActionModalOpen = action.payload;
     },
-
-    toggleSelectShow(state, action: PayloadAction<Show>) {
-      const isAlreadySelected = state.selectedShows.some(
-        (selectedShow) => selectedShow.id === action.payload.id
-      );
-      if (isAlreadySelected) {
-        // 如果已經選中，則移除該 show
-        state.selectedShows = state.selectedShows.filter(
-          (selectedShow) => selectedShow.id !== action.payload.id
-        );
-      } else {
-        // 否則將該 show 添加到 selectedShows
-        state.selectedShows.push(action.payload);
-      }
-    },
   },
-  // 處理Async
   extraReducers: (builder) => {
+    // builder
+    //   // 處理 fetchShow
+    //   .addCase(fetchShow.pending, (state) => {
+    //     state.loading = true;
+    //     state.error = null;
+    //   })
+    //   .addCase(fetchShow.fulfilled, (state, action) => {
+    //     state.loading = false;
+    //     state.currentShow = action.payload;
+    //   })
+    //   .addCase(fetchShow.rejected, (state, action) => {
+    //     state.loading = false;
+    //     state.error = action.error.message;
+    //   });
+
+    // builder
+    //   // 處理 fetchEpisodeDetail
+    //   .addCase(fetchEpisodeDetail.pending, (state) => {
+    //     state.loading = true;
+    //     state.error = null;
+    //   })
+    //   .addCase(fetchEpisodeDetail.fulfilled, (state, action) => {
+    //     // 檢查 episode 是否已經存在
+    //     const episodeExists = state.episodeDetail.some(
+    //       (episode) => episode.id === action.payload.id
+    //     );
+    //     // 如果不存在才推入
+    //     if (!episodeExists) {
+    //       state.episodeDetail.push(action.payload);
+    //     }
+    //   })
+    //   .addCase(fetchEpisodeDetail.rejected, (state, action) => {
+    //     state.loading = false;
+    //     state.error = action.error.message;
+    //   });
+
     builder
-      // 處理 fetchShowWithEpisodes
-      .addCase(fetchShowWithEpisodes.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchShowWithEpisodes.fulfilled, (state, action) => {
-        state.loading = false;
-        state.currentShow = action.payload;
-      })
-      .addCase(fetchShowWithEpisodes.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
-      // 處理 searchShows
       .addCase(searchShows.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(searchShows.fulfilled, (state, action) => {
         state.loading = false;
+        // 保存搜索結果至searchResults
         state.searchResults = action.payload;
       })
       .addCase(searchShows.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Search failed";
+        state.error = action.error.message || "搜尋失敗";
+      });
+
+    // 處理 fetchShowEpisodes
+    builder
+      .addCase(fetchShowEpisodes.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchShowEpisodes.fulfilled, (state, action) => {
+        state.loading = false;
+        const episodes = action.payload;
+        if (state.currentShow) {
+          state.currentShow.episodes = episodes;
+        }
+      })
+      .addCase(fetchShowEpisodes.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });
 
 export const {
+  // setShowsDetail,
   setIsActionModalOpen,
   setCurrentAction,
-
   setCurrentShow,
   setActiveEpisode,
   clearActiveEpisode,
@@ -177,7 +267,7 @@ export const {
   setSelectedShows,
   toggleSelectShow,
   clearSelectedShows,
-
+  clearSearchResults,
   setCurrentPlayer,
   clearCurrentPlayer,
 } = podcastSlice.actions;

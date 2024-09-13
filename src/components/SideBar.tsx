@@ -5,22 +5,22 @@ import SideBarItem from "./SideBarItem";
 import SidebarAddItem from "./SidebarAddItem";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
-import { setCurrentListId } from "../slice/userSlice";
+import { setCurrentCategoryId } from "../slice/userSlice";
 
 const Sidebar: React.FC = () => {
   const dispatch = useDispatch();
   // 從 userSlice 獲取播放清單和當前選中的清單 ID
-  const { userPlaylists, currentListId } = useSelector(
+  const { userCategories, currentCategoryId, userFavorites } = useSelector(
     (state: RootState) => state.user
   );
 
-  console.log("播放列表:", userPlaylists?.[0]);
-
+  console.log("播放列表:", userCategories);
+  console.log("收藏清單:", userFavorites);
   // 如果 playlists 為空或未定義，顯示提示
-  if (!userPlaylists || userPlaylists.length === 0) {
+  if (!userCategories || userCategories.length === 0) {
     return (
       <Box sx={{ padding: "1.5rem" }}>
-        <Typography>無法獲取播放清單</Typography>
+        <Typography>無法獲取播放分類清單</Typography>
       </Box>
     );
   }
@@ -47,19 +47,19 @@ const Sidebar: React.FC = () => {
 
       {/* Spotify 播放清單 */}
       <Box sx={{ width: "100%" }}>
-        {userPlaylists?.map((playlist) => (
+        {userCategories?.map((category) => (
           <SideBarItem
-            key={playlist.id}
-            text={playlist.name}
-            isActive={currentListId === playlist.id}
-            onClick={() => dispatch(setCurrentListId(playlist.id))}
+            key={category?.id}
+            text={category?.name}
+            isActive={currentCategoryId === category?.id}
+            onClick={() => dispatch(setCurrentCategoryId(category?.id))}
           />
         ))}
         {/* 收藏清單 */}
         <SideBarItem
           text="收藏清單"
-          isActive={currentListId === "favorites"}
-          onClick={() => dispatch(setCurrentListId("favorites"))}
+          isActive={currentCategoryId === "favorites"}
+          onClick={() => dispatch(setCurrentCategoryId("favorites"))}
         />
         {/* 新增分類的按鈕 */}
         <SidebarAddItem />

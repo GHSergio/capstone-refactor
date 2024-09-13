@@ -18,10 +18,7 @@ const User = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
 
-  console.log(userProfile);
-  // // 檢查 userProfile 是否存在
-  // const display_name = userProfile?.display_name ?? "未知"; // 如果 userProfile 為 undefined，顯示預設文字
-  // const images = userProfile?.images?.[0]?.url || ""; // 如果沒有圖片，顯示空字串
+  // console.log(userProfile);
 
   const handleDropdownClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
