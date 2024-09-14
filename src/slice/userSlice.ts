@@ -278,32 +278,39 @@ export const updateCategory = createAsyncThunk(
   }
 );
 
-// 添加show到分類
+// 添加show到分類(通常會選擇多個show 但一次只能傳遞一個)
 export const addShowToCategory = createAsyncThunk(
   "user/addShowToCategory",
   async (
     { categoryId, showId }: { categoryId: string; showId: string },
     { rejectWithValue }
   ) => {
+    const acToken = localStorage.getItem("acToken");
     const url = `${AcBaseUri}/api/categories/${categoryId}/shows`;
     const bodyParam = { showId };
 
     try {
-      const response = await axios.post(url, bodyParam, {
+      await axios.post(url, bodyParam, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("acToken")}`,
+          Authorization: `Bearer ${acToken}`,
         },
       });
-
-      if (response.status === 201 || response.data.success) {
-        return { success: true, showId, categoryId };
-      } else {
-        return rejectWithValue(
-          `Failed with status: ${response.status} - ${response.statusText}`
-        );
+      return { success: true, showId, categoryId };
+    } catch (error: any) {
+      if (error.response && error.response.status === 409) {
+        // 如果是 409 錯誤，表示節目已經存在分類中
+        return rejectWithValue({
+          success: false,
+          message: "已經存在分類中",
+          showId,
+        });
       }
-    } catch (error) {
-      return rejectWithValue(error || "添加分類清單失敗");
+      // 處理其他錯誤
+      return rejectWithValue({
+        success: false,
+        message: error.message || "添加節目失敗",
+        showId,
+      });
     }
   }
 );

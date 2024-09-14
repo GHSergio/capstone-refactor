@@ -13,6 +13,8 @@ import {
   CardContent,
   CardMedia,
   Tooltip,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
@@ -33,11 +35,11 @@ const SearchModal = () => {
   const { isSearchModalOpen, selectedShows, searchResults } = useSelector(
     (state: RootState) => state.podcast
   );
-  const { currentCategoryId, userCategories } = useSelector(
-    (state: RootState) => state.user
-  );
+  const { currentCategoryId } = useSelector((state: RootState) => state.user);
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // 控制 Snackbar 顯示狀態
+  const [alertMessage, setAlertMessage] = useState(""); // 保存提示訊息
 
   // console.log("searchResults:", searchResults);
   console.log("當前分類: ", currentCategoryId);
@@ -50,68 +52,37 @@ const SearchModal = () => {
     dispatch(clearSearchResults());
   };
 
-  // 將選中的 shows 添加到當前 category
-  // const handleConfirmAdd = () => {
-  //   if (currentCategoryId) {
-  //     const category = userCategories?.find(
-  //       (cat) => cat.id === currentCategoryId
-  //     );
-
-  //     if (category) {
-  //       // 過濾掉已經存在於該分類的 shows
-  //       const newShows = selectedShows.filter(
-  //         (show) =>
-  //           !category.savedShows.some((savedShow) => savedShow.id === show.id)
-  //       );
-
-  //       // 如果有新節目，才發送請求
-  //       if (newShows.length > 0) {
-  //         const newShowIds = newShows.map((show) => show.id);
-  //         dispatch(
-  //           addShowToCategory({
-  //             categoryId: currentCategoryId,
-  //             showIds: newShowIds, // 傳送過濾後的新節目
-  //           })
-  //         );
-  //         console.log("Selected shows:", newShows);
-  //         console.log("Show IDs to add:", newShowIds);
-  //       }
-  //     }
-  //   }
-  //   dispatch(setIsSearchModalOpen(false));
-  //   dispatch(clearSelectedShows());
-  //   dispatch(clearSearchResults());
-  // };
+  // 將選中的 shows 逐個 添加到當前 category
   const handleConfirmAdd = async () => {
     if (currentCategoryId && selectedShows.length > 0) {
-      const failedShows: string[] = []; // 用來保存失敗的 showId
+      const alreadyExistsShows: string[] = [];
 
-      for (let show of selectedShows) {
+      for (const show of selectedShows) {
         try {
-          const result = await dispatch(
+          await dispatch(
             addShowToCategory({
               categoryId: currentCategoryId,
               showId: show.id,
             })
           ).unwrap();
-
-          if (!result.success) {
-            failedShows.push(show.id);
-            console.error(`Failed to add show ${show.id}:`, result.message);
+        } catch (error: any) {
+          if (error.message.includes("已經存在分類中")) {
+            alreadyExistsShows.push(show.name || "Unknown Show");
+          } else {
+            console.error(`Error adding show ${show.name}:`, error);
           }
-        } catch (error) {
-          failedShows.push(show.id);
-          console.error(`Error adding show ${show.id}:`, error);
         }
       }
 
-      if (failedShows.length > 0) {
-        console.log("The following shows failed to be added:", failedShows);
-        // 這裡你可以考慮顯示一個 Snackbar 或 Alert，通知用戶失敗的節目
+      if (alreadyExistsShows.length > 0) {
+        setAlertMessage(
+          `節目 "${alreadyExistsShows.join(", ")}" 已經存在於分類中`
+        );
+        setSnackbarOpen(true);
       } else {
-        // 全部成功後關閉 modal 並清除已選中的 shows
         dispatch(setIsSearchModalOpen(false));
         dispatch(clearSelectedShows());
+        dispatch(clearSearchResults());
       }
     }
   };
@@ -140,194 +111,211 @@ const SearchModal = () => {
     textOverflow: "ellipsis",
   };
 
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   return (
-    <Modal open={isSearchModalOpen} onClose={handleSearchModalClose}>
-      <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "70%",
-          height: "75%",
-          bgcolor: "#FFFFFF",
-          boxShadow: "0px -10px 20px 0px #0000001F",
-          borderRadius: 2,
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        {/* Header */}
+    <>
+      <Modal open={isSearchModalOpen} onClose={handleSearchModalClose}>
         <Box
           sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "70%",
+            height: "75%",
+            bgcolor: "#FFFFFF",
+            boxShadow: "0px -10px 20px 0px #0000001F",
+            borderRadius: 2,
             display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            p: 2,
+            flexDirection: "column",
           }}
         >
-          <Typography
-            variant="h6"
+          {/* Header */}
+          <Box
             sx={{
-              width: "100%",
-              fontSize: "1.2rem",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              p: 2,
             }}
           >
-            新增 Podcast
-          </Typography>
-          <IconButton
-            onClick={handleSearchModalClose}
-            sx={{ position: "absolute", right: 10 }}
-          >
-            <CloseIcon />
-          </IconButton>
-        </Box>
+            <Typography
+              variant="h6"
+              sx={{
+                width: "100%",
+                fontSize: "1.2rem",
+              }}
+            >
+              新增 Podcast
+            </Typography>
+            <IconButton
+              onClick={handleSearchModalClose}
+              sx={{ position: "absolute", right: 10 }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Box>
 
-        <Divider sx={{ marginBottom: "0.5rem" }} />
+          <Divider sx={{ marginBottom: "0.5rem" }} />
 
-        {/* SearchBar */}
-        <Box
-          sx={{
-            p: 2,
-            display: "flex",
-          }}
-        >
-          <TextField
-            fullWidth
-            placeholder="輸入關鍵字..."
-            value={searchTerm}
-            onChange={handleSearchChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon sx={{ color: "#ACADB9" }} />
-                </InputAdornment>
-              ),
+          {/* SearchBar */}
+          <Box
+            sx={{
+              p: 2,
+              display: "flex",
             }}
-          />
-        </Box>
+          >
+            <TextField
+              fullWidth
+              placeholder="輸入關鍵字..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon sx={{ color: "#ACADB9" }} />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Box>
 
-        {/* Main */}
-        <Box
-          sx={{
-            display: "flex",
-            flex: 1,
-            flexWrap: "wrap",
-            p: 2,
-            overflowY: "auto",
-          }}
-        >
-          {searchResults.length > 0 ? (
-            searchResults.map((show) => (
-              <Grid
-                m={1}
-                key={show.id}
-                sx={{
-                  width: "170px",
-                  height: "240px",
-                  borderRadius: "0.5rem",
-                  boxShadow: "0px 0px 2px 2px #C7C7C73D",
-                  padding: 0,
-                  overflow: "hidden",
-                  cursor: "pointer",
-                  border: isSelected(show) ? "5px solid #FF7F50" : "none",
-                }}
-                onClick={() => handleShowSelect?.(show)}
-              >
-                <Box
+          {/* Main */}
+          <Box
+            sx={{
+              display: "flex",
+              flex: 1,
+              flexWrap: "wrap",
+              p: 2,
+              overflowY: "auto",
+            }}
+          >
+            {searchResults.length > 0 ? (
+              searchResults.map((show) => (
+                <Grid
+                  m={1}
+                  key={show.id}
                   sx={{
-                    width: "100%",
-                    height: "100%",
-                    backgroundColor: "#FFFFFF",
-                    padding: "1rem",
+                    width: "170px",
+                    height: "240px",
+                    borderRadius: "0.5rem",
+                    boxShadow: "0px 0px 2px 2px #C7C7C73D",
+                    padding: 0,
+                    overflow: "hidden",
+                    cursor: "pointer",
+                    border: isSelected(show) ? "5px solid #FF7F50" : "none",
                   }}
+                  onClick={() => handleShowSelect?.(show)}
                 >
-                  <Card
+                  <Box
                     sx={{
                       width: "100%",
                       height: "100%",
-                      margin: "0 auto",
-                      boxShadow: "none",
+                      backgroundColor: "#FFFFFF",
+                      padding: "1rem",
                     }}
                   >
-                    <CardMedia
-                      component="img"
-                      height="140"
-                      image={show?.images?.[0].url}
-                      alt={show.name}
-                      sx={{ borderRadius: "0.5rem" }}
-                    />
-                    <CardContent
+                    <Card
                       sx={{
-                        padding: "0.1rem 0",
+                        width: "100%",
+                        height: "100%",
+                        margin: "0 auto",
+                        boxShadow: "none",
                       }}
                     >
-                      {/* Podcast頻道名稱 */}
-                      <Tooltip title={show.name} arrow>
-                        <Typography
-                          variant="h6"
-                          component="div"
-                          sx={{
-                            fontSize: "0.9rem",
-                            ...overFlowStyled,
-                          }}
-                        >
-                          {show.name}
-                        </Typography>
-                      </Tooltip>
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image={show?.images?.[0].url}
+                        alt={show.name}
+                        sx={{ borderRadius: "0.5rem" }}
+                      />
+                      <CardContent
+                        sx={{
+                          padding: "0.1rem 0",
+                        }}
+                      >
+                        {/* Podcast頻道名稱 */}
+                        <Tooltip title={show.name} arrow>
+                          <Typography
+                            variant="h6"
+                            component="div"
+                            sx={{
+                              fontSize: "0.9rem",
+                              ...overFlowStyled,
+                            }}
+                          >
+                            {show.name}
+                          </Typography>
+                        </Tooltip>
 
-                      {/* Podcast頻道作者 */}
-                      <Tooltip title={show.publisher} arrow>
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          sx={{
-                            fontSize: "0.75rem",
-                            ...overFlowStyled,
-                          }}
-                        >
-                          {show.publisher}
-                        </Typography>
-                      </Tooltip>
-                    </CardContent>
-                  </Card>
-                </Box>
-              </Grid>
-            ))
-          ) : (
-            <Typography>沒有匹配的結果</Typography>
-          )}
-        </Box>
+                        {/* Podcast頻道作者 */}
+                        <Tooltip title={show.publisher} arrow>
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{
+                              fontSize: "0.75rem",
+                              ...overFlowStyled,
+                            }}
+                          >
+                            {show.publisher}
+                          </Typography>
+                        </Tooltip>
+                      </CardContent>
+                    </Card>
+                  </Box>
+                </Grid>
+              ))
+            ) : (
+              <Typography>沒有匹配的結果</Typography>
+            )}
+          </Box>
 
-        <Divider />
+          <Divider />
 
-        {/* Footer */}
-        <Box
-          sx={{
-            p: 2,
-            bgcolor: "#F6F7F8",
-            display: "flex",
-            justifyContent: "flex-end",
-            boxShadow: "0px -10px 20px 0px #0000001F",
-          }}
-        >
-          <Button
-            variant="outlined"
-            onClick={handleSearchModalClose}
-            sx={{ mr: 2 }}
+          {/* Footer */}
+          <Box
+            sx={{
+              p: 2,
+              bgcolor: "#F6F7F8",
+              display: "flex",
+              justifyContent: "flex-end",
+              boxShadow: "0px -10px 20px 0px #0000001F",
+            }}
           >
-            取消
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleConfirmAdd}
-            disabled={selectedShows.length === 0}
-          >
-            確認新增
-          </Button>
+            <Button
+              variant="outlined"
+              onClick={handleSearchModalClose}
+              sx={{ mr: 2 }}
+            >
+              取消
+            </Button>
+            <Button
+              variant="contained"
+              onClick={handleConfirmAdd}
+              disabled={selectedShows.length === 0}
+            >
+              確認新增
+            </Button>
+          </Box>
         </Box>
-      </Box>
-    </Modal>
+      </Modal>
+      {/* 顯示 Snackbar 提示 */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={2000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert onClose={handleSnackbarClose} severity="info">
+          {alertMessage}
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 
