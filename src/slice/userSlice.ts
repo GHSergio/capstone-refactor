@@ -75,9 +75,11 @@ export const fetchUserProfile = createAsyncThunk(
       const data = response.data;
       // console.log("使用者資訊: ", data);
       return data;
-    } catch (error) {
-      console.log("獲取使用者資訊失敗: ", error);
-      return rejectWithValue(error);
+    } catch (error: unknown) {
+      // Axios 提供的方法來檢查錯誤是否為 Axios 錯誤。
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response);
+      }
     }
   }
 );
@@ -95,9 +97,10 @@ export const initializeAccount = createAsyncThunk(
       // localStorage.setItem("acToken", token);
       // console.log("創建帳戶response: ", response, token);
       return token;
-    } catch (error) {
-      console.log("創建AC帳號時發生錯誤: ", error);
-      return rejectWithValue("初始化帳戶失敗");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response);
+      }
     }
   }
 );
@@ -114,11 +117,12 @@ export const fetchUserFavorites = createAsyncThunk(
           Authorization: `Bearer ${acToken}`,
         },
       });
-      console.log("收藏: ", response);
+      // console.log("收藏: ", response);
       return response.data.favoriteEpisodeIds;
-    } catch (error) {
-      console.log("獲取收藏失敗: ", error);
-      return rejectWithValue(error);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response);
+      }
     }
   }
 );
@@ -137,9 +141,10 @@ export const fetchCategories = createAsyncThunk(
       });
       console.log("獲取分類清單: ", response);
       return response.data.categories;
-    } catch (error) {
-      console.log("獲取分類清單時發生錯誤: ", error);
-      return rejectWithValue("移除分類清單失敗");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response);
+      }
     }
   }
 );
@@ -147,28 +152,40 @@ export const fetchCategories = createAsyncThunk(
 // 獲取指定的 Show 資訊
 export const fetchShow = createAsyncThunk(
   "spotify/fetchShowWithEpisodes",
-  async (showId: string) => {
+  async (showId: string, { rejectWithValue }) => {
     const token = localStorage.getItem("access_token");
     const uri = `${spotifyBaseUrl}/v1/shows/${showId}`;
-    const response = await axios.get(uri, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
+    try {
+      const response = await axios.get(uri, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response);
+      }
+    }
   }
 );
 
 // 獲取指定Episode 資訊
 export const fetchEpisodeDetail = createAsyncThunk(
   "podcast/fetchEpisodeDetail",
-  async (episodeId: string) => {
+  async (episodeId: string, { rejectWithValue }) => {
     const token = localStorage.getItem("access_token");
     const url = `${spotifyBaseUrl}/v1/episodes/${episodeId}`;
-    const response = await axios.get(url, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return response.data;
+    try {
+      const response = await axios.get(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.data;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response);
+      }
+    }
   }
 );
 
@@ -180,16 +197,17 @@ export const addFavorite = createAsyncThunk(
     const url = `${AcBaseUri}/api/episodes`;
     const bodyParam = { episodeId };
     try {
-      const response = await axios.post(url, bodyParam, {
+      await axios.post(url, bodyParam, {
         headers: {
           Authorization: `Bearer ${acToken}`,
         },
       });
-      console.log("添加episode到收藏: ", response);
+      // console.log("添加episode到收藏: ", response);
       return { id: episodeId }; // 回傳一個包含id的物件
-    } catch (error) {
-      console.log("添加收藏時發生錯誤: ", error);
-      return rejectWithValue("添加收藏失敗");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response);
+      }
     }
   }
 );
@@ -208,9 +226,10 @@ export const removeFavorite = createAsyncThunk(
       });
       // console.log("被刪除的episodeId: ", episodeId);
       return episodeId;
-    } catch (error) {
-      console.log("移除收藏時發生錯誤: ", error);
-      return rejectWithValue("移除收藏失敗");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response);
+      }
     }
   }
 );
@@ -227,11 +246,18 @@ export const createCategory = createAsyncThunk(
           Authorization: `Bearer ${localStorage.getItem("acToken")}`,
         },
       });
-      console.log("新分類清單: ", response);
-      return response.data.category;
-    } catch (error) {
-      console.log("添加分類時發生錯誤: ", error);
-      return rejectWithValue("添加分類失敗");
+      // console.log("新分類清單: ", response);
+      if (response.data.success) {
+        // 返回新分類的資料，假設 API 會回傳新分類的ID或相關資料
+        return {
+          name: newTitle,
+          id: response.data.categoryId || "",
+        };
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response);
+      }
     }
   }
 );
@@ -248,9 +274,10 @@ export const deleteCategory = createAsyncThunk(
         },
       });
       return categoryId;
-    } catch (error) {
-      console.log("移除分類時發生錯誤: ", error);
-      return rejectWithValue("移除分類清單失敗");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response);
+      }
     }
   }
 );
@@ -263,7 +290,7 @@ export const updateCategory = createAsyncThunk(
     { rejectWithValue }
   ) => {
     const url = `${AcBaseUri}/api/categories/${categoryId}`;
-    const bodyParameters = { newName };
+    const bodyParameters = { name: newName };
     try {
       await axios.put(url, bodyParameters, {
         headers: {
@@ -271,9 +298,10 @@ export const updateCategory = createAsyncThunk(
         },
       });
       return { categoryId, newName };
-    } catch (error) {
-      console.log("修改分類名稱時發生錯誤: ", error);
-      return rejectWithValue("修改分類清單失敗");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response);
+      }
     }
   }
 );
@@ -296,21 +324,10 @@ export const addShowToCategory = createAsyncThunk(
         },
       });
       return { success: true, showId, categoryId };
-    } catch (error: any) {
-      if (error.response && error.response.status === 409) {
-        // 如果是 409 錯誤，表示節目已經存在分類中
-        return rejectWithValue({
-          success: false,
-          message: "已經存在分類中",
-          showId,
-        });
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response);
       }
-      // 處理其他錯誤
-      return rejectWithValue({
-        success: false,
-        message: error.message || "添加節目失敗",
-        showId,
-      });
     }
   }
 );
@@ -330,12 +347,31 @@ export const removeShowFromCategory = createAsyncThunk(
         },
       });
       return { categoryId, showId };
-    } catch (error) {
-      console.log("移除節目時發生錯誤: ", error);
-      return rejectWithValue("移除節目失敗");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response);
+      }
     }
   }
 );
+
+// 共用的錯誤處理函式
+const handleAuthError = (state: UserState, action: any) => {
+  const { status } = action.payload as { status: number };
+  if (status === 401) {
+    state.alert = {
+      open: true,
+      message: "驗證已過期，請重新登入",
+      severity: "error",
+    };
+  } else {
+    state.alert = {
+      open: true,
+      message: action.error.message as string,
+      severity: "error",
+    };
+  }
+};
 
 // userSlice
 const userSlice = createSlice({
@@ -372,10 +408,6 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // 處理 fetchUserProfile
-      .addCase(fetchUserProfile.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
       .addCase(fetchUserProfile.fulfilled, (state, action) => {
         const responseData = action.payload;
         // 將使用者資料存入 localStorage
@@ -384,33 +416,21 @@ const userSlice = createSlice({
         state.userProfile = responseData;
       })
       .addCase(fetchUserProfile.rejected, (state, action) => {
-        state.error = action.payload as string;
-        state.loading = false;
+        handleAuthError(state, action);
       });
     // initializeAccount
     builder
-      .addCase(initializeAccount.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
       .addCase(initializeAccount.fulfilled, (state, action) => {
         localStorage.setItem("acToken", action.payload);
-        state.loading = false;
       })
       .addCase(initializeAccount.rejected, (state, action) => {
-        state.error = action.payload as string;
-        state.loading = false;
+        handleAuthError(state, action);
       });
 
     // fetchUserFavorites
     builder
-      .addCase(fetchUserFavorites.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
       .addCase(fetchUserFavorites.fulfilled, (state, action) => {
         state.userFavorites = action.payload;
-        state.loading = false;
         // 保存到 localStorage
         localStorage.setItem(
           "user_favorites",
@@ -418,20 +438,14 @@ const userSlice = createSlice({
         );
       })
       .addCase(fetchUserFavorites.rejected, (state, action) => {
-        state.error = action.payload as string;
-        state.loading = false;
+        handleAuthError(state, action);
       });
 
     // fetchCategories
     builder
-      .addCase(fetchCategories.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
       .addCase(fetchCategories.fulfilled, (state, action) => {
         state.userCategories = action.payload;
-        console.log("接收到的分類?", state.userCategories);
-        state.loading = false;
+        // console.log("接收到的分類?", state.userCategories);
         // 保存到 localStorage
         localStorage.setItem(
           "user_categories",
@@ -439,8 +453,7 @@ const userSlice = createSlice({
         );
       })
       .addCase(fetchCategories.rejected, (state, action) => {
-        state.error = action.payload as string;
-        state.loading = false;
+        handleAuthError(state, action);
       });
 
     builder
@@ -454,7 +467,7 @@ const userSlice = createSlice({
       })
       .addCase(fetchShow.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        handleAuthError(state, action);
       });
 
     builder
@@ -475,7 +488,7 @@ const userSlice = createSlice({
       })
       .addCase(fetchEpisodeDetail.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        handleAuthError(state, action);
       });
 
     // addFavorite
@@ -496,12 +509,13 @@ const userSlice = createSlice({
           severity: "success",
         };
       })
-      .addCase(addFavorite.rejected, (state) => {
-        state.alert = {
-          open: true,
-          message: "添加收藏失敗！",
-          severity: "error",
-        };
+      .addCase(addFavorite.rejected, (state, action) => {
+        // state.alert = {
+        //   open: true,
+        //   message: "添加收藏失敗！",
+        //   severity: "error",
+        // };
+        handleAuthError(state, action);
       });
 
     // removeFavorite
@@ -529,82 +543,161 @@ const userSlice = createSlice({
           severity: "success",
         };
       })
-      .addCase(removeFavorite.rejected, (state) => {
-        state.alert = {
-          open: true,
-          message: "移除收藏失敗！",
-          severity: "error",
-        };
+      .addCase(removeFavorite.rejected, (state, action) => {
+        // state.alert = {
+        //   open: true,
+        //   message: "移除收藏失敗！",
+        //   severity: "error",
+        // };
+        handleAuthError(state, action);
       });
 
     // createCategory
-    builder.addCase(createCategory.fulfilled, (state, action) => {
-      if (state.userCategories) {
-        state.userCategories.push(action.payload);
-      }
-    });
+    builder
+      .addCase(createCategory.fulfilled, (state, action) => {
+        // 確保 action.payload 存在
+        if (action.payload) {
+          const newCategory = {
+            ...action.payload, // 保留從 API 回傳的資料 (id 和 name)
+            savedShows: [], // 初始化 savedShows 為空陣列
+          };
+
+          if (state.userCategories) {
+            state.userCategories.push(newCategory); // 將新分類加入到狀態
+          } else {
+            state.userCategories = [newCategory]; // 如果 userCategories 為空，初始化為一個新的數組
+          }
+
+          // 更新 localStorage，將 userCategories 轉換成 JSON 字符串
+          localStorage.setItem(
+            "user_categories",
+            JSON.stringify(state.userCategories)
+          );
+        }
+      })
+      .addCase(createCategory.rejected, (state, action) => {
+        handleAuthError(state, action);
+      });
 
     // updateCategory
-    builder.addCase(updateCategory.fulfilled, (state, action) => {
-      const { categoryId, newName } = action.payload;
-      const category = state.userCategories?.find(
-        (cat) => cat.id === categoryId
-      );
-      if (category) {
-        category.name = newName;
-      }
-    });
+    builder
+      .addCase(updateCategory.fulfilled, (state, action) => {
+        if (action.payload) {
+          const { categoryId, newName } = action.payload;
+          if (state.userCategories) {
+            const category = state.userCategories.find(
+              (cat) => cat.id === categoryId
+            );
+
+            if (category) {
+              category.name = newName;
+
+              // 更新 localStorage
+              localStorage.setItem(
+                "user_categories",
+                JSON.stringify(state.userCategories)
+              );
+            }
+          }
+        }
+      })
+      .addCase(updateCategory.rejected, (state, action) => {
+        handleAuthError(state, action);
+      });
 
     // deleteCategory
-    builder.addCase(deleteCategory.fulfilled, (state, action) => {
-      state.userCategories = state.userCategories?.filter(
-        (cat) => cat.id !== action.payload
-      );
-    });
+    builder
+      .addCase(deleteCategory.fulfilled, (state, action) => {
+        state.userCategories = state.userCategories?.filter(
+          (cat) => cat.id !== action.payload
+        );
+        localStorage.setItem(
+          "user_categories",
+          JSON.stringify(state.userCategories)
+        );
+      })
+      .addCase(deleteCategory.rejected, (state, action) => {
+        handleAuthError(state, action);
+      });
 
     // addShowToCategory
-    builder.addCase(addShowToCategory.fulfilled, (state, action) => {
-      const { categoryId, showId } = action.payload;
-      const category = state.userCategories?.find(
-        (cat) => cat.id === categoryId
-      );
-      if (category) {
-        // 確保節目不會重複添加到分類
-        const isAlreadyInCategory = category.savedShows.some(
-          (savedShow) => savedShow.id === showId
-        );
-        if (!isAlreadyInCategory) {
-          category.savedShows.push({ id: showId });
+    builder
+      .addCase(addShowToCategory.fulfilled, (state, action) => {
+        if (action.payload) {
+          const { categoryId, showId } = action.payload;
+          const category = state.userCategories?.find(
+            (cat) => cat.id === categoryId
+          );
+          if (category) {
+            // 確保節目不會重複添加到分類
+            const isAlreadyInCategory = category.savedShows.some(
+              (savedShow) => savedShow.id === showId
+            );
+            if (!isAlreadyInCategory) {
+              category.savedShows.push({ id: showId });
+            }
+            // 更新 localStorage，將整個 userCategories 寫回
+            localStorage.setItem(
+              "user_categories",
+              JSON.stringify(state.userCategories)
+            );
+            state.alert = {
+              open: true,
+              message: "節目成功添加至該分類！",
+              severity: "success",
+            };
+          }
         }
-        // 更新 localStorage，將整個 userCategories 寫回
-        localStorage.setItem(
-          "user_categories",
-          JSON.stringify(state.userCategories)
-        );
-      }
-    });
+      })
 
-    builder.addCase(addShowToCategory.rejected, (state, action) => {
-      state.error = action.error.message;
-    });
+      .addCase(addShowToCategory.rejected, (state, action) => {
+        // 提取error.response內的status
+        const { status } = action.payload as { status: number };
+        // status === 409 邏輯 已在SearchModal元件handleConfirmAdd內
+
+        if (status === 401) {
+          state.alert = {
+            open: true,
+            message: "驗證已過期，請重新登入",
+            severity: "error",
+          };
+        } else if (status !== 409) {
+          state.alert = {
+            open: true,
+            message: action.error.message as string,
+            severity: "error",
+          };
+        }
+      });
 
     // removeShowFromCategory
-    builder.addCase(removeShowFromCategory.fulfilled, (state, action) => {
-      const { categoryId, showId } = action.payload;
-      const category = state.userCategories?.find(
-        (cat) => cat.id === categoryId
-      );
-      if (category) {
-        category.savedShows = category.savedShows.filter(
-          (show) => show.id !== showId
-        );
-        // 更新 localStorage，將整個 userCategories 寫回
-        localStorage.setItem(
-          "user_categories",
-          JSON.stringify(state.userCategories)
-        );
-      }
-    });
+    builder
+      .addCase(removeShowFromCategory.fulfilled, (state, action) => {
+        if (action.payload) {
+          const { categoryId, showId } = action.payload;
+          const category = state.userCategories?.find(
+            (cat) => cat.id === categoryId
+          );
+          if (category) {
+            category.savedShows = category.savedShows.filter(
+              (show) => show.id !== showId
+            );
+            // 更新 localStorage，將整個 userCategories 寫回
+            localStorage.setItem(
+              "user_categories",
+              JSON.stringify(state.userCategories)
+            );
+            state.alert = {
+              open: true,
+              message: "節目成功從該分類移除！",
+              severity: "success",
+            };
+          }
+        }
+      })
+      .addCase(removeShowFromCategory.rejected, (state, action) => {
+        handleAuthError(state, action);
+      });
   },
 });
 

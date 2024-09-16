@@ -14,7 +14,6 @@ import {
   CardMedia,
   Tooltip,
   Snackbar,
-  Alert,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
@@ -27,8 +26,9 @@ import {
   clearSearchResults,
   searchShows,
 } from "../../slice/podcastSlice";
-import { addShowToCategory } from "../../slice/userSlice";
+import { addShowToCategory, setAlert } from "../../slice/userSlice";
 import { Show } from "../../slice/types";
+import AlertComponent from "../AlertComponent";
 const SearchModal = () => {
   const dispatch: AppDispatch = useDispatch();
 
@@ -38,8 +38,8 @@ const SearchModal = () => {
   const { currentCategoryId } = useSelector((state: RootState) => state.user);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [snackbarOpen, setSnackbarOpen] = useState(false); // 控制 Snackbar 顯示狀態
-  const [alertMessage, setAlertMessage] = useState(""); // 保存提示訊息
+  // const [snackbarOpen, setSnackbarOpen] = useState(false); // 控制 Snackbar 顯示狀態
+  // const [alertMessage, setAlertMessage] = useState(""); // 保存提示訊息
 
   // console.log("searchResults:", searchResults);
   console.log("當前分類: ", currentCategoryId);
@@ -53,9 +53,10 @@ const SearchModal = () => {
   };
 
   // 將選中的 shows 逐個 添加到當前 category
+  // 將選中的 shows 逐個添加到當前 category
   const handleConfirmAdd = async () => {
     if (currentCategoryId && selectedShows.length > 0) {
-      const alreadyExistsShows: string[] = [];
+      const alreadyExistsShows: string[] = []; // 保存已存在的節目名稱
 
       for (const show of selectedShows) {
         try {
@@ -66,24 +67,30 @@ const SearchModal = () => {
             })
           ).unwrap();
         } catch (error: any) {
-          if (error.message.includes("已經存在分類中")) {
+          // 如果是 409 錯誤，表示節目已經存在分類中
+          if (error?.status === 409) {
             alreadyExistsShows.push(show.name || "Unknown Show");
           } else {
+            // 處理其他錯誤，例如伺服器錯誤或其他
             console.error(`Error adding show ${show.name}:`, error);
           }
         }
       }
 
+      // 如果有已存在的節目名稱，顯示提示
       if (alreadyExistsShows.length > 0) {
-        setAlertMessage(
-          `節目 "${alreadyExistsShows.join(", ")}" 已經存在於分類中`
+        dispatch(
+          setAlert({
+            open: true,
+            message: `節目 "${alreadyExistsShows.join(", ")}" 已經存在於分類中`,
+            severity: "info",
+          })
         );
-        setSnackbarOpen(true);
-      } else {
-        dispatch(setIsSearchModalOpen(false));
-        dispatch(clearSelectedShows());
-        dispatch(clearSearchResults());
       }
+      // 不論成功失敗 皆 關閉Modal 但會提示重複項目
+      dispatch(setIsSearchModalOpen(false));
+      dispatch(clearSelectedShows());
+      dispatch(clearSearchResults());
     }
   };
 
@@ -111,9 +118,9 @@ const SearchModal = () => {
     textOverflow: "ellipsis",
   };
 
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
+  // const handleSnackbarClose = () => {
+  //   setSnackbarOpen(false);
+  // };
 
   return (
     <>
@@ -305,16 +312,14 @@ const SearchModal = () => {
         </Box>
       </Modal>
       {/* 顯示 Snackbar 提示 */}
-      <Snackbar
+      {/* <Snackbar
         open={snackbarOpen}
         autoHideDuration={2000}
         onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert onClose={handleSnackbarClose} severity="info">
-          {alertMessage}
-        </Alert>
-      </Snackbar>
+      </Snackbar> */}
+      <AlertComponent />
     </>
   );
 };

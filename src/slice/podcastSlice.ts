@@ -3,11 +3,8 @@ import { Episode, Show } from "./types";
 import axios from "axios";
 
 export interface PodcastState {
-  searchResults: Show[]; // 原本應該是要用來顯示searchShows匹配的結果?
-  // selectedShows: { id: string }[]; // Modal內選中的節目，格式 {id: "string"}
-  selectedShows: Show[]; // Modal內挑選要添加到分類的shows
-  // showsDetail: Show[]; // 向API獲取分類內的savedShows的Detail
-  // episodeDetail: Episode[]; // 向API獲取收藏內EpisodeId的Detail
+  searchResults: Show[]; // 存searchShows匹配的結果
+  selectedShows: Show[]; // Modal內挑選要添加到分類的
   currentShow: Show | null; //當前的Show
   activeEpisodeId: string | null; // 標示active episode
   currentPlayer: Episode | null; // 當前播放的 episode
@@ -23,12 +20,9 @@ export interface PodcastState {
 const initialState: PodcastState = {
   searchResults: [],
   selectedShows: [],
-  // showsDetail: [],
-  // episodeDetail: [],
   activeEpisodeId: null,
   currentPlayer: null,
   currentShow: null,
-  // currentShowId: null,
   loading: false,
   error: null,
   isActionModalOpen: false,

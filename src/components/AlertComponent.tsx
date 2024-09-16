@@ -16,7 +16,7 @@ const AlertComponent: React.FC = () => {
   return (
     <Snackbar
       open={open}
-      autoHideDuration={2000}
+      autoHideDuration={4000}
       onClose={handleAlertClose}
       anchorOrigin={{ vertical: "top", horizontal: "center" }}
     >
