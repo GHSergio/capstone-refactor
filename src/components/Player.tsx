@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import spotifyIcon from "../assets/spotifyIcon.png";
 
@@ -9,6 +9,7 @@ const Player = () => {
   if (!currentPlayer) {
     return (
       <Box
+        mt={5}
         sx={{
           width: "100%",
           height: "100%",
@@ -17,24 +18,6 @@ const Player = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-        }}
-      >
-        <Typography variant="h6">尚未選擇單集</Typography>
-      </Box>
-    );
-  }
-
-  const { id, name, image, description, release_date, duration_ms } =
-    currentPlayer;
-
-  return (
-    <>
-      <Box
-        sx={{
-          width: "100%",
-          height: "100%",
-          bgcolor: "#91B4C1",
-          borderRadius: "1rem",
           position: "relative",
         }}
       >
@@ -52,25 +35,25 @@ const Player = () => {
             alignItems: "center",
           }}
         >
-          {/* Image */}
-          <Box
-            mt={5}
-            component="img"
-            src={image}
-            sx={{
-              width: "184px",
-              height: "184px",
-              borderRadius: "0.5rem",
-            }}
-          ></Box>
-          {/* Title & Release */}
-          <Box mt={2}>
-            <Typography sx={{ fontSize: "0.9rem" }}>{name}</Typography>
-            <Typography sx={{ fontSize: "0.7rem" }}>{release_date}</Typography>
-          </Box>
-          {/* Player */}
-          <Box mt={1}>操控區</Box>
+          <Typography variant="h6">尚未選擇單集</Typography>
         </Box>
+      </Box>
+    );
+  }
+
+  const { id } = currentPlayer;
+
+  return (
+    <>
+      {/* 嵌入 Spotify 播放器 */}
+      <Box mt={0} sx={{ width: "100%", height: "380px" }}>
+        <iframe
+          src={`https://open.spotify.com/embed/episode/${id}`}
+          width="100%"
+          height="100%"
+          frameBorder="0"
+          allow="encrypted-media"
+        ></iframe>
       </Box>
     </>
   );

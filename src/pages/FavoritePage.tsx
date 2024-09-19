@@ -7,7 +7,7 @@ import { Favorite, fetchEpisodeDetail } from "../slice/userSlice";
 import listNull from "../assets/listNull.png";
 import EpisodeList from "../components/EpisodeList";
 import AlertComponent from "../components/AlertComponent";
-
+import ActionModal from "../components/modals/ActionModal";
 const FavoritePage: React.FC = () => {
   const { userFavorites, episodeDetail } = useSelector(
     (state: RootState) => state.user
@@ -113,6 +113,7 @@ const FavoritePage: React.FC = () => {
       </Box>
       {/* MUI Alert 提示 */}
       <AlertComponent />
+      <ActionModal />
     </>
   );
 };

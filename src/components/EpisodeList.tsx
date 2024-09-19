@@ -2,7 +2,8 @@ import { Grid, Box, Typography, IconButton, Tooltip } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
 import { setCurrentPlayer } from "../slice/podcastSlice";
-import player from "../assets/player.png";
+import idle_episode from "../assets/idle_episode.png";
+import active_episode from "../assets/active_episode.png";
 import BookmarkIcon from "./BookmarkIcon";
 import { Episode } from "../slice/types";
 import { addFavorite, removeFavorite } from "../slice/userSlice";
@@ -31,6 +32,7 @@ const EpisodeList: React.FC<EpisodeListProps> = ({
 }) => {
   const dispatch: AppDispatch = useDispatch();
   const { userFavorites } = useSelector((state: RootState) => state.user);
+  const { currentPlayer } = useSelector((state: RootState) => state.podcast);
 
   // 檢查當前單集是否已收藏
   const isFavorite = userFavorites?.some(
@@ -47,7 +49,8 @@ const EpisodeList: React.FC<EpisodeListProps> = ({
   };
 
   // 播放器處理
-  const handleOnClickPlayer = () => {
+  const handleOnClickPlayer = async () => {
+    // 保存當前播放的節目
     dispatch(setCurrentPlayer(episode));
   };
 
@@ -145,7 +148,11 @@ const EpisodeList: React.FC<EpisodeListProps> = ({
             <IconButton onClick={handleOnClickPlayer}>
               <Box
                 component="img"
-                src={player}
+                src={
+                  currentPlayer?.id === episode.id
+                    ? active_episode
+                    : idle_episode
+                }
                 alt="player"
                 sx={{ width: "2rem" }}
               ></Box>

@@ -5,3 +5,8 @@ declare module "*.svg" {
   const src: string;
   export default src;
 }
+
+interface Window {
+  onSpotifyWebPlaybackSDKReady: () => void;
+  Spotify: any; // 添加 Spotify 屬性類型
+}

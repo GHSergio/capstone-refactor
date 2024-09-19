@@ -10,12 +10,11 @@ import { setCurrentCategoryId } from "../slice/userSlice";
 const Sidebar: React.FC = () => {
   const dispatch = useDispatch();
   // 從 userSlice 獲取播放清單和當前選中的清單 ID
-  const { userCategories, currentCategoryId, userFavorites } = useSelector(
+  const { userCategories, currentCategoryId } = useSelector(
     (state: RootState) => state.user
   );
 
-  console.log("播放列表:", userCategories);
-  console.log("收藏清單:", userFavorites);
+  // console.log("播放列表:", userCategories);
   // 如果 playlists 為空或未定義，顯示提示
   if (!userCategories || userCategories.length === 0) {
     return (

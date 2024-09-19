@@ -4,7 +4,7 @@ import BookmarkIcon from "./BookmarkIcon";
 import User from "./User";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
-// import { toggleEpisodeFavorite } from "../slice/userSlice";
+import { addFavorite, removeFavorite } from "../slice/userSlice";
 const Footer: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const { currentPlayer } = useSelector((state: RootState) => state.podcast);
@@ -16,12 +16,18 @@ const Footer: React.FC = () => {
     (favEpisode) => favEpisode.id === currentPlayer?.id
   );
 
-  // // 處理收藏與取消收藏邏輯
-  // const handleToggleFavorite = () => {
-  //   if (currentPlayer) {
-  //     dispatch(toggleEpisodeFavorite(currentPlayer.id));
-  //   }
-  // };
+  // 處理onClick書籤 根據是否已收藏來添加或移除收藏
+  const handleToggleFavorite = () => {
+    if (!currentPlayer) {
+      return null;
+    }
+
+    if (isFavorite) {
+      dispatch(removeFavorite(currentPlayer.id));
+    } else {
+      dispatch(addFavorite(currentPlayer.id));
+    }
+  };
 
   return (
     <>
@@ -54,7 +60,7 @@ const Footer: React.FC = () => {
           <Box sx={{ position: "absolute", right: 20, top: 0 }}>
             <BookmarkIcon
               isFavorite={isFavorite}
-              // onToggleFavorite={handleToggleFavorite}
+              onToggleFavorite={handleToggleFavorite}
             />
           </Box>
 
@@ -80,7 +86,7 @@ const Footer: React.FC = () => {
               variant="h6"
               sx={{
                 display: "-webkit-box",
-                WebkitLineClamp: 3,
+                WebkitLineClamp: 1,
                 WebkitBoxOrient: "vertical",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
@@ -104,8 +110,9 @@ const Footer: React.FC = () => {
               {currentPlayer?.description}
             </Typography>
           </Box>
+          {/* <Player /> */}
           {/* Player */}
-          <Box sx={{ width: "248px", height: "348px", margin: "2rem auto" }}>
+          <Box sx={{ width: "248px", height: "380px", margin: "1rem auto" }}>
             <Player />
           </Box>
         </Box>

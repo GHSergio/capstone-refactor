@@ -7,7 +7,9 @@ export interface PodcastState {
   selectedShows: Show[]; // Modal內挑選要添加到分類的
   currentShow: Show | null; //當前的Show
   activeEpisodeId: string | null; // 標示active episode
+  deviceId: string | null; // 設備 ID
   currentPlayer: Episode | null; // 當前播放的 episode
+  isPlaying: boolean;
   loading: boolean;
   error: string | null | undefined;
   // 管理 新增|編輯|刪除 分類
@@ -21,7 +23,9 @@ const initialState: PodcastState = {
   searchResults: [],
   selectedShows: [],
   activeEpisodeId: null,
+  deviceId: null,
   currentPlayer: null,
+  isPlaying: false,
   currentShow: null,
   loading: false,
   error: null,
@@ -106,29 +110,88 @@ export const fetchShowEpisodes = createAsyncThunk(
   }
 );
 
+// 獲取spotify devices
+export const getSpotifyDevices = createAsyncThunk(
+  "user/getSpotifyDevices",
+  async (_, { rejectWithValue }) => {
+    const token = localStorage.getItem("access_token");
+    const url = `${spotifyBaseUrl}/v1/me/player/devices`;
+
+    try {
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("取得設備: ", response);
+      // 查找活動中的設備
+      return response.data.devices.find((device: any) => device.is_active);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response);
+      }
+    }
+  }
+);
+
+// 控制設備播放指定的Episode
+export const playEpisodeOnSpotify = createAsyncThunk(
+  "user/playEpisodeOnSpotify",
+  async (
+    {
+      deviceId,
+      episodeUri,
+    }: {
+      deviceId: string;
+      episodeUri: string;
+    },
+    { rejectWithValue }
+  ) => {
+    const token = localStorage.getItem("access_token");
+    const url = `${spotifyBaseUrl}/v1/me/player/play?device_id=${deviceId}`;
+    const bodyParameters = {
+      uris: [episodeUri],
+    };
+    try {
+      const response = await axios.put(url, bodyParameters, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("正在播放節目", response);
+      return response.data; // 假設成功時返回的資料
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        // 返回可序列化的數據，過濾掉非序列化的部分
+        return rejectWithValue({
+          status: error.response.status,
+          data: error.response.data,
+        });
+      }
+      // 如果不是 Axios 錯誤
+      return rejectWithValue({
+        status: 500,
+        message: "伺服器錯誤",
+      });
+    }
+  }
+);
+
 // Podcast Slice
 const podcastSlice = createSlice({
   name: "podcast",
   initialState,
   reducers: {
-    // // 移除指定 episodeId 的詳細資料
-    // removeEpisodeDetail(state, action: PayloadAction<string>) {
-    //   // 移除指定 episodeId 的詳細資料
-    //   state.episodeDetail = state.episodeDetail?.filter(
-    //     (episode) => episode.id !== action.payload
-    //   );
-    // },
-
-    // // Card 渲染
-    // setShowsDetail(state, action: PayloadAction<Show[]>) {
-    //   state.showsDetail = action.payload;
-    // },
     // 播放器 相關
     setCurrentPlayer(state, action: PayloadAction<Episode>) {
       state.currentPlayer = action.payload;
     },
     clearCurrentPlayer(state) {
       state.currentPlayer = null;
+    },
+    setIsPlaying(state, action: PayloadAction<boolean>) {
+      state.isPlaying = action.payload;
     },
 
     // MoreModal 相關
@@ -247,11 +310,41 @@ const podcastSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       });
+
+    // // 獲取Spotify設備成功時，保存設備ID
+    // builder
+    //   .addCase(getSpotifyDevices.fulfilled, (state, action) => {
+    //     state.deviceId = action.payload.id; // 存儲設備 ID
+    //   })
+    //   .addCase(getSpotifyDevices.rejected, (state, action) => {
+    //     state.error = action.error.message || "獲取設備失敗";
+    //   });
+
+    // // 播放Episode
+    // builder
+    //   .addCase(playEpisodeOnSpotify.fulfilled, (state, action) => {
+    //     if (action.payload) {
+    //       state.currentPlayer = action.payload;
+    //     }
+    //   })
+    //   .addCase(playEpisodeOnSpotify.rejected, (state, action) => {
+    //     const payload = action.payload as
+    //       | { status?: number; data?: any }
+    //       | undefined;
+    //     const status = payload?.status;
+    //     const data = payload?.data;
+    //     if (status === 403) {
+    //       state.error = "無法播放，請確認您的 Spotify Premium 資格。";
+    //     } else if (status === 401) {
+    //       state.error = "驗證失敗，請重新登入。";
+    //     } else {
+    //       state.error = data?.message || "播放時發生未知錯誤";
+    //     }
+    //   });
   },
 });
 
 export const {
-  // setShowsDetail,
   setIsActionModalOpen,
   setCurrentAction,
   setCurrentShow,
@@ -262,8 +355,10 @@ export const {
   toggleSelectShow,
   clearSelectedShows,
   clearSearchResults,
+
   setCurrentPlayer,
   clearCurrentPlayer,
+  setIsPlaying,
 } = podcastSlice.actions;
 
 export default podcastSlice.reducer;

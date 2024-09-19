@@ -6,7 +6,7 @@ import {
   Menu,
   MenuItem,
   Avatar,
-  Button,
+  // Button,
 } from "@mui/material";
 import { RootState } from "../store/store";
 import { useSelector } from "react-redux";
@@ -35,6 +35,10 @@ const User = () => {
     navigate("/login");
   };
 
+  // 取得名稱的第一個字母，並將其轉為大寫
+  const displayInitial =
+    userProfile?.display_name?.charAt(0).toUpperCase() || "";
+
   return (
     <>
       <Box
@@ -58,15 +62,23 @@ const User = () => {
         >
           {/* 使用者資訊顯示 */}
           <Avatar
-            src={userProfile?.images?.[0]?.url || ""}
+            src={userProfile?.images?.[0]?.url || undefined}
             alt={userProfile?.display_name || ""}
             sx={{
               width: "48px",
               height: "48px",
               borderRadius: "5rem",
               boxShadow: "0 0 2px 2px rgba(0, 0, 0, 0.3)",
+              bgcolor: userProfile?.images?.[0]?.url
+                ? "transparent"
+                : "#4CAF50", // 綠色背景
+              color: "#fff", // 文字顏色設為白色
+              fontSize: "1.2rem", // 調整文字大小
             }}
-          />
+          >
+            {/* 當沒有照片時，顯示名稱的第一個字母 */}
+            {!userProfile?.images?.[0]?.url && displayInitial}
+          </Avatar>
           <Typography
             variant="h6"
             sx={{ fontSize: "0.8rem", marginLeft: "1rem" }}
