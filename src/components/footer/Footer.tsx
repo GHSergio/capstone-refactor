@@ -1,10 +1,9 @@
 import Player from "./Player";
 import { Box, Divider, Typography } from "@mui/material";
-import BookmarkIcon from "./BookmarkIcon";
-import User from "./User";
+import BookmarkIcon from "../BookmarkIcon";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState, AppDispatch } from "../store/store";
-import { addFavorite, removeFavorite } from "../slice/userSlice";
+import { RootState, AppDispatch } from "../../store/store";
+import { addFavorite, removeFavorite } from "../../slice/userSlice";
 const Footer: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const { currentPlayer } = useSelector((state: RootState) => state.podcast);
@@ -32,32 +31,29 @@ const Footer: React.FC = () => {
   return (
     <>
       {/* User */}
-      <Box sx={{ position: "absolute", top: "40px", right: "60px" }}>
+      {/* <Box sx={{ position: "absolute", top: "40px", right: "60px" }}>
         <User />
-      </Box>
+      </Box> */}
 
       <Box
-        width={312}
-        height={596}
         sx={{
-          backgroundColor: "#FFFFFF",
-          boxShadow: "16px 16px 40px 0px #C7C7C73D",
-          borderRadius: "1rem",
-          marginTop: "5rem",
+          width: "100vw",
+          height: "25vh",
+          backgroundColor: "lightGray",
           position: "relative",
         }}
       >
         {/* content */}
         <Box
           sx={{
-            width: "80%",
+            width: "100%",
             marginX: "auto",
             display: "flex",
             flexDirection: "column",
           }}
         >
           {/* bookmark */}
-          <Box sx={{ position: "absolute", right: 20, top: 0 }}>
+          <Box sx={{ position: "absolute", right: 0, top: 0 }}>
             <BookmarkIcon
               isFavorite={isFavorite}
               onToggleFavorite={handleToggleFavorite}
@@ -73,7 +69,10 @@ const Footer: React.FC = () => {
               alignItems: "center",
             }}
           >
-            <Typography variant="h6" sx={{ fontSize: "1.25rem" }}>
+            <Typography
+              variant="h6"
+              sx={{ fontSize: "1.25rem", padding: " 0 0.5rem" }}
+            >
               正在播放
             </Typography>
           </Box>
@@ -81,7 +80,7 @@ const Footer: React.FC = () => {
           <Divider sx={{ my: "0.5rem" }}></Divider>
 
           {/* title & description */}
-          <Box>
+          {/* <Box>
             <Typography
               variant="h6"
               sx={{
@@ -99,7 +98,7 @@ const Footer: React.FC = () => {
               variant="body1"
               sx={{
                 display: "-webkit-box",
-                WebkitLineClamp: 2,
+                WebkitLineClamp: 1,
                 WebkitBoxOrient: "vertical",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
@@ -109,10 +108,10 @@ const Footer: React.FC = () => {
             >
               {currentPlayer?.description}
             </Typography>
-          </Box>
+          </Box> */}
           {/* <Player /> */}
           {/* Player */}
-          <Box sx={{ width: "248px", height: "380px", margin: "1rem auto" }}>
+          <Box sx={{ width: "100%", height: "100%" }}>
             <Player />
           </Box>
         </Box>

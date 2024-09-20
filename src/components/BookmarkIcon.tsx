@@ -15,11 +15,36 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({
   const theme = useTheme();
   return (
     <>
-      <IconButton onClick={onToggleFavorite}>
+      <IconButton
+        onClick={onToggleFavorite}
+        sx={{ position: "absolute", top: 0, right: 0, padding: 1 }}
+      >
         {isFavorite ? (
-          <BookmarkIcon sx={{ color: theme.palette.primary.main }} />
+          <BookmarkIcon
+            sx={{
+              color: theme.palette.primary.main,
+              fontSize: {
+                xs: "0.6rem",
+                sm: "1rem",
+                md: "1rem",
+                lg: "1.5rem",
+                xl: "2rem",
+              },
+            }}
+          />
         ) : (
-          <BookmarkBorderIcon sx={{ color: theme.palette.primary.main }} />
+          <BookmarkBorderIcon
+            sx={{
+              color: theme.palette.primary.main,
+              fontSize: {
+                xs: "0.6rem",
+                sm: "1rem",
+                md: "1rem",
+                lg: "1.5rem",
+                xl: "2rem",
+              },
+            }}
+          />
         )}
       </IconButton>
     </>

@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
-import { RootState } from "../store/store";
-import spotifyIcon from "../assets/spotifyIcon.png";
+import { RootState } from "../../store/store";
+import spotifyIcon from "../../assets/spotifyIcon.png";
 
 const Player = () => {
   const { currentPlayer } = useSelector((state: RootState) => state.podcast);
@@ -9,10 +9,10 @@ const Player = () => {
   if (!currentPlayer) {
     return (
       <Box
-        mt={5}
+        // mt={5}
         sx={{
           width: "100%",
-          height: "100%",
+          height: "18vh",
           bgcolor: "#91B4C1",
           borderRadius: "1rem",
           display: "flex",
@@ -28,7 +28,7 @@ const Player = () => {
         ></Box>
         <Box
           sx={{
-            width: "85%",
+            width: "100%",
             margin: "0 auto",
             display: "flex",
             flexDirection: "column",
@@ -46,7 +46,7 @@ const Player = () => {
   return (
     <>
       {/* 嵌入 Spotify 播放器 */}
-      <Box mt={0} sx={{ width: "100%", height: "380px" }}>
+      <Box sx={{ width: "100%", height: "18vh" }}>
         <iframe
           src={`https://open.spotify.com/embed/episode/${id}`}
           width="100%"

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { Grid } from "@mui/material";
-import SideBar from "../components/SideBar";
-import Footer from "../components/Footer";
+import { Box, Grid } from "@mui/material";
+import SideBar from "../components/sidebar/SideBar";
+import Footer from "../components/footer/Footer";
 import { useDispatch } from "react-redux";
 import MainContent from "../components/MainContent";
 import {
@@ -13,6 +13,7 @@ import {
 const MainPage: React.FC = () => {
   const dispatch = useDispatch();
 
+  // 從 localStorage 提取資訊
   useEffect(() => {
     const userProfile = localStorage.getItem("user_profile");
     const userCategories = localStorage.getItem("user_categories");
@@ -23,7 +24,7 @@ const MainPage: React.FC = () => {
       try {
         const parsedUserProfile = JSON.parse(userProfile);
         dispatch(setUserData(parsedUserProfile));
-        console.log("更新後的使用者資訊: ", parsedUserProfile);
+        // console.log("更新後的使用者資訊: ", parsedUserProfile);
       } catch (error) {
         console.error("解析使用者資訊失敗: ", error);
       }
@@ -51,33 +52,58 @@ const MainPage: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <Grid
-      container
-      width="100vw"
-      height="100vh"
-      sx={{ display: "flex", alignItems: "center" }}
-    >
-      {/* SideBar */}
-      <Grid
-        item
-        xs={2}
-        width={260}
-        height="100%"
-        sx={{ boxShadow: "0px 0px 2px 2px #C7C7C73D" }}
+    <>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          minHeight: "100vh",
+          // maxWidth: "1440px",
+          margin: "0 auto",
+          width: "100%", // 寬度自適應
+        }}
       >
-        <SideBar />
-      </Grid>
+        <Grid
+          container
+          width="100vw"
+          height="100vh"
+          sx={{
+            alignItems: "center",
+            flexGrow: 1,
+          }}
+        >
+          {/* SideBar */}
+          <Grid
+            item
+            xs={12}
+            md={3}
+            sx={{
+              boxShadow: "0px 0px 2px 2px #C7C7C73D",
+              height: "100%",
+            }}
+          >
+            <SideBar />
+          </Grid>
 
-      {/* MainContent */}
-      <Grid item xs={7} height="100%">
-        <MainContent />
-      </Grid>
-
-      {/* Footer */}
-      <Grid item xs={3} width={372} height="100%">
-        <Footer />
-      </Grid>
-    </Grid>
+          {/* MainContent */}
+          <Grid item xs={12} md={9} sx={{ height: "100%", overflowY: "auto" }}>
+            <MainContent />
+          </Grid>
+        </Grid>
+        {/* Footer */}
+        <Box
+          sx={{
+            position: "relative",
+            bottom: 0,
+            width: "100%",
+            // height: "20vh",
+            backgroundColor: "#23262F",
+          }}
+        >
+          <Footer />
+        </Box>
+      </Box>
+    </>
   );
 };
 

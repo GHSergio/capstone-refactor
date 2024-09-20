@@ -42,8 +42,8 @@ const SearchModal = () => {
   // const [alertMessage, setAlertMessage] = useState(""); // 保存提示訊息
 
   // console.log("searchResults:", searchResults);
-  console.log("當前分類: ", currentCategoryId);
-  console.log("被選中的shows: ", selectedShows);
+  // console.log("當前分類: ", currentCategoryId);
+  // console.log("被選中的shows: ", selectedShows);
 
   // 清空 搜尋結果 & 挑中的shows
   const handleSearchModalClose = () => {
@@ -53,7 +53,6 @@ const SearchModal = () => {
   };
 
   // 將選中的 shows 逐個 添加到當前 category
-  // 將選中的 shows 逐個添加到當前 category
   const handleConfirmAdd = async () => {
     if (currentCategoryId && selectedShows.length > 0) {
       const alreadyExistsShows: string[] = []; // 保存已存在的節目名稱
@@ -117,10 +116,6 @@ const SearchModal = () => {
     overflow: "hidden",
     textOverflow: "ellipsis",
   };
-
-  // const handleSnackbarClose = () => {
-  //   setSnackbarOpen(false);
-  // };
 
   return (
     <>
@@ -311,14 +306,6 @@ const SearchModal = () => {
           </Box>
         </Box>
       </Modal>
-      {/* 顯示 Snackbar 提示 */}
-      {/* <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={2000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-      </Snackbar> */}
       <AlertComponent />
     </>
   );

@@ -1,7 +1,13 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
-import { Box, Typography, CardMedia, useTheme } from "@mui/material";
+import {
+  Box,
+  Typography,
+  CardMedia,
+  useTheme,
+  CircularProgress,
+} from "@mui/material";
 import { setActiveEpisode } from "../slice/podcastSlice";
 import { Favorite, fetchEpisodeDetail } from "../slice/userSlice";
 import listNull from "../assets/listNull.png";
@@ -9,7 +15,7 @@ import EpisodeList from "../components/EpisodeList";
 import AlertComponent from "../components/AlertComponent";
 import ActionModal from "../components/modals/ActionModal";
 const FavoritePage: React.FC = () => {
-  const { userFavorites, episodeDetail } = useSelector(
+  const { userFavorites, episodeDetail, loading } = useSelector(
     (state: RootState) => state.user
   );
   const { activeEpisodeId } = useSelector((state: RootState) => state.podcast);
@@ -29,6 +35,27 @@ const FavoritePage: React.FC = () => {
   const handleSetActive = (episodeId: string) => {
     dispatch(setActiveEpisode(episodeId));
   };
+
+  if (loading) {
+    return (
+      <>
+        <Box
+          sx={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h6" sx={{ ml: 2 }}>
+            載入中...
+          </Typography>
+          <CircularProgress color="inherit" />
+        </Box>
+      </>
+    );
+  }
 
   return (
     <>
@@ -62,9 +89,26 @@ const FavoritePage: React.FC = () => {
                 key={episode.id}
                 sx={{
                   width: "100%",
-                  height: "170px",
-                  mb: 3,
-                  p: 2,
+                  height: {
+                    xs: "100px",
+                    sm: "140px",
+                    md: "150px",
+                    lg: "170px",
+                    xl: "200px",
+                    // 獨立處理媒體查詢的 maxWidth
+                    "@media (max-width: 321px)": {
+                      height: "95px",
+                    },
+                    "@media (min-width: 321px) and(max-width: 376px)": {
+                      height: "120px",
+                    },
+                    "@media (min-width: 376px) and (max-width: 600px)": {
+                      height: "100px",
+                    },
+                    "@media(min-width:1600px)": {},
+                  },
+                  mb: { xs: 1, sm: 1, md: 2, lg: 2 },
+                  p: { xs: 0.5, sm: 1, md: 1, lg: 2 },
                   borderRadius: 2,
                   border: isActive
                     ? `3px solid ${theme.palette.primary.main}`
@@ -78,8 +122,8 @@ const FavoritePage: React.FC = () => {
                 {/* List*/}
                 <EpisodeList
                   episode={episode}
-                  imageWidth="100%"
-                  descriptionHeight="2.5rem"
+                  // imageWidth="130px"
+                  // descriptionHeight="2.5rem"
                 />
               </Box>
             );

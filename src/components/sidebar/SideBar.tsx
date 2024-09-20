@@ -1,11 +1,11 @@
 import React from "react";
 import { Box, Divider, Typography } from "@mui/material";
-import Logo from "../assets/Logo.png";
+import Logo from "../../assets/Logo.png";
 import SideBarItem from "./SideBarItem";
 import SidebarAddItem from "./SidebarAddItem";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../store/store";
-import { setCurrentCategoryId } from "../slice/userSlice";
+import { RootState } from "../../store/store";
+import { setCurrentCategoryId } from "../../slice/userSlice";
 
 const Sidebar: React.FC = () => {
   const dispatch = useDispatch();
@@ -37,15 +37,24 @@ const Sidebar: React.FC = () => {
       }}
     >
       {/* Logo 區域 */}
-      <Box sx={{}}>
-        <img src={Logo} alt="Logo" style={{ width: "150px" }} />
+      <Box sx={{ width: "80%" }}>
+        <img src={Logo} alt="Logo" style={{ width: "100%" }} />
       </Box>
 
       {/* 分隔線 */}
-      <Divider sx={{ width: "100%", my: "2rem" }} />
+      <Divider sx={{ width: "100%", my: "1.5rem" }} />
 
-      {/* Spotify 播放清單 */}
-      <Box sx={{ width: "100%" }}>
+      {/* 新增分類的按鈕 */}
+      <Box sx={{ width: "150px" }}>
+        <SidebarAddItem />
+      </Box>
+
+      {/* 分類清單 */}
+      <Box
+        sx={{
+          width: "100%",
+        }}
+      >
         {userCategories?.map((category) => (
           <SideBarItem
             key={category?.id}
@@ -60,8 +69,6 @@ const Sidebar: React.FC = () => {
           isActive={currentCategoryId === "favorites"}
           onClick={() => dispatch(setCurrentCategoryId("favorites"))}
         />
-        {/* 新增分類的按鈕 */}
-        <SidebarAddItem />
       </Box>
     </Box>
   );

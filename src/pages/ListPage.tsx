@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Box, Typography, CardMedia, Button } from "@mui/material";
+import {
+  Grid,
+  Box,
+  Typography,
+  CardMedia,
+  Button,
+  CircularProgress,
+} from "@mui/material";
 import listNull from "../assets/listNull.png";
 import CardComponent from "../components/CardComponent";
 import MoreModal from "../components/modals/MoreModal";
@@ -75,20 +82,35 @@ const ListPage: React.FC = () => {
           height: "100%",
           margin: "0 auto",
           gap: 2,
-          gridTemplateColumns: "repeat(auto-fill, minmax(178px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
           alignContent: "flex-start",
         }}
       >
         {/* 顯示卡片 */}
         {loading ? (
-          <Typography variant="h6">Loading...</Typography>
+          <>
+            <Box
+              sx={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Typography variant="h6" sx={{ ml: 2 }}>
+                載入中...
+              </Typography>
+              <CircularProgress color="inherit" />
+            </Box>
+          </>
         ) : showsDetail.length > 0 ? (
           showsDetail.map((show) => (
             <Grid
               item
               key={show.id}
               sx={{
-                width: "178px",
+                width: "180px",
                 height: "266px",
                 borderRadius: "0.5rem",
                 boxShadow: "0px 0px 40px 10px #C7C7C73D",

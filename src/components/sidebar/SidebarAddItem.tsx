@@ -1,13 +1,17 @@
 import React from "react";
 import {
   ListItem as MUIListItem,
-  ListItemText,
+  // ListItemText,
   IconButton,
   useTheme,
+  Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch } from "react-redux";
-import { setCurrentAction, setIsActionModalOpen } from "../slice/podcastSlice";
+import {
+  setCurrentAction,
+  setIsActionModalOpen,
+} from "../../slice/podcastSlice";
 
 const SidebarAddItem: React.FC = () => {
   const dispatch = useDispatch();
@@ -22,8 +26,9 @@ const SidebarAddItem: React.FC = () => {
     <MUIListItem
       onClick={handleAddCategory}
       sx={{
+        width: "100%",
         display: "flex",
-        justifyContent: "center",
+        // justifyContent: "flex-start",
         alignItems: "center",
         color: theme.palette.secondary.main,
         border: `2px solid ${theme.palette.secondary.main}`,
@@ -36,13 +41,16 @@ const SidebarAddItem: React.FC = () => {
       <IconButton sx={{ color: theme.palette.secondary.main }}>
         <AddIcon />
       </IconButton>
-      <ListItemText
-        primary="新增分類"
+      <Typography
+        variant="h6"
         sx={{
           textAlign: "center",
           color: theme.palette.secondary.main,
+          fontSize: "100%",
         }}
-      />
+      >
+        新增分類
+      </Typography>
     </MUIListItem>
   );
 };

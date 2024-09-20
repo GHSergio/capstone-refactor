@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import ListPage from "../pages/ListPage";
 import FavoritePage from "../pages/FavoritePage";
+import User from "./footer/User";
+// import Footer from "./footer/Footer";
 
 const MainContent = () => {
   const { currentCategoryId } = useSelector((state: RootState) => state.user);
@@ -47,13 +49,36 @@ const MainContent = () => {
             width: "100%",
             padding: "1rem",
             margin: "5rem auto 0 auto",
-            overflowY: "auto",
             height: "100%",
+            overflowY: "auto",
+            "&::-webkit-scrollbar": {
+              width: "0.5rem",
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: "#f1f1f1",
+              borderRadius: "0.5rem",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "#C1C9D3",
+              borderRadius: "0.5rem",
+            },
+            "&::-webkit-scrollbar-thumb:hover": {
+              backgroundColor: "#555",
+              cursor: "pointer",
+            },
           }}
         >
           {currentCategoryId === "favorites" ? <FavoritePage /> : <ListPage />}
         </Box>
       </Box>
+
+      {/* User */}
+      <Box sx={{ position: "absolute", top: "40px", right: "60px" }}>
+        <User />
+      </Box>
+      {/* <Box height={200}>
+        <Footer />
+      </Box> */}
     </>
   );
 };

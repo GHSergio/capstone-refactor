@@ -150,9 +150,9 @@ async function getToken(code: string): Promise<{
 }> {
   const code_verifier = localStorage.getItem("code_verifier");
 
-  console.log("Requesting token with code:", code); // 確認 code 是否正確
-  console.log("Using code_verifier:", code_verifier); // 確認 code_verifier 是否正確
-  console.log("Redirect URI:", redirectUrl); // 確認 redirect_uri 是否正確
+  // console.log("Requesting token with code:", code); // 確認 code 是否正確
+  // console.log("Using code_verifier:", code_verifier); // 確認 code_verifier 是否正確
+  // console.log("Redirect URI:", redirectUrl); // 確認 redirect_uri 是否正確
 
   const response = await fetch(tokenEndpoint, {
     method: "POST",
@@ -174,7 +174,7 @@ async function getToken(code: string): Promise<{
     console.error("錯誤訊息：", data); // 打印錯誤訊息
     throw new Error(`Token 交換失敗，狀態碼：${response.status}`);
   }
-  console.log("Token response data:", data); // 打印完整的返回數據
+  // console.log("Token response data:", data); // 打印完整的返回數據
   return data;
 }
 

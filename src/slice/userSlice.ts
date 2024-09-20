@@ -139,7 +139,7 @@ export const fetchCategories = createAsyncThunk(
           Authorization: `Bearer ${acToken}`,
         },
       });
-      console.log("獲取分類清單: ", response);
+      // console.log("獲取分類清單: ", response);
       return response.data.categories;
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
@@ -477,6 +477,7 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchEpisodeDetail.fulfilled, (state, action) => {
+        state.loading = false;
         // 檢查 episode 是否已經存在
         const episodeExists = state.episodeDetail.some(
           (episode) => episode.id === action.payload.id
