@@ -58,7 +58,7 @@ const MainPage: React.FC = () => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          minHeight: "100vh",
+          height: "100vh",
           margin: "0 auto",
           width: "100%",
         }}
@@ -66,7 +66,7 @@ const MainPage: React.FC = () => {
         <Grid
           container
           width="100vw"
-          // height="100vh"
+          height="100vh"
           sx={{
             height: { xs: "", sm: "100vh" },
             alignItems: "center",
@@ -81,6 +81,7 @@ const MainPage: React.FC = () => {
               boxShadow: "0px 0px 2px 2px #C7C7C73D",
               height: "100%",
               display: { xs: "block", sm: "none" },
+              paddingBottom: { xs: 0, sm: "6.5rem" },
             }}
           >
             <Navbar />
@@ -89,30 +90,41 @@ const MainPage: React.FC = () => {
           {/* 大螢幕顯示 Sidebar */}
           <Grid
             item
-            // xs={12}
             sm={3}
             sx={{
               boxShadow: "0px 0px 2px 2px #C7C7C73D",
+              display: { xs: "none", sm: "flex" },
               height: "100%",
-              display: { xs: "none", sm: "block" },
+              paddingBottom: { xs: 0, sm: "7rem" },
             }}
           >
             <SideBar />
           </Grid>
 
           {/* MainContent */}
-          <Grid item xs={12} sm={9} sx={{ height: "100%", overflowY: "auto" }}>
+          <Grid
+            item
+            xs={12}
+            sm={9}
+            sx={{
+              height: "100%",
+              overflowY: "auto",
+              marginTop: { xs: "2rem", sm: 0 },
+            }}
+          >
             <MainContent />
           </Grid>
         </Grid>
         {/* Footer */}
         <Box
           sx={{
-            position: { xs: "absolute", sm: "relative" },
+            position: { xs: "fixed", sm: "absolute" },
             width: "100%",
-            "@media(min-width:476px)": {
-              bottom: 0,
+            height: "20vh",
+            "@media(max-width:600px)": {
+              top: 0,
             },
+            bottom: 0,
           }}
         >
           <Footer />

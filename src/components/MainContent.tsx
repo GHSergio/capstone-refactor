@@ -46,25 +46,25 @@ const MainContent = () => {
         <Box
           sx={{
             width: "100%",
+            height: "80vh",
             padding: "1rem",
             margin: { xs: "6rem auto 0 auto", sm: "5rem auto 0 auto" },
-            height: "100%",
-            overflowY: "auto",
-            "&::-webkit-scrollbar": {
-              width: "0.5rem",
-            },
-            "&::-webkit-scrollbar-track": {
-              backgroundColor: "#f1f1f1",
-              borderRadius: "0.5rem",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "#C1C9D3",
-              borderRadius: "0.5rem",
-            },
-            "&::-webkit-scrollbar-thumb:hover": {
-              backgroundColor: "#555",
-              cursor: "pointer",
-            },
+            // overflowY: "auto",
+            // "&::-webkit-scrollbar": {
+            //   width: "0.5rem",
+            // },
+            // "&::-webkit-scrollbar-track": {
+            //   backgroundColor: "#f1f1f1",
+            //   borderRadius: "0.5rem",
+            // },
+            // "&::-webkit-scrollbar-thumb": {
+            //   backgroundColor: "#C1C9D3",
+            //   borderRadius: "0.5rem",
+            // },
+            // "&::-webkit-scrollbar-thumb:hover": {
+            //   backgroundColor: "#555",
+            //   cursor: "pointer",
+            // },
           }}
         >
           {currentCategoryId === "favorites" ? <FavoritePage /> : <ListPage />}

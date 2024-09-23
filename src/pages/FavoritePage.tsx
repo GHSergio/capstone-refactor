@@ -64,6 +64,7 @@ const FavoritePage: React.FC = () => {
         sx={{
           maxHeight: "100%",
           overflowY: "auto",
+          paddingBottom: { xs: 0, sm: "7.5rem" },
           "&::-webkit-scrollbar": {
             width: "0.5rem",
           },

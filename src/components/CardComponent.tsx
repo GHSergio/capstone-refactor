@@ -28,7 +28,7 @@ const CardComponent: React.FC<CardComponentProps> = ({
         width: "100%",
         height: "100%",
         // backgroundColor: "#FFFFFF",
-        padding: "0rem",
+        p: 0,
       }}
     >
       <Card

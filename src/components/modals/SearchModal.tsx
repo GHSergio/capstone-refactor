@@ -38,8 +38,6 @@ const SearchModal = () => {
   const { currentCategoryId } = useSelector((state: RootState) => state.user);
 
   const [searchTerm, setSearchTerm] = useState("");
-  // const [snackbarOpen, setSnackbarOpen] = useState(false); // 控制 Snackbar 顯示狀態
-  // const [alertMessage, setAlertMessage] = useState(""); // 保存提示訊息
 
   // console.log("searchResults:", searchResults);
   // console.log("當前分類: ", currentCategoryId);
@@ -117,6 +115,24 @@ const SearchModal = () => {
     textOverflow: "ellipsis",
   };
 
+  const searchStyled = {
+    fontSize: {
+      xs: "0.6rem",
+      sm: "0.7rem",
+      md: "1rem",
+      lg: "1rem",
+    },
+  };
+
+  const buttonStyled = {
+    fontSize: {
+      xs: "0.4rem",
+      sm: "0.6rem",
+      md: "0.8rem",
+      lg: "1rem",
+    },
+  };
+
   return (
     <>
       <Modal open={isSearchModalOpen} onClose={handleSearchModalClose}>
@@ -126,8 +142,8 @@ const SearchModal = () => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "70%",
-            height: "75%",
+            width: "80%",
+            height: "80%",
             bgcolor: "#FFFFFF",
             boxShadow: "0px -10px 20px 0px #0000001F",
             borderRadius: 2,
@@ -148,7 +164,12 @@ const SearchModal = () => {
               variant="h6"
               sx={{
                 width: "100%",
-                fontSize: "1.2rem",
+                fontSize: {
+                  xs: "0.6rem",
+                  sm: "0.8rem",
+                  md: "1rem",
+                  lg: "1.25rem",
+                },
               }}
             >
               新增 Podcast
@@ -166,8 +187,10 @@ const SearchModal = () => {
           {/* SearchBar */}
           <Box
             sx={{
-              p: 2,
+              p: { xs: 1, md: 2 },
               display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             <TextField
@@ -175,10 +198,32 @@ const SearchModal = () => {
               placeholder="輸入關鍵字..."
               value={searchTerm}
               onChange={handleSearchChange}
+              // 調整input內部樣式
               InputProps={{
+                sx: {
+                  lineHeight: "30px",
+                  "& input": {
+                    paddingY: {
+                      xs: "0.2rem",
+                      sm: "0.4rem",
+                      md: "0.6rem",
+                      lg: "1rem",
+                    },
+                    ...searchStyled,
+                  },
+                  "& input::placeholder": {
+                    ...searchStyled,
+                  },
+                },
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon sx={{ color: "#ACADB9" }} />
+                    {/* 調整icon樣式 */}
+                    <SearchIcon
+                      sx={{
+                        color: "#ACADB9",
+                        ...searchStyled,
+                      }}
+                    />
                   </InputAdornment>
                 ),
               }}
@@ -193,6 +238,8 @@ const SearchModal = () => {
               flexWrap: "wrap",
               p: 2,
               overflowY: "auto",
+              justifyContent: "flex-start",
+              alignContent: "flex-start",
             }}
           >
             {searchResults.length > 0 ? (
@@ -201,23 +248,45 @@ const SearchModal = () => {
                   m={1}
                   key={show.id}
                   sx={{
-                    width: "170px",
-                    height: "240px",
+                    width: { sm: "175px", md: "180px", lg: "170px" },
+                    height: {
+                      xs: "220px",
+                      sm: "240px",
+                      md: "240px",
+                      lg: "240px",
+                    },
+                    "@media(min-width:1600px)": {
+                      width: "200px",
+                      height: "250px",
+                    },
                     borderRadius: "0.5rem",
                     boxShadow: "0px 0px 2px 2px #C7C7C73D",
                     padding: 0,
                     overflow: "hidden",
                     cursor: "pointer",
-                    border: isSelected(show) ? "5px solid #FF7F50" : "none",
+                    border: isSelected(show) ? "2px solid #FF7F50" : "none",
+                    "@media (max-width:320px)": {
+                      maxWidth: "95px",
+                      height: "150px",
+                    },
+                    "@media (min-width:321px) and (max-width:376px)": {
+                      maxWidth: "110px",
+                      height: "170px",
+                    },
+                    "@media(min-width:376px) and (max-width:600px)": {
+                      maxWidth: "130px",
+                      height: "190px",
+                    },
                   }}
                   onClick={() => handleShowSelect?.(show)}
                 >
+                  {/* Card外框 */}
                   <Box
                     sx={{
                       width: "100%",
                       height: "100%",
                       backgroundColor: "#FFFFFF",
-                      padding: "1rem",
+                      padding: { xs: "0.5rem", md: "0.8rem" },
                     }}
                   >
                     <Card
@@ -226,14 +295,16 @@ const SearchModal = () => {
                         height: "100%",
                         margin: "0 auto",
                         boxShadow: "none",
+                        padding: "0",
                       }}
                     >
                       <CardMedia
                         component="img"
-                        height="140"
                         image={show?.images?.[0].url}
                         alt={show.name}
-                        sx={{ borderRadius: "0.5rem" }}
+                        sx={{
+                          borderRadius: "0.5rem",
+                        }}
                       />
                       <CardContent
                         sx={{
@@ -282,7 +353,7 @@ const SearchModal = () => {
           {/* Footer */}
           <Box
             sx={{
-              p: 2,
+              p: { xs: 1, md: 2 },
               bgcolor: "#F6F7F8",
               display: "flex",
               justifyContent: "flex-end",
@@ -292,16 +363,16 @@ const SearchModal = () => {
             <Button
               variant="outlined"
               onClick={handleSearchModalClose}
-              sx={{ mr: 2 }}
+              sx={{ mr: { xs: 1, md: 2 }, p: 0 }}
             >
-              取消
+              <Typography sx={{ ...buttonStyled }}>取消</Typography>
             </Button>
             <Button
               variant="contained"
               onClick={handleConfirmAdd}
               disabled={selectedShows.length === 0}
             >
-              確認新增
+              <Typography sx={{ ...buttonStyled }}>確認新增</Typography>
             </Button>
           </Box>
         </Box>

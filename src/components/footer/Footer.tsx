@@ -32,8 +32,8 @@ const Footer: React.FC = () => {
     <>
       <Box
         sx={{
-          width: "100vw",
-          // height: "25vh",
+          width: "100%",
+          height: "100%",
           backgroundColor: "lightGray",
           position: "relative",
         }}

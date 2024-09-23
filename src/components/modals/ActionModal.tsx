@@ -67,6 +67,34 @@ const ActionModal: React.FC = () => {
     (list) => list.id === currentCategoryId
   );
 
+  const buttonStyled = {
+    padding: { xs: "", sm: "0 1rem", md: "0 2rem", lg: "0 3.5rem" },
+    borderRadius: "0.5rem",
+  };
+
+  const textStyled = {
+    fontSize: { xs: "0.6rem", sm: "0.8rem", md: "0.8rem", lg: "1rem" },
+
+    "@media (max-width:320px)": {
+      fontSize: "0.3rem",
+    },
+    "@media (min-width:321px) and (max-width:376px)": {
+      fontSize: "0.4rem",
+    },
+    "@media(min-width:376px) and (max-width:600px)": {
+      fontSize: "0.5rem",
+    },
+  };
+
+  const searchStyled = {
+    fontSize: {
+      xs: "0.4rem",
+      sm: "0.6rem",
+      md: "0.8rem",
+      lg: "1rem",
+    },
+  };
+
   return (
     <Modal open={isActionModalOpen} onClose={handleClose}>
       <Box
@@ -75,13 +103,13 @@ const ActionModal: React.FC = () => {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: "30%",
-          height: "35%",
+          width: { xs: "60%", sm: "40%" },
+          height: "45%",
           bgcolor: "#FFFFFF",
           borderRadius: "1rem",
           display: "flex",
           flexDirection: "column",
-          p: 3,
+          p: { xs: 1.5, md: 2, lg: 3 },
         }}
       >
         {/* Header */}
@@ -91,30 +119,66 @@ const ActionModal: React.FC = () => {
             alignItems: "center",
           }}
         >
-          <Typography variant="h6" sx={{ fontSize: "1rem" }}>
+          <Typography
+            variant="h6"
+            sx={{
+              fontSize: {
+                xs: "0.6rem",
+                sm: "0.8rem",
+                md: "1rem",
+                lg: "1.25rem",
+              },
+            }}
+          >
             {currentAction === "edit" && "編輯名稱"}
             {currentAction === "add" && "新增名稱"}
             {currentAction === "delete" && "刪除分類"}
           </Typography>
           <IconButton
             onClick={handleClose}
-            sx={{ position: "absolute", right: 15 }}
+            sx={{ position: "absolute", right: 5 }}
           >
-            <CloseIcon />
+            <CloseIcon
+              sx={{
+                fontSize: {
+                  xs: "0.6rem",
+                  sm: "0.8rem",
+                  md: "1rem",
+                  lg: "1.25rem",
+                },
+              }}
+            />
           </IconButton>
         </Box>
 
-        <Divider sx={{ marginY: "1rem" }} />
+        <Divider sx={{ marginY: { xs: "0.5rem", md: "1rem" } }} />
 
         {/* Main */}
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ flex: 1, p: 0 }}>
           {currentAction === "edit" && (
             <TextField
               fullWidth
-              label={currentList?.name}
+              placeholder={currentList?.name || ""}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              placeholder={currentList?.name || ""}
+              // 調整input內部樣式
+              InputProps={{
+                sx: {
+                  "& input": {
+                    paddingY: {
+                      xs: "0.2rem",
+                      sm: "0.4rem",
+                      md: "0.6rem",
+                      lg: "1rem",
+                    },
+                    ...searchStyled,
+                  },
+                  "& input::placeholder": {
+                    ...searchStyled,
+                    color: "gray",
+                  },
+                },
+              }}
             />
           )}
 
@@ -129,38 +193,42 @@ const ActionModal: React.FC = () => {
           )}
 
           {currentAction === "delete" && (
-            <Typography>您確定要刪除 {currentList?.name} 分類嗎？</Typography>
+            <Typography sx={{ ...searchStyled }}>
+              您確定要刪除 {currentList?.name} 分類嗎？
+            </Typography>
           )}
         </Box>
 
-        <Divider sx={{ marginY: "1rem" }} />
+        <Divider sx={{ marginY: { xs: "0.5rem", md: "1rem" } }} />
 
         {/* Footer */}
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Box p={0} sx={{ display: "flex", justifyContent: "space-between" }}>
           <Button
             variant="outlined"
             onClick={handleClose}
             sx={{
-              padding: "0 3.5rem",
-              borderRadius: "0.5rem",
+              mr: { xs: 1, md: 2 },
+              p: 0,
               color: "#111111",
+              ...buttonStyled,
             }}
           >
-            取消
+            <Typography sx={{ ...textStyled }}>取消</Typography>
           </Button>
           <Button
             variant="contained"
             color="primary"
             onClick={handleConfirm}
-            // disabled={currentAction !== "delete" && !inputValue.trim()}
-            disabled={!inputValue && currentAction !== "delete"}
+            disabled={!inputValue.trim() && currentAction !== "delete"}
             sx={{
-              padding: "0 3.5rem",
-              borderRadius: "0.5rem",
               color: "#FFFFFF",
+              ...buttonStyled,
             }}
           >
-            {currentAction === "delete" ? "刪除" : "保存"}
+            <Typography sx={{ ...textStyled }}>
+              {" "}
+              {currentAction === "delete" ? "刪除" : "保存"}
+            </Typography>
           </Button>
         </Box>
       </Box>

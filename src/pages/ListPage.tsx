@@ -80,10 +80,27 @@ const ListPage: React.FC = () => {
         sx={{
           width: "100%",
           height: "100%",
-          margin: "0 auto",
+          margin: "0 auto ",
+          paddingBottom: { xs: 0, sm: "7.5rem" },
           gap: 2,
           gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
           alignContent: "flex-start",
+          overflowY: "auto",
+          "&::-webkit-scrollbar": {
+            width: "0.5rem",
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "#f1f1f1",
+            borderRadius: "0.5rem",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "#C1C9D3",
+            borderRadius: "0.5rem",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            backgroundColor: "#555",
+            cursor: "pointer",
+          },
         }}
       >
         {/* 顯示卡片 */}
@@ -110,7 +127,12 @@ const ListPage: React.FC = () => {
               item
               key={show.id}
               sx={{
-                maxWidth: { xs: "180px", sm: "160px" },
+                maxWidth: {
+                  xs: "180px",
+                  sm: "160px",
+                  md: "165px",
+                  lg: "190px",
+                },
                 borderRadius: "0.5rem",
                 boxShadow: "0px 0px 40px 10px #C7C7C73D",
                 padding: 2,

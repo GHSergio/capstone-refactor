@@ -28,7 +28,6 @@ const SidebarAddItem: React.FC = () => {
       sx={{
         width: "100%",
         display: "flex",
-        // justifyContent: "flex-start",
         alignItems: "center",
         color: theme.palette.secondary.main,
         border: `2px solid ${theme.palette.secondary.main}`,
@@ -46,7 +45,7 @@ const SidebarAddItem: React.FC = () => {
         sx={{
           textAlign: "center",
           color: theme.palette.secondary.main,
-          fontSize: "100%",
+          fontSize: { xs: "70%", sm: "90%" },
         }}
       >
         新增分類
