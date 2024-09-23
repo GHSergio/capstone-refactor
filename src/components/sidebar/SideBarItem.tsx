@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   ListItem as MUIListItem,
-  ListItemText,
   IconButton,
   Menu,
   MenuItem,
@@ -81,7 +80,7 @@ const SideBarItem: React.FC<SideBarItemProps> = ({
           <Typography
             variant="h6"
             sx={{
-              fontSize: "100%",
+              fontSize: { xs: "70%", sm: "100%" },
               WebkitLineClamp: 1,
               overflow: "hidden",
               textOverflow: "ellipsis",
@@ -109,10 +108,6 @@ const SideBarItem: React.FC<SideBarItemProps> = ({
                 vertical: "bottom",
                 horizontal: "right",
               }}
-              // transformOrigin={{
-              //   vertical: "bottom",
-              //   horizontal: "right",
-              // }}
             >
               <MenuItem onClick={handleEdit}>編輯名稱</MenuItem>
               <Divider />

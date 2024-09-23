@@ -31,7 +31,7 @@ const Sidebar: React.FC = () => {
         height: "100%",
         backgroundColor: "#F6F7F8",
         display: "flex",
-        flexDirection: "column",
+        flexDirection: { xs: "row", sm: "column" },
         alignItems: "center",
         padding: "1.5rem",
       }}
@@ -42,7 +42,13 @@ const Sidebar: React.FC = () => {
       </Box>
 
       {/* 分隔線 */}
-      <Divider sx={{ width: "100%", my: "1.5rem" }} />
+      <Divider
+        sx={{
+          width: "100%",
+          my: "1.5rem",
+          display: { sx: "none", sm: "block" },
+        }}
+      />
 
       {/* 新增分類的按鈕 */}
       <Box sx={{ width: "150px" }}>

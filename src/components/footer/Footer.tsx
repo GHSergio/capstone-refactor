@@ -30,15 +30,10 @@ const Footer: React.FC = () => {
 
   return (
     <>
-      {/* User */}
-      {/* <Box sx={{ position: "absolute", top: "40px", right: "60px" }}>
-        <User />
-      </Box> */}
-
       <Box
         sx={{
           width: "100vw",
-          height: "25vh",
+          // height: "25vh",
           backgroundColor: "lightGray",
           position: "relative",
         }}

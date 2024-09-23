@@ -4,7 +4,6 @@ import { RootState } from "../store/store";
 import ListPage from "../pages/ListPage";
 import FavoritePage from "../pages/FavoritePage";
 import User from "./footer/User";
-// import Footer from "./footer/Footer";
 
 const MainContent = () => {
   const { currentCategoryId } = useSelector((state: RootState) => state.user);
@@ -48,7 +47,7 @@ const MainContent = () => {
           sx={{
             width: "100%",
             padding: "1rem",
-            margin: "5rem auto 0 auto",
+            margin: { xs: "6rem auto 0 auto", sm: "5rem auto 0 auto" },
             height: "100%",
             overflowY: "auto",
             "&::-webkit-scrollbar": {
@@ -73,12 +72,16 @@ const MainContent = () => {
       </Box>
 
       {/* User */}
-      <Box sx={{ position: "absolute", top: "40px", right: "60px" }}>
+      <Box
+        sx={{
+          position: "absolute",
+          top: "40px",
+          right: "60px",
+          display: { xs: "none", sm: "block" },
+        }}
+      >
         <User />
       </Box>
-      {/* <Box height={200}>
-        <Footer />
-      </Box> */}
     </>
   );
 };

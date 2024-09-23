@@ -2,8 +2,9 @@ import React, { useEffect } from "react";
 import { Box, Grid } from "@mui/material";
 import SideBar from "../components/sidebar/SideBar";
 import Footer from "../components/footer/Footer";
-import { useDispatch } from "react-redux";
 import MainContent from "../components/MainContent";
+import Navbar from "../components/Navbar";
+import { useDispatch } from "react-redux";
 import {
   setUserData,
   setUserCategories,
@@ -58,46 +59,60 @@ const MainPage: React.FC = () => {
           display: "flex",
           flexDirection: "column",
           minHeight: "100vh",
-          // maxWidth: "1440px",
           margin: "0 auto",
-          width: "100%", // 寬度自適應
+          width: "100%",
         }}
       >
         <Grid
           container
           width="100vw"
-          height="100vh"
+          // height="100vh"
           sx={{
+            height: { xs: "", sm: "100vh" },
             alignItems: "center",
             flexGrow: 1,
           }}
         >
-          {/* SideBar */}
+          {/* 小螢幕顯示 Navbar */}
           <Grid
             item
             xs={12}
-            md={3}
             sx={{
               boxShadow: "0px 0px 2px 2px #C7C7C73D",
               height: "100%",
+              display: { xs: "block", sm: "none" },
+            }}
+          >
+            <Navbar />
+          </Grid>
+
+          {/* 大螢幕顯示 Sidebar */}
+          <Grid
+            item
+            // xs={12}
+            sm={3}
+            sx={{
+              boxShadow: "0px 0px 2px 2px #C7C7C73D",
+              height: "100%",
+              display: { xs: "none", sm: "block" },
             }}
           >
             <SideBar />
           </Grid>
 
           {/* MainContent */}
-          <Grid item xs={12} md={9} sx={{ height: "100%", overflowY: "auto" }}>
+          <Grid item xs={12} sm={9} sx={{ height: "100%", overflowY: "auto" }}>
             <MainContent />
           </Grid>
         </Grid>
         {/* Footer */}
         <Box
           sx={{
-            position: "relative",
-            bottom: 0,
+            position: { xs: "absolute", sm: "relative" },
             width: "100%",
-            // height: "20vh",
-            backgroundColor: "#23262F",
+            "@media(min-width:476px)": {
+              bottom: 0,
+            },
           }}
         >
           <Footer />

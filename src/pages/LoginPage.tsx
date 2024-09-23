@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import ImageCarousel from "../components/LoginPage/ImageCarousel";
 import Logo from "../assets/Logo.png";
-import { loginWithSpotifyClick } from "../api/Author"; // 引入 login 函數
+import { loginWithSpotifyClick } from "../api/Author"; // 引入 Spotify Author 函數
 
 const LoginPage: React.FC = () => {
   const [isPaused, setIsPaused] = useState(false);
@@ -17,6 +17,18 @@ const LoginPage: React.FC = () => {
 
   const handleLoginClick = () => {
     loginWithSpotifyClick(); // 觸發 Spotify 授權
+  };
+
+  const TypographyStyle = {
+    fontSize: {
+      xs: "0.3rem",
+      sm: "0.6rem",
+      md: "0.8rem",
+      lg: "1rem",
+    },
+    "@media(min-width:1600px)": {
+      fontSize: "1.8rem",
+    },
   };
 
   return (
@@ -47,11 +59,13 @@ const LoginPage: React.FC = () => {
           textAlign="center"
           sx={{
             width: {
-              xs: "40vw",
-              sm: "35vw",
-              md: "30vw",
-              lg: "25vw",
-              // xl: "25vw",
+              xs: "30vw",
+              sm: "28vw",
+              md: "25vw",
+              lg: "20vw",
+            },
+            "@media(min-width:1600px)": {
+              width: "20vw",
             },
             display: "flex",
             flexDirection: "column",
@@ -60,9 +74,10 @@ const LoginPage: React.FC = () => {
         >
           <img src={Logo} alt="Logo" style={{ width: "100%" }} />
           <Typography
-            variant="h6"
+            variant="body1"
             gutterBottom
             sx={{
+              marginTop: "0.2rem",
               width: {
                 xs: "40vw",
                 sm: "35vw",
@@ -70,15 +85,11 @@ const LoginPage: React.FC = () => {
                 lg: "25vw",
               },
               fontFamily: "Montserrat",
-              fontSize: {
-                xs: "0.3rem",
-                sm: "0.6rem",
-                md: "0.8rem",
-                lg: "1.2rem",
-                xl: "1.8rem",
+              ...TypographyStyle,
+              "@media (min-width:1600px)": {
+                width: "25vw",
               },
               color: "#111111",
-              marginTop: "0.5rem",
               letterSpacing: "0.03rem",
             }}
           >
@@ -89,12 +100,14 @@ const LoginPage: React.FC = () => {
         {/*  按鈕 */}
         <Box
           sx={{
-            mt: {
-              xs: "0.5rem",
-              sm: "1rem",
-              md: "1.5rem",
-              lg: "2rem",
-              // xl: "2.5rem",
+            marginY: {
+              xs: "0.2rem",
+              sm: "0.6rem",
+              md: "0.9rem",
+              lg: "0.8rem",
+            },
+            "@media(min-width:1600px)": {
+              marginY: "1.25rem",
             },
           }}
           onClick={handleLoginClick}
@@ -106,15 +119,8 @@ const LoginPage: React.FC = () => {
                 sm: "40vw",
                 md: "35vw",
                 lg: "30vw",
-                // xl: "25vw",
               },
-              fontSize: {
-                xs: "0.35rem",
-                sm: "0.6rem",
-                md: "0.8rem",
-                lg: "1.2rem",
-                xl: "2rem",
-              },
+              ...TypographyStyle,
               color: "#F3F5F6",
               backgroundColor: "#1ED760",
               borderRadius: {
@@ -129,7 +135,9 @@ const LoginPage: React.FC = () => {
                 sm: "0.6rem",
                 md: "0.8rem",
                 lg: "1.2rem",
-                xl: "2rem",
+              },
+              "@media (min-width:1600px)": {
+                padding: "2rem",
               },
               "&:hover": {
                 backgroundColor: "#1ED760",
@@ -152,37 +160,22 @@ const LoginPage: React.FC = () => {
               sm: "0.4rem",
               md: "0.6rem",
               lg: "0.8rem",
-              xl: "1.5rem",
             },
           }}
         >
           <Typography
-            variant="body2"
+            variant="body1"
             sx={{
-              fontFamily: "Noto Sans TC",
-              fontSize: {
-                xs: "0.35rem",
-                sm: "0.6rem",
-                md: "0.8rem",
-                lg: "1.2rem",
-                xl: "2rem",
-              },
+              ...TypographyStyle,
             }}
           >
             沒有帳號嗎？
           </Typography>
           <Typography
-            variant="body2"
+            variant="body1"
             sx={{
-              fontFamily: "Noto Sans TC",
               fontWeight: "700",
-              fontSize: {
-                xs: "0.35rem",
-                sm: "0.6rem",
-                md: "0.8rem",
-                lg: "1.2rem",
-                xl: "2rem",
-              },
+              ...TypographyStyle,
             }}
           >
             <a

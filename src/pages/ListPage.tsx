@@ -110,12 +110,20 @@ const ListPage: React.FC = () => {
               item
               key={show.id}
               sx={{
-                width: "180px",
-                height: "266px",
+                maxWidth: { xs: "180px", sm: "160px" },
                 borderRadius: "0.5rem",
                 boxShadow: "0px 0px 40px 10px #C7C7C73D",
                 padding: 2,
                 overflow: "hidden",
+                "@media (max-width:320px)": {
+                  maxWidth: "130px",
+                },
+                "@media (min-width:321px) and (max-width:376px)": {
+                  maxWidth: "155px",
+                },
+                "@media(min-width:376px) and (max-width:600px)": {
+                  maxWidth: "180px",
+                },
               }}
             >
               <CardComponent

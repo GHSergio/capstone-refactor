@@ -479,7 +479,7 @@ const userSlice = createSlice({
       .addCase(fetchEpisodeDetail.fulfilled, (state, action) => {
         state.loading = false;
         // 檢查 episode 是否已經存在
-        const episodeExists = state.episodeDetail.some(
+        const episodeExists = state.episodeDetail?.some(
           (episode) => episode.id === action.payload.id
         );
         // 如果不存在才推入

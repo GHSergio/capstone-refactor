@@ -27,8 +27,8 @@ const CardComponent: React.FC<CardComponentProps> = ({
       sx={{
         width: "100%",
         height: "100%",
-        backgroundColor: "#FFFFFF",
-        padding: "0.3rem",
+        // backgroundColor: "#FFFFFF",
+        padding: "0rem",
       }}
     >
       <Card
@@ -41,15 +41,17 @@ const CardComponent: React.FC<CardComponentProps> = ({
       >
         <CardMedia
           component="img"
-          height="130"
           image={image}
           alt={name}
           sx={{
             borderRadius: "0.5rem",
             boxShadow: "0 0 5px 3px rgba(0,0,0,0.5)",
             marginBottom: "0.1rem",
+            objectFit: "center",
+            objectPosition: "center",
           }}
         />
+
         <CardContent
           sx={{
             padding: 0,

@@ -99,7 +99,10 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ isPaused }) => {
       <Box
         sx={{
           position: "absolute",
-          top: { xs: 160, sm: 260, md: 380, lg: 492, xl: 950 },
+          top: { xs: 160, sm: 260, md: 380, lg: 492 },
+          "@media(min-width:1600px)": {
+            top: 950,
+          },
           width: "35vw",
           display: "flex",
           flexDirection: "column",
@@ -116,7 +119,9 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ isPaused }) => {
                 sm: "1.2rem",
                 md: "1.6rem",
                 lg: "2rem",
-                xl: "3rem",
+              },
+              "@media(min-width:1600px)": {
+                fontSize: "3rem",
               },
               fontFamily: "Noto Sans TC",
               fontWeight: 700,
@@ -133,7 +138,9 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ isPaused }) => {
                 sm: "0.5rem",
                 md: "0.7rem",
                 lg: "0.9rem",
-                xl: "1.5rem",
+              },
+              "@media(min-width:1600px)": {
+                fontSize: "1.5rem",
               },
               marginTop: { xs: "0.5rem", lg: "1.2rem" },
               fontFamily: "Poppins",
@@ -191,7 +198,10 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ isPaused }) => {
           display: "flex",
           gap: "1.25vw",
           position: "absolute",
-          bottom: { xs: 50, sm: 70, md: 120, lg: 137, xl: 230 },
+          bottom: { xs: 50, sm: 70, md: 120, lg: 137 },
+          "@media(min-width:1600px)": {
+            bottom: 230,
+          },
         }}
       >
         {images.map((_, index) => (
