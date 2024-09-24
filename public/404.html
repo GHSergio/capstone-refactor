@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <script type="text/javascript">
+      // 獲取當前路徑
+      var currentPath = window.location.pathname + window.location.search;
+      // 將當前路徑存入 localStorage
+      localStorage.setItem("redirectPath", currentPath);
+      // 將使用者重定向到 index.html
+      window.location.replace("/capstone-refactor/index.html");
+    </script>
+  </head>
+  <body></body>
+</html>
