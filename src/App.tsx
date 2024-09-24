@@ -20,8 +20,8 @@ function AppRouter() {
       <Route path="/callback" element={<CallbackPage />} />
       <Route path="/main/" element={<MainPage />}></Route>
 
-      {/* 訪問其他都會被導向/ */}
-      <Route path="*" element={<Navigate to="/main/list" replace />} />
+      {/* 訪問其他都會被導向/
+      <Route path="*" element={<Navigate to="/main/list" replace />} /> */}
     </Routes>
   );
 }
