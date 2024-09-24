@@ -4,7 +4,7 @@ import svgr from "vite-plugin-svgr";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: process.env.VITE_BASENAME || "/",
+  base: process.env.VITE_APP_BASENAME || "/",
   plugins: [react(), svgr()],
   server: {
     host: "localhost",
