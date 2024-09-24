@@ -5,10 +5,10 @@ const authorizationEndpoint: string = import.meta.env
 const tokenEndpoint: string = import.meta.env
   .VITE_SPOTIFY_TOKEN_ENDPOINT as string;
 
-// console.log("clientId:", clientId);
-// console.log("authorizationEndpoint:", authorizationEndpoint);
-// console.log("redirectUrl:", redirectUrl);
-// console.log("tokenEndpoint:", tokenEndpoint);
+console.log("clientId:", clientId);
+console.log("authorizationEndpoint:", authorizationEndpoint);
+console.log("redirectUrl:", redirectUrl);
+console.log("tokenEndpoint:", tokenEndpoint);
 
 const scope: string =
   "streaming user-read-playback-position user-library-read user-modify-playback-state user-read-playback-state user-read-private user-read-email";
