@@ -10,15 +10,15 @@ console.log("basename:", basename);
 
 function App() {
   return (
-    <BrowserRouter basename={basename}>
-      <Routes>
-        {/* 根路徑 `/` 重定向到 `/login` */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/callback" element={<CallbackPage />} />
-        <Route path="/main/" element={<MainPage />}></Route>
-      </Routes>
-    </BrowserRouter>
+    // <BrowserRouter basename={basename}>
+    <Routes>
+      {/* 根路徑 `/` 重定向到 `/login` */}
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/callback" element={<CallbackPage />} />
+      <Route path="/main/" element={<MainPage />}></Route>
+    </Routes>
+    // </BrowserRouter>
   );
 }
 
