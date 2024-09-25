@@ -18,14 +18,20 @@
 - **Material-UI**：提供現成的 UI 元件，方便構建響應式介面。
 - **Spotify API**：整合 Spotify API，實現單集播放和資料管理功能。
 
-## Links
+## 部署網址
 
 - **Live Site URL**: [https://capstone-refactor.vercel.app/](https://capstone-refactor.vercel.app/)
 
 ### 體驗帳號
 
-- **帳號**: spotifytest9527@gmail.com
-- **密碼**: #spotifyTest#9527
+- 體驗帳號:
+  ```
+  spotifytest9527@gmail.com
+  ```
+- 密碼:
+  ```
+  #spotifyTest#9527
+  ```
 
 ## 使用說明
 
@@ -68,6 +74,6 @@
 - 點選書籤可將 Episode 從收藏清單中移除。
 - 點選播放可將其置換到「正在播放」。
 
-###
+## 作者
 
 - Github - [Ming Hsu](https://github.com/GHSergio)
