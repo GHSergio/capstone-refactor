@@ -18,6 +18,7 @@ import {
   createCategory,
   updateCategory,
   deleteCategory,
+  fetchCategories,
 } from "../../slice/userSlice";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -38,14 +39,18 @@ const ActionModal: React.FC = () => {
     setInputValue("");
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (!currentCategoryId) {
       return;
     }
 
     if (currentAction === "add") {
       // 新增分類的邏輯
-      dispatch(createCategory(inputValue));
+      const response = await dispatch(createCategory(inputValue));
+      if (response.payload) {
+        // 新增成功後，重新獲取最新的分類清單
+        dispatch(fetchCategories());
+      }
     } else if (currentAction === "edit" && currentCategoryId) {
       // 編輯分類的邏輯
       dispatch(
@@ -185,7 +190,7 @@ const ActionModal: React.FC = () => {
           {currentAction === "add" && (
             <TextField
               fullWidth
-              label="新增分類名稱"
+              // label="新增分類名稱"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="請輸入分類名稱"

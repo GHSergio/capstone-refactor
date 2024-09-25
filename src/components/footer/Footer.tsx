@@ -42,9 +42,12 @@ const Footer: React.FC = () => {
         <Box
           sx={{
             width: "100%",
+            height: "100%",
             marginX: "auto",
             display: "flex",
             flexDirection: "column",
+            position: "relative",
+            marginTop: "0.5rem",
           }}
         >
           {/* bookmark */}
@@ -104,9 +107,9 @@ const Footer: React.FC = () => {
               {currentPlayer?.description}
             </Typography>
           </Box> */}
+
           {/* <Player /> */}
-          {/* Player */}
-          <Box sx={{ width: "100%", height: "100%" }}>
+          <Box sx={{ width: "100%", height: { xs: "10vh", sm: "auto" } }}>
             <Player />
           </Box>
         </Box>

@@ -12,11 +12,12 @@ export interface PodcastState {
   isPlaying: boolean;
   loading: boolean;
   error: string | null | undefined;
+  // 是否打開 Modal
+  isMoreModalOpen: boolean;
+  isSearchModalOpen: boolean;
   // 管理 新增|編輯|刪除 分類
   isActionModalOpen: boolean;
   currentAction: string | null; // 當前的Action
-  // 是否打開Search Modal
-  isSearchModalOpen: boolean;
 }
 
 const initialState: PodcastState = {
@@ -29,6 +30,7 @@ const initialState: PodcastState = {
   currentShow: null,
   loading: false,
   error: null,
+  isMoreModalOpen: false,
   isActionModalOpen: false,
   currentAction: null,
   isSearchModalOpen: false,
@@ -37,14 +39,14 @@ const initialState: PodcastState = {
 // Spotify API 基礎 URL
 const spotifyBaseUrl = import.meta.env.VITE_SPOTIFY_API_BASE_URI;
 
-// Helper function: 獲取 accessToken
-const getSpotifyAccessToken = () => localStorage.getItem("access_token");
+// // Helper function: 獲取 accessToken
+// const getSpotifyAccessToken = () => localStorage.getItem("access_token");
 
 // 搜索 Shows
 export const searchShows = createAsyncThunk(
   "spotify/searchShows",
   async (query: string) => {
-    const token = getSpotifyAccessToken();
+    const token = localStorage.getItem("access_token");
     const url = `${spotifyBaseUrl}/v1/search`;
     const params = {
       q: query,
@@ -62,39 +64,11 @@ export const searchShows = createAsyncThunk(
   }
 );
 
-// // 獲取指定的 Show 資訊
-// export const fetchShow = createAsyncThunk(
-//   "spotify/fetchShowWithEpisodes",
-//   async (showId: string) => {
-//     const token = getSpotifyAccessToken();
-//     const uri = `${spotifyBaseUrl}/v1/shows/${showId}`;
-//     const response = await axios.get(uri, {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     });
-//     return response.data;
-//   }
-// );
-
-// // 獲取指定Episode 資訊
-// export const fetchEpisodeDetail = createAsyncThunk(
-//   "podcast/fetchEpisodeDetail",
-//   async (episodeId: string) => {
-//     const token = getSpotifyAccessToken();
-//     const url = `${spotifyBaseUrl}/v1/episodes/${episodeId}`;
-//     const response = await axios.get(url, {
-//       headers: { Authorization: `Bearer ${token}` },
-//     });
-//     return response.data;
-//   }
-// );
-
 // 獲取指定的 show 裡面的 Episodes
 export const fetchShowEpisodes = createAsyncThunk(
   "podcast/fetchShowEpisodes",
   async (showId: string, { rejectWithValue }) => {
-    const token = getSpotifyAccessToken();
+    const token = localStorage.getItem("access_token");
     const url = `${spotifyBaseUrl}/v1/shows/${showId}/episodes`;
     try {
       const response = await axios.get(url, {
@@ -195,6 +169,9 @@ const podcastSlice = createSlice({
     },
 
     // MoreModal 相關
+    setIsMoreModalOpen(state, action: PayloadAction<boolean>) {
+      state.isMoreModalOpen = action.payload;
+    },
     setCurrentShow(state, action: PayloadAction<Show | null>) {
       state.currentShow = action.payload;
     },
@@ -210,7 +187,7 @@ const podcastSlice = createSlice({
       state.isSearchModalOpen = action.payload;
     },
     setSelectedShows(state, action: PayloadAction<Show[]>) {
-      state.selectedShows = action.payload.id;
+      state.selectedShows = action.payload;
     },
     toggleSelectShow(state, action: PayloadAction<Show>) {
       const isAlreadySelected = state.selectedShows.some(
@@ -345,6 +322,7 @@ const podcastSlice = createSlice({
 });
 
 export const {
+  setIsMoreModalOpen,
   setIsActionModalOpen,
   setCurrentAction,
   setCurrentShow,

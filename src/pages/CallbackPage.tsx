@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 const CallbackPage = () => {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0); // 進度狀態
-  const [error, setError] = useState<string | null>(null); // 錯誤狀態
+  const [error, setError] = useState<string | null>(null);
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -153,7 +153,7 @@ const CallbackPage = () => {
       ) : error ? (
         <>
           <Typography variant="h6" sx={{ color: "red", mb: 2 }}>
-            發生錯誤: {error}，可嘗試F5重整頁面
+            發生錯誤: 可嘗試F5重整頁面，{error}
           </Typography>
           <Button
             variant="contained"
@@ -164,7 +164,19 @@ const CallbackPage = () => {
           </Button>
         </>
       ) : (
-        <Typography variant="h6" sx={{ color: "#fff" }}>
+        <Typography
+          variant="h6"
+          sx={{
+            color: "#fff",
+            fontSize: {
+              xs: "0.5rem",
+              sm: "0.6rem",
+              md: "0.7rem",
+              lg: "0.8rem",
+              xl: "1rem",
+            },
+          }}
+        >
           數據獲取完成，即將前往主頁...
         </Typography>
       )}

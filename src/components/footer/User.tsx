@@ -5,7 +5,7 @@ import {
   IconButton,
   Menu,
   Avatar,
-  // Button,
+  Tooltip,
 } from "@mui/material";
 import { RootState } from "../../store/store";
 import { useSelector } from "react-redux";
@@ -42,11 +42,18 @@ const User = () => {
     <>
       <Box
         sx={{
-          width: { xs: "4rem", sm: "7rem", md: "8rem", lg: "9rem" },
+          width: {
+            xs: "4rem",
+            sm: "7rem",
+            md: "8rem",
+            lg: "9rem",
+          },
+          "@media(min-width:1600px)": {
+            width: "12rem",
+          },
           bgcolor: "#FAFAFA",
           boxShadow: "0 0 2px 2px rgba(0, 0, 0, 0.3)",
           borderRadius: "5rem",
-          // display: { xs: "none", sm: "flex" },
           position: "relative",
         }}
       >
@@ -55,6 +62,9 @@ const User = () => {
           sx={{
             width: "90%",
             height: { xs: "1.25rem", sm: "2rem" },
+            "@media(min-width:1600px)": {
+              height: "3rem",
+            },
             display: "flex",
             alignItems: "center",
             margin: "0 auto",
@@ -66,6 +76,10 @@ const User = () => {
             sx={{
               width: { xs: "1.25rem", sm: "2rem" },
               height: { xs: "1.25rem", sm: "2rem" },
+              "@media(min-width:1600px)": {
+                width: "3rem",
+                height: "3rem",
+              },
               borderRadius: "5rem",
               boxShadow: "0 0 2px 2px rgba(0, 0, 0, 0.3)",
               bgcolor: userProfile?.images?.[0]?.url
@@ -78,31 +92,43 @@ const User = () => {
             {/* 當沒有照片時，顯示名稱的第一個字母 */}
             {!userProfile?.images?.[0]?.url && displayInitial}
           </Avatar>
-          <Typography
-            variant="h6"
-            sx={{
-              fontSize: {
-                xs: "0.35rem",
-                sm: "0.6rem",
-                md: "0.7rem",
-                lg: "0.8rem",
-              },
-              marginLeft: {
-                xs: "0.3rem",
-                sm: "0.4rem",
-                md: "0.5rem",
-                lg: "1rem",
-              },
-            }}
-          >
-            {userProfile?.display_name}
-          </Typography>
 
+          {/* User displayName */}
+          <Tooltip title={userProfile?.display_name} arrow>
+            <Typography
+              variant="h6"
+              sx={{
+                fontSize: {
+                  xs: "0.35rem",
+                  sm: "0.6rem",
+                  md: "0.7rem",
+                  lg: "0.8rem",
+                },
+                marginLeft: {
+                  xs: "0.3rem",
+                  sm: "0.4rem",
+                  md: "0.5rem",
+                  lg: "1rem",
+                },
+                "@media(min-width:1600px)": {
+                  fontSize: "1.15rem",
+                  marginLeft: "1rem",
+                },
+                WebkitLineClamp: 1,
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {userProfile?.display_name}
+            </Typography>
+          </Tooltip>
           {/* 下拉按鈕 */}
           <IconButton
             onClick={handleDropdownClick}
             sx={{
-              width: { xs: "0.3rem", sm: "0.5rem" },
+              width: { xs: "0.3rem", sm: "0.5rem", xl: "1.2rem" },
+
               position: "absolute",
               top: "50%",
               right: { xs: 0, sm: 10 },
@@ -113,25 +139,32 @@ const User = () => {
             }}
           >
             <ArrowDropDownIcon
-              sx={{ fontSize: { xs: "0.7rem", sm: "1.5rem", md: "2rem" } }}
+              sx={{
+                fontSize: {
+                  xs: "0.7rem",
+                  sm: "1.2rem",
+                  md: "1.5rem",
+                  lg: "2rem",
+                },
+                "@media(min-width:1600px)": { fontSize: "2.5rem" },
+              }}
             />
           </IconButton>
-
           {/* 下拉菜單 */}
           <Menu
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
             onClose={handleDropdownClose}
-            // PaperProps={{
-            //   sx: {
-            //     width: { xs: "1rem", sm: "2rem", md: "3rem", lg: "4rem" },
-            //   },
-            // }}
+            MenuListProps={{
+              sx: {
+                padding: 0,
+              },
+            }}
           >
             <Box
               onClick={handleLogout}
               sx={{
-                padding: 0.5,
+                padding: { xs: "0.3rem", sm: "0.5rem", md: "0.7rem" },
                 width: "100%",
                 height: "100%",
                 display: "flex",
@@ -145,26 +178,14 @@ const User = () => {
               }}
             >
               <Typography
-                sx={{ fontSize: { xs: "0.3rem", sm: "0.7rem", md: "0.9rem" } }}
+                variant="body1"
+                sx={{ fontSize: { xs: "0.3rem", sm: "0.5rem", md: "0.7rem" } }}
               >
                 登出
               </Typography>
             </Box>
           </Menu>
         </Box>
-
-        {/* <Box
-          sx={{
-            width: "16px",
-            height: "16px",
-            position: "absolute",
-            top: "50%",
-            right: 15,
-            transform: "translate(0,-50%)",
-          }}
-          component="img"
-          src={dropdown}
-        ></Box> */}
       </Box>
     </>
   );

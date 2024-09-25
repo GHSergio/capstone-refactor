@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Grid,
   Box,
@@ -15,7 +15,11 @@ import ActionModal from "../components/modals/ActionModal";
 import AlertComponent from "../components/AlertComponent";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
-import { setIsSearchModalOpen, setCurrentShow } from "../slice/podcastSlice";
+import {
+  setIsSearchModalOpen,
+  setCurrentShow,
+  setIsMoreModalOpen,
+} from "../slice/podcastSlice";
 import { fetchShow, setShowsDetail } from "../slice/userSlice";
 import { Show } from "../slice/types";
 
@@ -23,10 +27,7 @@ const ListPage: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const { currentCategoryId, userCategories, showsDetail, loading } =
     useSelector((state: RootState) => state.user);
-
-  // const {} = useSelector((state: RootState) => state.podcast);
-
-  const [isMoreModalOpen, setIsMoreModalOpen] = useState(false);
+  const { isMoreModalOpen } = useSelector((state: RootState) => state.podcast);
 
   // 取得當前分類的 savedShows (只保存了 show 的 id)
   const currentCategory = userCategories?.find(
@@ -45,7 +46,7 @@ const ListPage: React.FC = () => {
         const results = await Promise.all(promises);
         showsData.push(...results);
 
-        console.log("獲取的Shows Detail:", showsData);
+        // console.log("獲取的Shows Detail:", showsData);
         dispatch(setShowsDetail(showsData));
       }
     };
@@ -56,11 +57,11 @@ const ListPage: React.FC = () => {
   // 控制 MoreModal 的狀態
   const handleMoreClick = (show: Show) => {
     dispatch(setCurrentShow(show));
-    setIsMoreModalOpen(true);
+    dispatch(setIsMoreModalOpen(true));
   };
 
   const handleMoreClose = () => {
-    setIsMoreModalOpen(false);
+    dispatch(setIsMoreModalOpen(false));
     dispatch(setCurrentShow(null));
   };
 
@@ -70,7 +71,7 @@ const ListPage: React.FC = () => {
   };
 
   if (!currentCategory) {
-    return <div>請選擇一個分類。</div>;
+    return <Box mt={1}>請選擇一個分類。</Box>;
   }
 
   return (
@@ -79,15 +80,14 @@ const ListPage: React.FC = () => {
         container
         sx={{
           width: "100%",
-          height: "100%",
-          margin: "0 auto ",
-          paddingBottom: { xs: 0, sm: "7.5rem" },
+          height: "98%",
+          margin: { xs: "3rem auto", sm: "0 auto" },
           gap: 2,
           gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
           alignContent: "flex-start",
           overflowY: "auto",
           "&::-webkit-scrollbar": {
-            width: "0.5rem",
+            width: { xs: "0.2rem", sm: "0.3rem", md: "0.4rem", xl: "0.5rem" },
           },
           "&::-webkit-scrollbar-track": {
             backgroundColor: "#f1f1f1",
@@ -138,13 +138,16 @@ const ListPage: React.FC = () => {
                 padding: 2,
                 overflow: "hidden",
                 "@media (max-width:320px)": {
-                  maxWidth: "130px",
+                  maxWidth: "125px",
                 },
                 "@media (min-width:321px) and (max-width:376px)": {
-                  maxWidth: "155px",
+                  maxWidth: "150px",
                 },
                 "@media(min-width:376px) and (max-width:600px)": {
-                  maxWidth: "180px",
+                  maxWidth: "170px",
+                },
+                "@media (min-width:1600px)": {
+                  maxWidth: "250px",
                 },
               }}
             >
@@ -177,10 +180,21 @@ const ListPage: React.FC = () => {
               <CardMedia
                 component="img"
                 image={listNull}
-                sx={{ width: "3.5rem", margin: "0 auto" }}
+                sx={{
+                  margin: "0 auto",
+                  width: { xs: "4rem", sm: "5rem", md: "6rem", lg: "7rem" },
+                  "@media(min-width:1600px)": {
+                    fontSize: "3rem",
+                    width: "8rem",
+                  },
+                }}
               />
               <Typography
-                sx={{ color: "#718096", fontSize: "1rem", margin: "1rem 0" }}
+                variant="body1"
+                sx={{
+                  color: "#718096",
+                  margin: "1rem 0",
+                }}
               >
                 您尚未加入任何曲目，可以點擊按鈕新增！
               </Typography>
@@ -188,11 +202,36 @@ const ListPage: React.FC = () => {
                 sx={{
                   backgroundColor: "#FF7F50",
                   borderRadius: "8px",
-                  padding: "0.7rem 3rem",
+                  padding: {
+                    xs: "0.5rem 1rem",
+                    sm: "0.5rem 2rem",
+                    md: "0.7rem 3rem",
+                    lg: "0.7rem 4rem",
+                  },
+                  "@media(min-width:1600px)": {
+                    padding: "1rem",
+                    width: "15rem",
+                  },
+                  "&:hover": {
+                    backgroundColor: "#FF7F50", 
+                  },
                 }}
                 onClick={handleClickSearch}
               >
-                <Typography sx={{ fontSize: "1rem", color: "#FFFFFF" }}>
+                <Typography
+                  sx={{
+                    fontSize: {
+                      xs: "0.4rem",
+                      sm: "0.6rem",
+                      md: "0.8rem",
+                      lg: "1rem",
+                    },
+                    "@media(min-width:1600px)": {
+                      fontSize: "1.5rem",
+                    },
+                    color: "#FFFFFF",
+                  }}
+                >
                   新增 Podcast
                 </Typography>
               </Button>

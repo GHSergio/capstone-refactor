@@ -5,6 +5,7 @@ import Footer from "../components/footer/Footer";
 import MainContent from "../components/MainContent";
 import Navbar from "../components/Navbar";
 import { useDispatch } from "react-redux";
+// import { AppDispatch } from "../store/store";
 import {
   setUserData,
   setUserCategories,
@@ -63,12 +64,11 @@ const MainPage: React.FC = () => {
           width: "100%",
         }}
       >
+        {/* sidebar & mainContent */}
         <Grid
           container
-          width="100vw"
-          height="100vh"
           sx={{
-            height: { xs: "", sm: "100vh" },
+            height: { xs: "auto", sm: "80vh" },
             alignItems: "center",
             flexGrow: 1,
           }}
@@ -79,9 +79,8 @@ const MainPage: React.FC = () => {
             xs={12}
             sx={{
               boxShadow: "0px 0px 2px 2px #C7C7C73D",
-              height: "100%",
+              // height: "100%",
               display: { xs: "block", sm: "none" },
-              paddingBottom: { xs: 0, sm: "6.5rem" },
             }}
           >
             <Navbar />
@@ -93,9 +92,8 @@ const MainPage: React.FC = () => {
             sm={3}
             sx={{
               boxShadow: "0px 0px 2px 2px #C7C7C73D",
-              display: { xs: "none", sm: "flex" },
+              display: { xs: "none", sm: "block" },
               height: "100%",
-              paddingBottom: { xs: 0, sm: "7rem" },
             }}
           >
             <SideBar />
@@ -109,20 +107,21 @@ const MainPage: React.FC = () => {
             sx={{
               height: "100%",
               overflowY: "auto",
-              marginTop: { xs: "2rem", sm: 0 },
             }}
           >
             <MainContent />
           </Grid>
         </Grid>
+
         {/* Footer */}
         <Box
           sx={{
-            position: { xs: "fixed", sm: "absolute" },
+            position: { xs: "absolute", sm: "relative" },
             width: "100%",
-            height: "20vh",
+            height: "100%",
             "@media(max-width:600px)": {
               top: 0,
+              height: "0vh",
             },
             bottom: 0,
           }}

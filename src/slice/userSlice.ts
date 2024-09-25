@@ -240,6 +240,7 @@ export const createCategory = createAsyncThunk(
   async (newTitle: string, { rejectWithValue }) => {
     const url = `${AcBaseUri}/api/categories`;
     const bodyParameters = { name: newTitle };
+    // console.log("分類名稱:", bodyParameters);
     try {
       const response = await axios.post(url, bodyParameters, {
         headers: {
@@ -248,14 +249,18 @@ export const createCategory = createAsyncThunk(
       });
       // console.log("新分類清單: ", response);
       if (response.data.success) {
-        // 返回新分類的資料，假設 API 會回傳新分類的ID或相關資料
-        return {
-          name: newTitle,
-          id: response.data.categoryId || "",
-        };
+        // // 返回新分類的資料，假設 API 會回傳新分類的ID或相關資料
+        // return {
+        //   name: newTitle,
+        //   id: response.data.categoryId || "",
+        // };
+
+        // 新增分類成功後，無需返回任何數據，稍後會重新獲取最新的分類
+        return true;
       }
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
+        console.log(error.response);
         return rejectWithValue(error.response);
       }
     }
@@ -557,23 +562,12 @@ const userSlice = createSlice({
     builder
       .addCase(createCategory.fulfilled, (state, action) => {
         // 確保 action.payload 存在
-        if (action.payload) {
-          const newCategory = {
-            ...action.payload, // 保留從 API 回傳的資料 (id 和 name)
-            savedShows: [], // 初始化 savedShows 為空陣列
+        if (action.payload === true) {
+          state.alert = {
+            open: true,
+            message: "新增分類成功！",
+            severity: "success",
           };
-
-          if (state.userCategories) {
-            state.userCategories.push(newCategory); // 將新分類加入到狀態
-          } else {
-            state.userCategories = [newCategory]; // 如果 userCategories 為空，初始化為一個新的數組
-          }
-
-          // 更新 localStorage，將 userCategories 轉換成 JSON 字符串
-          localStorage.setItem(
-            "user_categories",
-            JSON.stringify(state.userCategories)
-          );
         }
       })
       .addCase(createCategory.rejected, (state, action) => {

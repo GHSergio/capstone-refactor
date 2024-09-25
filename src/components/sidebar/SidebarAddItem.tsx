@@ -1,7 +1,6 @@
 import React from "react";
 import {
   ListItem as MUIListItem,
-  // ListItemText,
   IconButton,
   useTheme,
   Typography,
@@ -45,7 +44,10 @@ const SidebarAddItem: React.FC = () => {
         sx={{
           textAlign: "center",
           color: theme.palette.secondary.main,
-          fontSize: { xs: "70%", sm: "90%" },
+          // fontSize: { xs: "70%", sm: "70%", md: "90%", lg: "100%" },
+          // "@media(min-width:1600px)": {
+          //   fontSize: "1.6rem",
+          // },
         }}
       >
         新增分類

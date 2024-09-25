@@ -118,20 +118,30 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
                 xs: "35%",
                 sm: "22%",
                 md: "20%",
-                lg: "18%",
+                lg: "19%",
                 xl: "18%",
               },
               textAlign: "center",
-              marginRight: 1,
+              marginRight: {
+                xs: 0.75,
+                sm: 1,
+                md: 2,
+                lg: 2,
+                xl: 3,
+              },
               // 獨立處理媒體查詢的 maxWidth
-              "@media (max-width: 321px)": {
+              "@media (max-width: 320px)": {
                 maxWidth: "40%",
               },
-              "@media (min-width: 321px) and(max-width: 376px)": {
+              "@media (min-width: 321px) and(max-width: 375px)": {
                 maxWidth: "35%",
               },
               "@media (min-width: 376px) and (max-width: 600px)": {
                 maxWidth: "30%",
+              },
+              "@media(min-width:1600px)": {
+                maxWidth: "18%",
+                marginRight: 3,
               },
             }}
           >
@@ -362,7 +372,10 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
               sm: "65%",
               md: "70%",
               lg: "70%",
-              xl: "65%",
+              xl: "70%",
+            },
+            "@media(min-width:1600px)": {
+              maxHeight: "70%",
             },
             overflowY: "auto",
             "&::-webkit-scrollbar": {
@@ -402,7 +415,9 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
                     md: "150px",
                     lg: "170px",
                     xl: "200px",
-                    "@media(min-width:1600px)": {},
+                    "@media(min-width:1600px)": {
+                      height: "280px",
+                    },
                   },
                   mb: { xs: 1, sm: 1, md: 2, lg: 2 },
                   p: { xs: 0.5, sm: 1, md: 1, lg: 2 },

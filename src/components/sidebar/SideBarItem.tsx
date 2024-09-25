@@ -71,7 +71,12 @@ const SideBarItem: React.FC<SideBarItemProps> = ({
           backgroundColor: "#dddddd",
         },
         cursor: "pointer",
-        margin: "0.5rem 0",
+        margin: {
+          xs: "0.2rem 0",
+          sm: "0.3rem 0",
+          md: "0.4rem 0",
+          xl: "0.5rem 0",
+        },
       }}
     >
       {/* 使用 Box + Typography 控制字體大小 */}
@@ -80,7 +85,6 @@ const SideBarItem: React.FC<SideBarItemProps> = ({
           <Typography
             variant="h6"
             sx={{
-              fontSize: { xs: "70%", sm: "100%" },
               WebkitLineClamp: 1,
               overflow: "hidden",
               textOverflow: "ellipsis",
@@ -96,7 +100,15 @@ const SideBarItem: React.FC<SideBarItemProps> = ({
         {text !== "收藏清單" && (
           <>
             <IconButton onClick={handleClickDropdown}>
-              <MoreVertIcon sx={{ color: isActive ? "#FEFEFE" : "inherit" }} />
+              <MoreVertIcon
+                sx={{
+                  color: isActive ? "#FEFEFE" : "inherit",
+                  fontSize: { xs: "0.8rem", sm: "1rem", md: "1.2rem" },
+                  "@media(min-width:1600px)": {
+                    fontSize: "2rem",
+                  },
+                }}
+              />
             </IconButton>
 
             {/* DropDown */}

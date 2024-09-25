@@ -105,7 +105,7 @@ const CardComponent: React.FC<CardComponentProps> = ({
             sx={{
               color: "#FFFFFF",
               fontSize: "0.8rem",
-              lineHeight: "1rem",
+              lineHeight: { xs: "1rem", lg: "2rem" },
             }}
           >
             更多

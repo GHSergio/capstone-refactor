@@ -9,8 +9,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
 import { setCurrentPlayer } from "../slice/podcastSlice";
-// import idle_episode from "../assets/idle_episode.png";
-// import active_episode from "../assets/active_episode.png";
 import BookmarkIcon from "./BookmarkIcon";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
@@ -34,14 +32,12 @@ const formatDuration = (duration_ms: number) => {
     : `${minutes}分${seconds}秒`;
 };
 
-const EpisodeList: React.FC<EpisodeListProps> = ({
-  episode,
-  // imageWidth,
-  // descriptionHeight,
-}) => {
+const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
   const dispatch: AppDispatch = useDispatch();
   const { userFavorites } = useSelector((state: RootState) => state.user);
-  const { currentPlayer } = useSelector((state: RootState) => state.podcast);
+  const { currentPlayer, isMoreModalOpen } = useSelector(
+    (state: RootState) => state.podcast
+  );
   const theme = useTheme();
 
   // 檢查當前單集是否已收藏
@@ -80,13 +76,21 @@ const EpisodeList: React.FC<EpisodeListProps> = ({
           xs={4}
           sx={{
             p: 0.5,
-            maxWidth: {
-              xs: "30%",
-              sm: "16%",
-              md: "16%",
-              lg: "16%",
-              xl: "16%",
-            },
+            maxWidth: isMoreModalOpen
+              ? {
+                  xs: "30%",
+                  sm: "18%",
+                  md: "17%",
+                  lg: "16%",
+                  xl: "16%",
+                }
+              : {
+                  xs: "30%",
+                  sm: "24%",
+                  md: "19%",
+                  lg: "18%",
+                  xl: "17%",
+                },
             textAlign: "center",
             marginRight: {
               xs: 1,
@@ -96,17 +100,17 @@ const EpisodeList: React.FC<EpisodeListProps> = ({
               xl: 2,
             },
             // 獨立處理媒體查詢的 maxWidth
-            "@media (max-width: 321px)": {
-              maxWidth: "35%",
+            "@media (max-width: 320px)": {
+              maxWidth: isMoreModalOpen ? "35%" : "30%",
             },
-            "@media (min-width: 321px) and(max-width: 376px)": {
-              maxWidth: "40%",
+            "@media (min-width: 321px) and (max-width: 376px)": {
+              maxWidth: isMoreModalOpen ? "29%" : "29%",
             },
             "@media (min-width: 376px) and (max-width: 600px)": {
-              maxWidth: "25%",
+              maxWidth: isMoreModalOpen ? "25%" : "25%",
             },
             "@media (min-width: 1600px) ": {
-              maxWidth: "8%",
+              maxWidth: isMoreModalOpen ? "12.5%" : "12%",
             },
           }}
         >
@@ -124,33 +128,71 @@ const EpisodeList: React.FC<EpisodeListProps> = ({
             }}
           />
         </Grid>
+
         {/* 單集內容 */}
-        <Grid item xs={7} sx={{ width: "100%" }}>
+        <Grid
+          item
+          xs={7}
+          sx={{
+            width: isMoreModalOpen
+              ? {
+                  xs: "100%",
+                  sm: "115%",
+                  md: "120%",
+                  lg: "120%",
+                  xl: "120%",
+                }
+              : { xs: "100%", sm: "115%", md: "120%", lg: "120%", xl: "120%" },
+
+            "@media(min-width:1600px)": {
+              width: isMoreModalOpen ? "150%" : "150%",
+            },
+          }}
+        >
           {/* 單集標題 */}
           <Tooltip title={episode.name} arrow>
             <Typography
               variant="subtitle1"
               gutterBottom
               sx={{
-                fontSize: {
-                  xs: "0.5rem",
-                  sm: "0.7rem",
-                  md: "0.9rem",
-                  lg: "1rem",
-                  xl: "1.15rem",
-                  "@media (max-width: 321px)": {},
-                  "@media(min-width: 321px)and (max-width: 376px)": {},
-                  "@media (min-width: 376px) and (max-width: 600px)": {},
-                  "@media(min-width:1600px)": {},
+                fontSize: isMoreModalOpen
+                  ? {
+                      xs: "0.45rem",
+                      sm: "0.7rem",
+                      md: "0.9rem",
+                      lg: "1rem",
+                      xl: "1.15rem",
+                    }
+                  : {
+                      xs: "0.5rem",
+                      sm: "0.7rem",
+                      md: "0.9rem",
+                      lg: "1rem",
+                      xl: "1.15rem",
+                    },
+                lineHeight: {
+                  xs: "10px",
+                  sm: "15px",
+                  md: "25px",
+                  // lg: "25px",
+                  xl: "25px",
                 },
-                fontFamily: "Noto Sans TC",
                 fontWeight: "500",
-                width: "80%",
+                width: "100%",
                 WebkitLineClamp: 1,
                 whiteSpace: "nowrap",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
-                lineHeight: { xs: "15px", sm: "20px", md: "30px" },
+
+                "@media (max-width: 321px)": {
+                  width: "90%",
+                },
+                "@media(min-width: 321px)and (max-width: 376px)": {},
+                "@media (min-width: 376px) and (max-width: 600px)": {},
+                "@media(min-width:1600px)": {
+                  fontSize: isMoreModalOpen ? "1.5rem" : "1.5rem",
+                  lineHeight: isMoreModalOpen ? "30px" : "30px",
+                },
               }}
             >
               {episode.name}
@@ -159,33 +201,57 @@ const EpisodeList: React.FC<EpisodeListProps> = ({
           {/* 單集介紹 */}
           <Box
             sx={{
-              width: {
-                xs: "100%",
-                sm: "115%",
-                md: "120%",
-                lg: "120%",
-                xl: "120%",
-              },
-              height: {
-                xs: "35px",
-                sm: "40px",
-                md: "50px",
-                lg: "60px",
-                xl: "80px",
-              },
+              width: isMoreModalOpen
+                ? {
+                    xs: "110%",
+                    sm: "125%",
+                    md: "130%",
+                    lg: "120%",
+                    xl: "130%",
+                  }
+                : {
+                    xs: "110%",
+                    sm: "120%",
+                    md: "130%",
+                    lg: "120%",
+                    xl: "130%",
+                  },
+              height: isMoreModalOpen
+                ? {
+                    xs: "45px",
+                    sm: "55px",
+                    md: "60px",
+                    lg: "60px",
+                    xl: "90px",
+                  }
+                : {
+                    xs: "50px",
+                    sm: "60px",
+                    md: "65px",
+                    lg: "60px",
+                    xl: "90px",
+                  },
               overflowY: "auto",
               margin: {
-                xs: "0.3rem 0rem",
+                xs: "0.25rem 0rem",
                 sm: "0.3rem 0rem",
-                md: "0.2rem 0rem",
+                md: "0.4rem 0rem",
                 xl: "0.5rem 0rem",
               },
-              "@media (max-width: 321px)": { width: "80%" },
-              "@media(min-width: 321px)and (max-width: 376px)": {
-                width: "90%",
+              "@media (max-width: 321px)": {
+                width: isMoreModalOpen ? "90%" : "90%",
+                height: isMoreModalOpen ? "40px" : "50px",
               },
-              "@media (min-width: 376px) and (max-width: 600px)": {},
-              "@media(min-width:1600px)": {},
+              "@media(min-width: 321px)and (max-width: 376px)": {
+                width: isMoreModalOpen ? "100%" : "100%",
+                height: "45px",
+              },
+
+              "@media(min-width:1600px)": {
+                height: isMoreModalOpen ? "135px" : "135px",
+                width: isMoreModalOpen ? "140%" : "140%",
+                margin: isMoreModalOpen ? "0.9rem 0rem" : "0.5rem 0rem",
+              },
               boxShadow: "0 0 3px 1px rgba(0,0,0,0.2)",
               borderRadius: "0.3rem",
               padding: "0.1rem",
@@ -220,12 +286,23 @@ const EpisodeList: React.FC<EpisodeListProps> = ({
                 display: "-webkit-box",
                 WebkitBoxOrient: "vertical",
                 overflowY: "auto",
-                fontSize: {
-                  xs: "0.4rem",
-                  sm: "0.6rem",
-                  md: "0.75rem",
-                  lg: "0.8rem",
-                  xl: "1rem",
+                fontSize: isMoreModalOpen
+                  ? {
+                      xs: "0.4rem",
+                      sm: "0.6rem",
+                      md: "0.75rem",
+                      lg: "0.8rem",
+                      xl: "1rem",
+                    }
+                  : {
+                      xs: "0.4rem",
+                      sm: "0.6rem",
+                      md: "0.75rem",
+                      lg: "0.8rem",
+                      xl: "1rem",
+                    },
+                "@media(min-width:1600px)": {
+                  fontSize: isMoreModalOpen ? "1.5rem" : "1.5rem",
                 },
               }}
             >
@@ -258,25 +335,41 @@ const EpisodeList: React.FC<EpisodeListProps> = ({
               {currentPlayer?.id === episode.id ? (
                 <PauseIcon
                   sx={{
-                    fontSize: {
-                      xs: "0.4rem",
-                      sm: "0.9rem",
-                      md: "1.15rem",
-                      lg: "1rem",
-                      xl: "1.35rem",
-                    },
+                    fontSize: isMoreModalOpen
+                      ? {
+                          xs: "0.4rem",
+                          sm: "0.9rem",
+                          md: "1.15rem",
+                          lg: "1rem",
+                          xl: "1.35rem",
+                        }
+                      : {
+                          xs: "0.4rem",
+                          sm: "0.9rem",
+                          md: "1.15rem",
+                          lg: "1rem",
+                          xl: "1.35rem",
+                        },
                   }}
                 />
               ) : (
                 <PlayArrowIcon
                   sx={{
-                    fontSize: {
-                      xs: "0.5rem",
-                      sm: "0.9rem",
-                      md: "1.15rem",
-                      lg: "1rem",
-                      xl: "1.35rem",
-                    },
+                    fontSize: isMoreModalOpen
+                      ? {
+                          xs: "0.5rem",
+                          sm: "0.9rem",
+                          md: "1.15rem",
+                          lg: "1rem",
+                          xl: "1.35rem",
+                        }
+                      : {
+                          xs: "0.5rem",
+                          sm: "0.9rem",
+                          md: "1.15rem",
+                          lg: "1rem",
+                          xl: "1.35rem",
+                        },
                   }}
                 />
               )}
@@ -285,12 +378,23 @@ const EpisodeList: React.FC<EpisodeListProps> = ({
               variant="caption"
               color="#93989A"
               sx={{
-                fontSize: {
-                  xs: "0.3rem",
-                  sm: "0.45rem",
-                  md: "0.6rem",
-                  lg: "0.8rem",
-                  xl: "0.8rem",
+                fontSize: isMoreModalOpen
+                  ? {
+                      xs: "0.3rem",
+                      sm: "0.45rem",
+                      md: "0.6rem",
+                      lg: "0.8rem",
+                      xl: "0.8rem",
+                    }
+                  : {
+                      xs: "0.3rem",
+                      sm: "0.45rem",
+                      md: "0.6rem",
+                      lg: "0.8rem",
+                      xl: "0.8rem",
+                    },
+                "@media (min-width: 1600px) ": {
+                  fontSize: isMoreModalOpen ? "1.25rem" : "1.25rem",
                 },
               }}
             >

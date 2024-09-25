@@ -9,10 +9,9 @@ const Player = () => {
   if (!currentPlayer) {
     return (
       <Box
-        // mt={5}
         sx={{
           width: "100%",
-          height: "18vh",
+          height: "20vh",
           bgcolor: "#91B4C1",
           borderRadius: "1rem",
           display: "flex",
@@ -46,11 +45,10 @@ const Player = () => {
   return (
     <>
       {/* 嵌入 Spotify 播放器 */}
-      <Box sx={{ width: "100%", height: "18vh" }}>
+      <Box sx={{ width: "100%" }}>
         <iframe
           src={`https://open.spotify.com/embed/episode/${id}`}
           width="100%"
-          height="100%"
           frameBorder="0"
           allow="encrypted-media"
         ></iframe>

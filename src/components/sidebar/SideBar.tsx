@@ -19,7 +19,7 @@ const Sidebar: React.FC = () => {
   if (!userCategories || userCategories.length === 0) {
     return (
       <Box sx={{ padding: "1.5rem" }}>
-        <Typography>無法獲取播放分類清單</Typography>
+        <Typography variant="h6">無法獲取播放分類清單</Typography>
       </Box>
     );
   }
@@ -51,7 +51,14 @@ const Sidebar: React.FC = () => {
       />
 
       {/* 新增分類的按鈕 */}
-      <Box sx={{ width: "150px" }}>
+      <Box
+        sx={{
+          width: { xs: "80%", sm: "90%", md: "80%", lg: "70%", xl: "60%" },
+          "@media(min-width:1600px)": {
+            width: "40%",
+          },
+        }}
+      >
         <SidebarAddItem />
       </Box>
 
@@ -59,6 +66,16 @@ const Sidebar: React.FC = () => {
       <Box
         sx={{
           width: "100%",
+          overflowY: "auto",
+          "&::-webkit-scrollbar": {
+            width: { xs: "0.2rem", sm: "0.3rem", md: "0.4rem", xl: "0.5rem" },
+          },
+          "&::-webkit-scrollbar-track": {
+            borderRadius: "0.5rem",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            borderRadius: "0.5rem",
+          },
         }}
       >
         {userCategories?.map((category) => (

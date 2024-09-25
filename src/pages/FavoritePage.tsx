@@ -64,9 +64,9 @@ const FavoritePage: React.FC = () => {
         sx={{
           maxHeight: "100%",
           overflowY: "auto",
-          paddingBottom: { xs: 0, sm: "7.5rem" },
+          marginTop: { xs: "2rem", sm: "0rem" },
           "&::-webkit-scrollbar": {
-            width: "0.5rem",
+            width: { xs: "0.2rem", sm: "0.3rem", md: "0.4rem", xl: "0.5rem" },
           },
           "&::-webkit-scrollbar-track": {
             backgroundColor: "#f1f1f1",
@@ -106,7 +106,9 @@ const FavoritePage: React.FC = () => {
                     "@media (min-width: 376px) and (max-width: 600px)": {
                       height: "100px",
                     },
-                    "@media(min-width:1600px)": {},
+                    "@media(min-width:1600px)": {
+                      height: "250px",
+                    },
                   },
                   mb: { xs: 1, sm: 1, md: 2, lg: 2 },
                   p: { xs: 0.5, sm: 1, md: 1, lg: 2 },
@@ -121,11 +123,7 @@ const FavoritePage: React.FC = () => {
                 onClick={() => handleSetActive(episode.id)}
               >
                 {/* List*/}
-                <EpisodeList
-                  episode={episode}
-                  // imageWidth="130px"
-                  // descriptionHeight="2.5rem"
-                />
+                <EpisodeList episode={episode} />
               </Box>
             );
           })
@@ -142,13 +140,18 @@ const FavoritePage: React.FC = () => {
               component="img"
               src={listNull}
               alt="listNull"
-              sx={{ width: "3.5rem" }}
+              sx={{
+                width: { xs: "4rem", sm: "5rem", md: "6rem", lg: "7rem" },
+                "@media(min-width:1600px)": {
+                  fontSize: "3rem",
+                  width: "8rem",
+                },
+              }}
             />
             <Typography
+              variant="body1"
               sx={{
                 color: "#718096",
-                fontSize: "1.1rem",
-                fontFamily: "Noto Sans TC",
               }}
             >
               您尚未收藏任何單集
