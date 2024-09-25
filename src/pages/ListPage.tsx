@@ -213,7 +213,7 @@ const ListPage: React.FC = () => {
                     width: "15rem",
                   },
                   "&:hover": {
-                    backgroundColor: "#FF7F50", 
+                    backgroundColor: "#FF7F50",
                   },
                 }}
                 onClick={handleClickSearch}
