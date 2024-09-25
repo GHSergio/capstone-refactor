@@ -13,7 +13,6 @@ import {
   CardContent,
   CardMedia,
   Tooltip,
-  // Snackbar,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
@@ -48,6 +47,7 @@ const SearchModal = () => {
     dispatch(setIsSearchModalOpen(false));
     dispatch(clearSelectedShows());
     dispatch(clearSearchResults());
+    setSearchTerm("");
   };
 
   // 將選中的 shows 逐個 添加到當前 category
@@ -88,6 +88,7 @@ const SearchModal = () => {
       dispatch(setIsSearchModalOpen(false));
       dispatch(clearSelectedShows());
       dispatch(clearSearchResults());
+      setSearchTerm("");
     }
   };
 

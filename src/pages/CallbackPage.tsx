@@ -21,50 +21,6 @@ const CallbackPage = () => {
     setProgress((prev) => Math.min(prev + value, 100));
   };
 
-  // useEffect(() => {
-  //   // 先獲取access_token
-  //   const accessToken = localStorage.getItem("access_token");
-
-  //   const fetchData = async () => {
-  //     // 第一步：設定 access token
-  //     updateProgress(20);
-  //     try {
-  //       // 第二步：初始化帳戶並獲取 acToken
-  //       await dispatch(initializeAccount()).unwrap();
-  //       updateProgress(20);
-
-  //       // 第三步：獲取使用者資料
-  //       await dispatch(fetchUserProfile()).unwrap();
-  //       updateProgress(20);
-
-  //       // 第四步：獲取分類清單
-  //       await dispatch(fetchCategories()).unwrap();
-  //       updateProgress(20);
-
-  //       // 第五步：獲取收藏節目
-  //       await dispatch(fetchUserFavorites()).unwrap();
-  //       updateProgress(20);
-
-  //       setTimeout(() => {
-  //         navigate("/main");
-  //       }, 2000);
-  //     } catch (err) {
-  //       setError("獲取資料失敗，請重新嘗試。");
-  //       console.error("API 請求失敗: ", err);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   if (accessToken) {
-  //     fetchData();
-  //   } else {
-  //     setError("未找到 access token，請重新登入。");
-  //     console.error("Access token 未找到");
-  //     setLoading(false);
-  //   }
-  // }, [dispatch, navigate]);
-
   useEffect(() => {
     const fetchData = async () => {
       let accessToken = localStorage.getItem("access_token");

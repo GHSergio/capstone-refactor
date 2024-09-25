@@ -5,7 +5,6 @@ import Footer from "../components/footer/Footer";
 import MainContent from "../components/MainContent";
 import Navbar from "../components/Navbar";
 import { useDispatch } from "react-redux";
-// import { AppDispatch } from "../store/store";
 import {
   setUserData,
   setUserCategories,
