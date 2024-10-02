@@ -62,7 +62,9 @@ const AcBaseUri = import.meta.env.VITE_AC_API_BASE_URI;
 
 // 獲取使用者資訊
 export const fetchUserProfile = createAsyncThunk(
+  // typePrefix -> 用來生成三種 action types（pending, fulfilled, rejected）
   "spotify/fetchUserProfile",
+  // payloadCreator -> 處理邏輯並返回 fulfilled 或 rejected action 的 payload
   async (_, { rejectWithValue }) => {
     const token = localStorage.getItem("access_token");
     const userProfileEndpoint = spotifyBaseUrl + "/v1/me";
@@ -73,11 +75,12 @@ export const fetchUserProfile = createAsyncThunk(
         },
       });
       const data = response.data;
-      // console.log("使用者資訊: ", data);
+      // 回傳回應的 data 給 fulfilled action，作為其 payload
       return data;
     } catch (error: unknown) {
-      // Axios 提供的方法來檢查錯誤是否為 Axios 錯誤。
+      // 檢查錯誤是否為 Axios 錯誤並確保有 response
       if (axios.isAxiosError(error) && error.response) {
+        // 回傳錯誤 response 給 rejected action，作為其 payload
         return rejectWithValue(error.response);
       }
     }
@@ -362,7 +365,15 @@ export const removeShowFromCategory = createAsyncThunk(
 
 // 共用的錯誤處理函式
 const handleAuthError = (state: UserState, action: any) => {
-  const { status } = action.payload as { status: number };
+  // 從 action.payload（即 error.response）中提取 HTTP 狀態碼
+  const { status } = action.payload as {
+    status: number;
+  };
+  // 優先使用 API 返回的錯誤信息（即 action.payload.data.message）-> 從 catch return，
+  // 如果沒有具體的 API 錯誤信息，則使用 Axios 自動捕捉的錯誤（action.error.message）-> 不用在catch return也有
+  const message = action.payload?.data?.message || action.error?.message;
+
+  // 如果是身份驗證錯誤（401），提示用戶重新登入
   if (status === 401) {
     state.alert = {
       open: true,
@@ -370,9 +381,10 @@ const handleAuthError = (state: UserState, action: any) => {
       severity: "error",
     };
   } else {
+    // 處理其他錯誤情況，顯示具體的錯誤訊息或預設錯誤訊息
     state.alert = {
       open: true,
-      message: action.error.message as string,
+      message: message || "發生未知錯誤",
       severity: "error",
     };
   }
@@ -425,7 +437,7 @@ const userSlice = createSlice({
       });
     // initializeAccount
     builder
-      .addCase(initializeAccount.fulfilled, (state, action) => {
+      .addCase(initializeAccount.fulfilled, (_, action) => {
         localStorage.setItem("acToken", action.payload);
       })
       .addCase(initializeAccount.rejected, (state, action) => {
@@ -706,4 +718,5 @@ export const {
   setAlert,
   clearAlert,
 } = userSlice.actions;
+
 export default userSlice.reducer;

@@ -35,7 +35,7 @@ const MainPage: React.FC = () => {
       try {
         const parsedCategories = JSON.parse(userCategories);
         dispatch(setUserCategories(parsedCategories));
-        console.log("更新後的使用者分類資訊: ", parsedCategories);
+        // console.log("更新後的使用者分類資訊: ", parsedCategories);
       } catch (error) {
         console.error("解析使用者分類失敗: ", error);
       }
@@ -45,7 +45,7 @@ const MainPage: React.FC = () => {
       try {
         const parsedFavorites = JSON.parse(userFavorites);
         dispatch(setUserFavorites(parsedFavorites));
-        console.log("更新後的使用者收藏資訊: ", parsedFavorites);
+        // console.log("更新後的使用者收藏資訊: ", parsedFavorites);
       } catch (error) {
         console.error("解析使用者收藏失敗: ", error);
       }

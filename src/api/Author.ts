@@ -53,21 +53,6 @@ const currentToken = {
 const args = new URLSearchParams(window.location.search);
 const code: string | null = args.get("code");
 
-// // 如果找到授權碼，進行 token 交換
-// if (code) {
-//   getToken(code).then((token) => {
-//     console.log("獲取到的 token:", token);
-//     currentToken.save(token);
-
-//     // 移除 URL 中的授權碼，讓我們可以正確進行刷新
-//     const url = new URL(window.location.href);
-//     url.searchParams.delete("code");
-
-//     const updatedUrl = url.search ? url.href : url.href.replace("?", "");
-//     window.history.replaceState({}, document.title, updatedUrl);
-//   });
-// }
-
 // 如果找到授權碼，進行 token 交換
 if (code) {
   getToken(code)
@@ -227,57 +212,6 @@ async function refreshTokenClick(): Promise<void> {
   renderTemplate("oauth", "oauth-template", currentToken);
   console.log(currentToken);
 }
-
-// // HTML 模板渲染函數，帶有基本的資料綁定功能
-// function renderTemplate(
-//   targetId: string,
-//   templateId: string,
-//   data: any = null
-// ) {
-//   const template = document.getElementById(templateId) as HTMLTemplateElement;
-//   if (!template) {
-//     console.error(`找不到 ID 為 "${templateId}" 的模板。`);
-//     return;
-//   }
-//   const clone = template.content.cloneNode(true);
-
-//   const elements = (clone as HTMLElement).querySelectorAll("*");
-//   elements.forEach((ele) => {
-//     const bindingAttrs = [...ele.attributes].filter((a) =>
-//       a.name.startsWith("data-bind")
-//     );
-
-//     bindingAttrs.forEach((attr) => {
-//       const target = attr.name
-//         .replace(/data-bind-/, "")
-//         .replace(/data-bind/, "");
-//       const targetType = target.startsWith("onclick") ? "HANDLER" : "PROPERTY";
-//       const targetProp = target === "" ? "innerHTML" : target;
-
-//       const prefix = targetType === "PROPERTY" ? "data." : "";
-//       const expression = prefix + attr.value.replace(/;\n\r\n/g, "");
-
-//       // 這裡可以用更嚴格的框架進行驗證 ;)
-//       try {
-//         (ele as any)[targetProp] =
-//           targetType === "PROPERTY"
-//             ? eval(expression)
-//             : () => {
-//                 eval(expression);
-//               };
-//         ele.removeAttribute(attr.name);
-//       } catch (ex) {
-//         console.error(`綁定 ${expression} 到 ${targetProp} 時出錯`, ex);
-//       }
-//     });
-//   });
-
-//   const target = document.getElementById(targetId);
-//   if (target) {
-//     target.innerHTML = "";
-//     target.appendChild(clone);
-//   }
-// }
 
 export {
   redirectToSpotifyAuthorize,
