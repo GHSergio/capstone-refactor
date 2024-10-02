@@ -21,31 +21,26 @@ const CallbackPage = () => {
     setProgress((prev) => Math.min(prev + value, 100));
   };
 
+  // 等待 token 被設置
+  const waitForToken = async (): Promise<string | null> => {
+    return new Promise((resolve, reject) => {
+      const token = localStorage.getItem("access_token");
+      if (token) {
+        resolve(token);
+      } else {
+        reject("未找到 access token，請重新登入。");
+      }
+    });
+  };
+
   useEffect(() => {
     const fetchData = async () => {
-      let accessToken = localStorage.getItem("access_token");
-
-      // 持續檢查是否有token，直到它被設置
-      if (!accessToken) {
-        const waitForToken = async () => {
-          return new Promise((resolve) => {
-            const interval = setInterval(() => {
-              accessToken = localStorage.getItem("access_token");
-              if (accessToken) {
-                clearInterval(interval);
-                resolve(accessToken);
-              }
-            }, 100); // 每100ms檢查一次
-          });
-        };
-        await waitForToken(); // 等待 token 被設置
-      }
-
       try {
+        const accessToken = await waitForToken();
         if (accessToken) {
-          // 此時token已經存在，開始執行fetch等操作
           updateProgress(20);
 
+          // 開始執行相關的資料請求
           await dispatch(initializeAccount()).unwrap();
           updateProgress(20);
 
@@ -58,23 +53,75 @@ const CallbackPage = () => {
           await dispatch(fetchUserFavorites()).unwrap();
           updateProgress(20);
 
+          // 等待一段時間後導航到主頁
           setTimeout(() => {
             navigate("/main");
           }, 2000);
-        } else {
-          setError("未找到 access token，請重新登入。");
-          console.error("Access token 未找到");
-          setLoading(false);
         }
       } catch (err) {
-        setError("獲取資料失敗，請重新嘗試。");
-        console.error("API 請求失敗: ", err);
+        setError(err as string);
         setLoading(false);
+        console.error("API 請求失敗: ", err);
       }
     };
 
     fetchData();
   }, [dispatch, navigate]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     let accessToken = localStorage.getItem("access_token");
+
+  //     // 持續檢查是否有token，直到它被設置
+  //     if (!accessToken) {
+  //       const waitForToken = async () => {
+  //         return new Promise((resolve) => {
+  //           const interval = setInterval(() => {
+  //             accessToken = localStorage.getItem("access_token");
+  //             if (accessToken) {
+  //               clearInterval(interval);
+  //               resolve(accessToken); // 將 token 傳遞給 Promise 的 resolve，表示完成
+  //             }
+  //           }, 100); // 每100ms檢查一次
+  //         });
+  //       };
+  //       await waitForToken(); // 等待 Promise 完成，直到 accessToken 被設置
+  //     }
+
+  //     try {
+  //       if (accessToken) {
+  //         // 此時token已經存在，開始執行fetch等操作
+  //         updateProgress(20);
+
+  //         await dispatch(initializeAccount()).unwrap();
+  //         updateProgress(20);
+
+  //         await dispatch(fetchUserProfile()).unwrap();
+  //         updateProgress(20);
+
+  //         await dispatch(fetchCategories()).unwrap();
+  //         updateProgress(20);
+
+  //         await dispatch(fetchUserFavorites()).unwrap();
+  //         updateProgress(20);
+
+  //         setTimeout(() => {
+  //           navigate("/main");
+  //         }, 2000);
+  //       } else {
+  //         setError("未找到 access token，請重新登入。");
+  //         console.error("Access token 未找到");
+  //         setLoading(false);
+  //       }
+  //     } catch (err) {
+  //       setError("獲取資料失敗，請重新嘗試。");
+  //       console.error("API 請求失敗: ", err);
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [dispatch, navigate]);
 
   const handleLoginAgain = () => {
     localStorage.removeItem("access_token");

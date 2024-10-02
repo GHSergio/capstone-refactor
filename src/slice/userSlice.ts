@@ -366,28 +366,34 @@ export const removeShowFromCategory = createAsyncThunk(
 // 共用的錯誤處理函式
 const handleAuthError = (state: UserState, action: any) => {
   // 從 action.payload（即 error.response）中提取 HTTP 狀態碼
-  const { status } = action.payload as {
-    status: number;
-  };
-  // 優先使用 API 返回的錯誤信息（即 action.payload.data.message）-> 從 catch return，
-  // 如果沒有具體的 API 錯誤信息，則使用 Axios 自動捕捉的錯誤（action.error.message）-> 不用在catch return也有
-  const message = action.payload?.data?.message || action.error?.message;
+  // console.log("rejectWithValue", action.payload);
 
-  // 如果是身份驗證錯誤（401），提示用戶重新登入
+  const { status, data } = action.payload as {
+    status: number;
+    data?: { message?: string };
+  };
+  // 優先使用 API 返回的錯誤信息（即 action.payload.data）-> 從 catch return，
+  // 如果沒有具體的 API 錯誤信息，則使用 Axios 自動捕捉的錯誤（action.error.message）-> 不用在catch return也有
+
+  let message = data?.message || "發生未知錯誤"; // 默認的錯誤提示
+
+  // 根據 HTTP 狀態碼設置具體的錯誤訊息
   if (status === 401) {
-    state.alert = {
-      open: true,
-      message: "驗證已過期，請重新登入",
-      severity: "error",
-    };
-  } else {
-    // 處理其他錯誤情況，顯示具體的錯誤訊息或預設錯誤訊息
-    state.alert = {
-      open: true,
-      message: message || "發生未知錯誤",
-      severity: "error",
-    };
+    message = "驗證已過期，請重新登入";
+  } else if (status === 403) {
+    message = "您沒有權限執行此操作";
+  } else if (status === 404) {
+    message = "找不到請求的資源，請稍後再試或聯繫支援";
+  } else if (status === 409) {
+    message = "資料衝突，該項目可能已經存在";
+  } else if (status >= 500) {
+    message = "伺服器發生錯誤，請稍後再試";
   }
+  state.alert = {
+    open: true,
+    message: message,
+    severity: "error",
+  };
 };
 
 // userSlice
