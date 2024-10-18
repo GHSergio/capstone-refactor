@@ -9,11 +9,15 @@ import {
 } from "../slice/userSlice";
 import { AppDispatch } from "../store/store";
 import { useNavigate } from "react-router-dom";
+import { keyframes } from "@mui/system"; // 引入 MUI 的 keyframes
 
 const CallbackPage = () => {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0); // 進度狀態
   const [error, setError] = useState<string | null>(null);
+  const [animationEnded, setAnimationEnded] = useState(false); // 監控動畫是否結束
+  const [dataLoaded, setDataLoaded] = useState(false); // 監控 fetchData 是否完成
+
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -53,10 +57,8 @@ const CallbackPage = () => {
           await dispatch(fetchUserFavorites()).unwrap();
           updateProgress(20);
 
-          // 等待一段時間後導航到主頁
-          setTimeout(() => {
-            navigate("/main");
-          }, 2000);
+          // fetchData 完成後設置 dataLoaded 為 true
+          setDataLoaded(true);
         }
       } catch (err) {
         setError(err as string);
@@ -68,65 +70,62 @@ const CallbackPage = () => {
     fetchData();
   }, [dispatch, navigate]);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     let accessToken = localStorage.getItem("access_token");
-
-  //     // 持續檢查是否有token，直到它被設置
-  //     if (!accessToken) {
-  //       const waitForToken = async () => {
-  //         return new Promise((resolve) => {
-  //           const interval = setInterval(() => {
-  //             accessToken = localStorage.getItem("access_token");
-  //             if (accessToken) {
-  //               clearInterval(interval);
-  //               resolve(accessToken); // 將 token 傳遞給 Promise 的 resolve，表示完成
-  //             }
-  //           }, 100); // 每100ms檢查一次
-  //         });
-  //       };
-  //       await waitForToken(); // 等待 Promise 完成，直到 accessToken 被設置
-  //     }
-
-  //     try {
-  //       if (accessToken) {
-  //         // 此時token已經存在，開始執行fetch等操作
-  //         updateProgress(20);
-
-  //         await dispatch(initializeAccount()).unwrap();
-  //         updateProgress(20);
-
-  //         await dispatch(fetchUserProfile()).unwrap();
-  //         updateProgress(20);
-
-  //         await dispatch(fetchCategories()).unwrap();
-  //         updateProgress(20);
-
-  //         await dispatch(fetchUserFavorites()).unwrap();
-  //         updateProgress(20);
-
-  //         setTimeout(() => {
-  //           navigate("/main");
-  //         }, 2000);
-  //       } else {
-  //         setError("未找到 access token，請重新登入。");
-  //         console.error("Access token 未找到");
-  //         setLoading(false);
-  //       }
-  //     } catch (err) {
-  //       setError("獲取資料失敗，請重新嘗試。");
-  //       console.error("API 請求失敗: ", err);
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [dispatch, navigate]);
-
   const handleLoginAgain = () => {
     localStorage.removeItem("access_token");
     navigate("/login");
   };
+
+  // 將字串拆分為字母Array
+  const textToDisplay = "ALPHA Cast".split("");
+
+  // 定義動畫
+  const bounceAnimation = keyframes`
+    0% {
+      opacity: 0;
+      transform: translateY(-200px); /* 初始在上方 */
+    }
+    20% {
+      opacity: 1;
+      transform: translateY(0); /* 落到正常位置 */
+    }
+    40% {
+      transform: translateY(-30px); /* 第一次彈跳到上方 30px */
+    }
+    60% {
+      transform: translateY(0); /* 回到正常位置 */
+    }
+    80% {
+      transform: translateY(-15px); /* 第二次彈跳到上方 15px */
+    }
+    100% {
+      transform: translateY(0); /* 最後回到正常位置 */
+      opacity: 1;
+    }
+  `;
+
+  // 定義一個函數來生成 textShadow 字串
+  const generateTextShadow = (
+    offsetX: number,
+    offsetY: number,
+    blurRadius: number,
+    color: string
+  ) => {
+    return `${offsetX}px ${offsetY}px ${blurRadius}px ${color}, ${-offsetX}px ${-offsetY}px ${blurRadius}px ${color}`;
+  };
+
+  // 監控動畫結束的事件
+  const handleAnimationEnd = () => {
+    setAnimationEnded(true);
+  };
+
+  // 當數據加載和動畫都完成時，導航到主頁
+  useEffect(() => {
+    if (dataLoaded && animationEnded) {
+      setTimeout(() => {
+        navigate("/main");
+      }, 2000); // 等待2秒後導航
+    }
+  }, [dataLoaded, animationEnded, navigate]);
 
   return (
     <Box
@@ -141,16 +140,131 @@ const CallbackPage = () => {
     >
       {loading ? (
         <>
+          {/* 使用 MUI 的 Typography */}
+          <Box>
+            {textToDisplay.map((text, index) => (
+              <Typography
+                key={index}
+                variant="h1"
+                onAnimationEnd={
+                  index === textToDisplay.length - 1
+                    ? handleAnimationEnd
+                    : undefined
+                } // 在最後一個字母的動畫結束時觸發
+                sx={{
+                  opacity: 0,
+                  fontFamily: "'Henny Penny', cursive",
+                  color: "white",
+                  textShadow: {
+                    xs: generateTextShadow(1.5, 1.5, 1.5, "black"), // 使用函數生成陰影
+                    sm: generateTextShadow(2, 2, 2, "black"),
+                    md: generateTextShadow(3, 3, 3, "black"),
+                    lg: generateTextShadow(4, 4, 4, "black"),
+                  },
+                  "@media (min-width:1600px)": {
+                    textShadow: generateTextShadow(8, 8, 5, "black"),
+                  },
+                  animation: `${bounceAnimation} 1.5s ease-in-out forwards`,
+                  animationDelay: `${index * 0.3}s`,
+                  display: "inline-block",
+                  margin: {
+                    sm: "0.6rem",
+                    md: "0.8rem",
+                    lg: "1rem",
+                  },
+                  fontSize: {
+                    sm: "3.5rem",
+                    md: "4.5rem",
+                    lg: "6rem",
+                  },
+                  "@media (max-width:320px)": {
+                    fontSize: "1.15rem",
+                    margin: "0.35rem",
+                  },
+                  "@media (min-width:321px) and (max-width:376px)": {
+                    fontSize: "1.5rem",
+                    margin: "0.35rem",
+                  },
+                  "@media(min-width:376px) and (max-width:600px)": {
+                    fontSize: "1.8rem",
+                    margin: "0.35rem",
+                  },
+                  "@media(min-width:1600px)": {
+                    fontSize: "12rem",
+                    margin: "1.8rem",
+                  },
+                }}
+              >
+                {text}
+              </Typography>
+            ))}
+          </Box>
+
           {/* 進度條容器 */}
-          <Box sx={{ width: "80%", mb: 2 }}>
+          <Box
+            sx={{
+              width: "80%",
+              my: {
+                sm: "1rem",
+                md: "1.2rem",
+                lg: "2rem",
+              },
+            }}
+          >
             <LinearProgress
               variant="determinate"
               value={progress}
-              sx={{ height: 10, borderRadius: 5 }}
+              sx={{
+                borderRadius: 5,
+                height: {
+                  sm: "0.8rem",
+                  md: "1.2rem",
+                  lg: "1.5rem",
+                },
+                "@media (max-width:320px)": {
+                  height: "0.4rem",
+                },
+                "@media (min-width:321px) and (max-width:376px)": {
+                  height: "0.5rem",
+                },
+                "@media(min-width:376px) and (max-width:600px)": {
+                  height: "0.6rem",
+                },
+                "@media(min-width:1600px)": {
+                  height: "3rem",
+                },
+              }}
             />
           </Box>
-          <Typography variant="h6" sx={{ color: "#fff", mb: 1 }}>
-            獲取初始數據中, 請耐心等待...目前進度: {progress}%
+
+          <Typography
+            variant="h6"
+            sx={{
+              color: "#fff",
+              mt: 1,
+              fontSize: {
+                sm: "1rem",
+                md: "1.5rem",
+                lg: "2rem",
+              },
+              "@media (max-width:320px)": {
+                fontSize: "0.6rem",
+              },
+              "@media (min-width:321px) and (max-width:376px)": {
+                fontSize: "0.7rem",
+              },
+              "@media(min-width:376px) and (max-width:600px)": {
+                fontSize: "0.8rem",
+              },
+              "@media(min-width:1600px)": {
+                fontSize: "4rem",
+              },
+            }}
+          >
+            {/* 根據動畫是否結束顯示不同的文字 */}
+            {dataLoaded && animationEnded
+              ? "數據獲取完成，即將前往主頁..."
+              : `獲取初始數據中, 請耐心等待...目前進度: ${progress}%`}
           </Typography>
         </>
       ) : error ? (
@@ -166,23 +280,7 @@ const CallbackPage = () => {
             重新登入
           </Button>
         </>
-      ) : (
-        <Typography
-          variant="h6"
-          sx={{
-            color: "#fff",
-            fontSize: {
-              xs: "0.5rem",
-              sm: "0.6rem",
-              md: "0.7rem",
-              lg: "0.8rem",
-              xl: "1rem",
-            },
-          }}
-        >
-          數據獲取完成，即將前往主頁...
-        </Typography>
-      )}
+      ) : null}
     </Box>
   );
 };
