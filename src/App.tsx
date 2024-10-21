@@ -16,8 +16,8 @@ function AppRouter() {
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<LoginPage />} />
 
+      <Route path="/callback" element={<CallbackPage />} />
       <Route element={<PrivateRoute />}>
-        <Route path="/callback" element={<CallbackPage />} />
         <Route path="/main" element={<MainPage />} />
       </Route>
 

@@ -25,15 +25,33 @@ const CallbackPage = () => {
     setProgress((prev) => Math.min(prev + value, 100));
   };
 
+  // // 等待 token 被設置
+  // const waitForToken = async (): Promise<string | null> => {
+  //   return new Promise((resolve, reject) => {
+  //     const token = localStorage.getItem("access_token");
+  //     if (token) {
+  //       resolve(token);
+  //     } else {
+  //       reject("未找到 access token，請重新登入。");
+  //     }
+  //   });
+  // };
+
   // 等待 token 被設置
-  const waitForToken = async (): Promise<string | null> => {
+  const waitForToken = async (retries = 5): Promise<string | null> => {
     return new Promise((resolve, reject) => {
-      const token = localStorage.getItem("access_token");
-      if (token) {
-        resolve(token);
-      } else {
-        reject("未找到 access token，請重新登入。");
-      }
+      const checkToken = (attempts: number) => {
+        const token = localStorage.getItem("access_token");
+        if (token) {
+          resolve(token);
+        } else if (attempts > 0) {
+          // 每500毫秒重試一次，最多重試 `retries` 次
+          setTimeout(() => checkToken(attempts - 1), 500);
+        } else {
+          reject("未找到 access token，請重新登入。");
+        }
+      };
+      checkToken(retries);
     });
   };
 
@@ -270,7 +288,8 @@ const CallbackPage = () => {
       ) : error ? (
         <>
           <Typography variant="h6" sx={{ color: "red", mb: 2 }}>
-            發生錯誤: 可嘗試F5重整頁面，{error}
+            {error}
+            {/* 發生錯誤: 可嘗試F5重整頁面， */}
           </Typography>
           <Button
             variant="contained"

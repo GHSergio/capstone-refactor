@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { Episode, Show } from "./types";
 import axios from "axios";
+import { refreshToken } from "../api/Author";
 
 export interface Category {
   id: string;
@@ -59,6 +60,22 @@ const initialState: UserState = {
 // Spotify API 基本 URL
 const spotifyBaseUrl = import.meta.env.VITE_SPOTIFY_API_BASE_URI;
 const AcBaseUri = import.meta.env.VITE_AC_API_BASE_URI;
+
+// 刷新token
+export const refreshAccessToken = createAsyncThunk(
+  "user/refreshAccessToken",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await refreshToken();
+      console.log("API回傳: ", response);
+      return response;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response);
+      }
+    }
+  }
+);
 
 // 獲取使用者資訊
 export const fetchUserProfile = createAsyncThunk(
@@ -429,6 +446,23 @@ const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // refresh token
+    builder
+      .addCase(refreshAccessToken.fulfilled, (_, action) => {
+        if (action.payload) {
+          console.log("刷新成功獲取: ", action.payload);
+          const { access_token, refresh_token, expires_in } = action.payload;
+          localStorage.setItem("access_token", access_token);
+          localStorage.setItem("refresh_token", refresh_token);
+          localStorage.setItem("expires_in", expires_in.toString());
+          // 計算過期時間並轉換成ISO格式 保存localStorage
+          const expirationTime = new Date(Date.now() + expires_in * 1000);
+          localStorage.setItem("expires", expirationTime.toISOString());
+        }
+      })
+      .addCase(refreshAccessToken.rejected, (state, action) => {
+        handleAuthError(state, action);
+      });
     builder
       // 處理 fetchUserProfile
       .addCase(fetchUserProfile.fulfilled, (state, action) => {

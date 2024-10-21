@@ -5,14 +5,16 @@ import Footer from "../components/footer/Footer";
 import MainContent from "../components/MainContent";
 import Navbar from "../components/Navbar";
 import { useDispatch } from "react-redux";
+import { AppDispatch } from "../store/store";
 import {
   setUserData,
   setUserCategories,
   setUserFavorites,
+  refreshAccessToken,
 } from "../slice/userSlice";
 
 const MainPage: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   // 從 localStorage 提取資訊
   useEffect(() => {
@@ -50,6 +52,43 @@ const MainPage: React.FC = () => {
         console.error("解析使用者收藏失敗: ", error);
       }
     }
+  }, [dispatch]);
+
+  useEffect(() => {
+    // 定期檢查 token 是否即將過期
+    const checkTokenExpiration = () => {
+      const expiresAt = localStorage.getItem("expires");
+
+      if (expiresAt) {
+        const expiresAtTime = new Date(expiresAt).getTime();
+        const currentTime = Date.now();
+        const timeLeft = expiresAtTime - currentTime;
+        console.log("expiresAtTime: ", expiresAtTime);
+        console.log("currentTime: ", currentTime);
+        console.log("timeLeft: ", timeLeft);
+
+        // 比較當前時間和過期時間
+        if (timeLeft <= 5 * 60 * 1000) {
+          console.log("Token 即將過期，刷新 Token...");
+          dispatch(refreshAccessToken()); // 如果過期，觸發刷新 token
+        } else {
+          console.log("Token 還有效，剩餘時間:", timeLeft / 1000 / 60, "分鐘");
+        }
+
+        // 動態設置下次檢查的時間間隔
+        const nextCheck =
+          timeLeft > 10 * 60 * 1000 ? 5 * 60 * 1000 : 1 * 60 * 1000; // 大於10分鐘時每5分鐘檢查一次，否則每1分鐘
+        setTimeout(checkTokenExpiration, nextCheck);
+      }
+    };
+
+    // 每 1 分鐘檢查一次
+    const intervalId = setInterval(() => {
+      checkTokenExpiration();
+    }, 60000); // 每分鐘檢查一次
+
+    // 清除定時器
+    return () => clearInterval(intervalId);
   }, [dispatch]);
 
   return (
