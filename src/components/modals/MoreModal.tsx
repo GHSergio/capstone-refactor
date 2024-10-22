@@ -327,8 +327,8 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
                 maxHeight: {
                   xs: "12vw",
                   sm: "13vw",
-                  md: "7vw",
-                  lg: "7vw",
+                  md: "8vw",
+                  lg: "8vw",
                   xl: "8vw",
                 },
 
