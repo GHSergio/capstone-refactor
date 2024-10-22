@@ -62,19 +62,19 @@ const MainContent = () => {
             },
             "@media (max-width:321px)": {
               margin: "35vw auto 0 auto",
-              height: "90vw",
+              height: "95vw",
             },
             "@media (min-width:321px) and (max-width:376px)": {
               margin: "30vw auto 0 auto",
-              height: "90vw",
+              height: "95vw",
             },
             "@media (min-width:376px) and (max-width:600px)": {
               margin: "25vw auto 0 auto",
-              height: "78vh",
+              height: "80vw",
             },
             "@media (min-width:1600px)": {
               margin: "0vw auto 0 auto",
-              height: "78vh",
+              height: "90vw",
             },
           }}
         >

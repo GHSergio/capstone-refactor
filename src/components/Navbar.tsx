@@ -43,6 +43,7 @@ const Navbar: React.FC = () => {
           <Box
             sx={{
               textAlign: "center",
+              fontSize: "1rem",
             }}
           >
             <img src={Logo} alt="Logo" style={{ width: "220px" }} />

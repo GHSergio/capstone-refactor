@@ -1,6 +1,5 @@
 import React from "react";
-import { Box, Divider, Typography } from "@mui/material";
-import Logo from "../../assets/Logo.png";
+import { Box, Typography } from "@mui/material";
 import SideBarItem from "./SideBarItem";
 import SidebarAddItem from "./SidebarAddItem";
 import { useSelector, useDispatch } from "react-redux";
@@ -18,7 +17,11 @@ const Sidebar: React.FC = () => {
   // 如果 playlists 為空或未定義，顯示提示
   if (!userCategories || userCategories.length === 0) {
     return (
-      <Box sx={{ padding: "1.5rem" }}>
+      <Box
+        sx={{
+          padding: { xs: "1.5rem", sm: "1rem", md: "1.5rem", xl: "2rem" },
+        }}
+      >
         <Typography variant="h6">無法獲取播放分類清單</Typography>
       </Box>
     );
@@ -33,23 +36,12 @@ const Sidebar: React.FC = () => {
         display: "flex",
         flexDirection: { xs: "row", sm: "column" },
         alignItems: "center",
-        padding: "1.5rem",
+        padding: { xs: "1.5rem", sm: "0.8rem", md: "1rem", xl: "1.5rem" },
+        "@media(min-width:1600px)": {
+          padding: "2rem",
+        },
       }}
     >
-      {/* Logo 區域 */}
-      {/* <Box sx={{ width: "80%" }}>
-        <img src={Logo} alt="Logo" style={{ width: "100%" }} />
-      </Box> */}
-
-      {/* 分隔線 */}
-      {/* <Divider
-        sx={{
-          width: "100%",
-          my: "1.5rem",
-          display: { sx: "none", sm: "block" },
-        }}
-      /> */}
-
       {/* 新增分類的按鈕 */}
       <Box
         sx={{
