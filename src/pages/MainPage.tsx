@@ -152,7 +152,7 @@ const MainPage: React.FC = () => {
             sm={9}
             sx={{
               height: "100%",
-              overflowY: "auto",
+              // overflowY: "auto",
             }}
           >
             <MainContent />
@@ -162,12 +162,16 @@ const MainPage: React.FC = () => {
         {/* Footer */}
         <Box
           sx={{
+            // display: { xs: "block", sm: "none" },
             position: { xs: "absolute", sm: "relative" },
             width: "100%",
-            height: "100%",
+            height: { sm: "35vh", md: "25vh", xl: "25vh" },
             "@media(max-width:600px)": {
               top: 0,
               height: "0vh",
+            },
+            "@media(min-width:1600px)": {
+              height: "15vh",
             },
             bottom: 0,
           }}

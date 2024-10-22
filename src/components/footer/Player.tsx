@@ -49,6 +49,7 @@ const Player = () => {
         <iframe
           src={`https://open.spotify.com/embed/episode/${id}`}
           width="100%"
+          height="100%"
           frameBorder="0"
           allow="encrypted-media"
         ></iframe>

@@ -109,7 +109,9 @@ const Footer: React.FC = () => {
           </Box> */}
 
           {/* <Player /> */}
-          <Box sx={{ width: "100%", height: { xs: "10vh", sm: "auto" } }}>
+          <Box
+            sx={{ width: { xs: "100%" }, height: { xs: "50vh", sm: "auto" } }}
+          >
             <Player />
           </Box>
         </Box>

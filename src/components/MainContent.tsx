@@ -4,21 +4,12 @@ import { RootState } from "../store/store";
 import ListPage from "../pages/ListPage";
 import FavoritePage from "../pages/FavoritePage";
 import User from "./footer/User";
+import Player from "./footer/Player";
 import ActionModal from "./modals/ActionModal";
 
 const MainContent = () => {
   const { currentCategoryId } = useSelector((state: RootState) => state.user);
-  const getGreeting = (): string => {
-    const now = new Date();
-    const hour = now.getHours();
-    if (hour < 12) {
-      return "早安";
-    } else if (hour < 18) {
-      return "午安";
-    } else {
-      return "晚安";
-    }
-  };
+
   return (
     <>
       <ActionModal />
@@ -28,44 +19,61 @@ const MainContent = () => {
           flexDirection: "column",
           alignItems: "center",
           position: "relative",
-          height: "100%",
           width: "100%",
+          height: "100%",
+          boxShadow: "0 0 5px 2px rgba(0, 0, 0, 0.2)",
         }}
       >
-        {/* 問候 */}
+        {/* Header */}
         <Box
           sx={{
-            position: "absolute",
-            top: "1rem",
-            left: "1rem",
-            display: { xs: "none", sm: "block" },
+            position: "fixed",
+            right: "0px",
+            display: { xs: "none", sm: "flex" },
+            justifyContent: "flex-end",
+            alignItems: "center",
+            width: "75%",
+            backgroundColor: "#F6F7F8",
+            boxShadow: "0 0 5px 2px rgba(0, 0, 0, 0.2)",
+            height: { sm: "15vh", md: "10vh" },
+            "@media (min-width:1600px)": {
+              height: "6.5vh",
+            },
+            zIndex: 2,
+            // border: "1px solid blue",
           }}
         >
-          <Typography
-            variant="h6"
+          {/* User */}
+          <Box
             sx={{
-              fontSize: "1.5rem",
+              marginRight: "1rem",
             }}
           >
-            {getGreeting()}
-          </Typography>
+            <User />
+          </Box>
         </Box>
 
         {/* 動態內容區域 */}
         <Box
           sx={{
             width: "100%",
-            height: "80vh",
+            height: { xs: "70vh", sm: "60vh" },
             padding: "1rem",
-            margin: { xs: "6rem auto 0 auto", sm: "5rem auto 0 auto" },
+            margin: {
+              xs: "20vh auto 0 auto",
+              sm: "15vh auto 0 auto",
+              md: "10vh auto 0 auto",
+            },
+            "@media (min-width:1600px)": {
+              margin: "7.5vh auto 0 auto",
+              height: "78vh",
+            },
           }}
         >
           {currentCategoryId === "favorites" ? <FavoritePage /> : <ListPage />}
         </Box>
       </Box>
-
-      {/* User */}
-      <Box
+      {/* <Box
         sx={{
           position: "absolute",
           top: "40px",
@@ -74,7 +82,7 @@ const MainContent = () => {
         }}
       >
         <User />
-      </Box>
+      </Box> */}
     </>
   );
 };
