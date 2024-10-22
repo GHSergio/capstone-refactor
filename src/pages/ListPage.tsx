@@ -71,7 +71,31 @@ const ListPage: React.FC = () => {
   };
 
   if (!currentCategory) {
-    return <Box mt={10}>請選擇一個分類。</Box>;
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: { xs: "4rem", sm: "4rem", md: "4rem", xl: "10rem" },
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: {
+              xs: "0.8rem",
+              sm: "1rem",
+              md: "1.25rem",
+              xl: "1.5rem",
+            },
+            "@media (min-width:1600px)": {
+              fontSize: "2.5rem",
+            },
+          }}
+        >
+          請選擇一個分類。
+        </Typography>
+      </Box>
+    );
   }
 
   return (
