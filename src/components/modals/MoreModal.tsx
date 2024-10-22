@@ -104,23 +104,32 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
           sx={{
             p: { xs: 0.5, sm: 1, md: 2, lg: 2, xl: 3 },
             position: "relative",
-            height: { xs: "25%", sm: "26%", md: "23%", lg: "26%", xl: "26%" },
+            height: { xs: "25%", sm: "26%", md: "23%", lg: "22%", xl: "26%" },
           }}
         >
           {/* 頻道封面 */}
           <Grid
             item
-            xs={5}
+            // xs={5}
+            xs={3}
             sm={3}
             sx={{
               p: 0.5,
+              minWidth: {
+                xs: "100px",
+                sm: "120px",
+                md: "130px",
+                lg: "200px",
+                xl: "200px",
+              },
               maxWidth: {
-                xs: "35%",
+                xs: "18%",
                 sm: "22%",
                 md: "20%",
                 lg: "19%",
                 xl: "18%",
               },
+
               textAlign: "center",
               marginRight: {
                 xs: 0.75,
@@ -131,17 +140,21 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
               },
               // 獨立處理媒體查詢的 maxWidth
               "@media (max-width: 320px)": {
-                maxWidth: "40%",
+                maxWidth: "18%",
+                minWidth: "100px",
               },
               "@media (min-width: 321px) and(max-width: 375px)": {
-                maxWidth: "35%",
+                maxWidth: "18%",
+                minWidth: "100px",
               },
               "@media (min-width: 376px) and (max-width: 600px)": {
-                maxWidth: "30%",
+                maxWidth: "18%",
+                minWidth: "100px",
               },
               "@media(min-width:1600px)": {
                 maxWidth: "18%",
                 marginRight: 3,
+                minWidth: "350px",
               },
             }}
           >
@@ -165,7 +178,8 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
 
           <Grid
             item
-            xs={5}
+            // xs={6}
+            xs={9}
             sm={9}
             sx={{
               "@media (max-width: 321px)": {
@@ -259,18 +273,18 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
               variant="body1"
               color="text.secondary"
               sx={{
-                width: {
+                maxWidth: {
                   xs: "130%",
                   sm: "90%",
                   md: "95%",
                   lg: "100%",
-                  xl: "100%",
+                  xl: "130%",
                 },
                 height: {
                   xs: "60px",
                   sm: "85px",
                   md: "85px",
-                  lg: "120px",
+                  lg: "85px",
                   xl: "105px",
                 },
                 overflowY: "auto",
@@ -283,21 +297,27 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
                   xl: "1.2rem",
                 },
                 "@media (max-width: 321px)": {
-                  maxWidth: "100%",
+                  // maxWidth: "105%",
+                  minWidth: "110%",
+
                   height: "65px",
                   fontSize: "0.4rem",
                 },
                 "@media(min-width: 321px)and (max-width: 376px)": {
-                  maxWidth: "100%",
+                  // maxWidth: "105%",
+                  minWidth: "105%",
+
                   height: "65px",
                   fontSize: "0.4rem",
                 },
                 "@media (min-width: 376px) and (max-width: 600px)": {
-                  maxWidth: "150%",
+                  // maxWidth: "125%",
+                  minWidth: "125%",
                   height: "65px",
                   fontSize: "0.4rem",
                 },
                 "@media (min-width: 1600px)": {
+                  maxWidth: "100%",
                   fontSize: "1.5rem",
                   height: "240px",
                 },
@@ -351,7 +371,7 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
                   xl: "1.2rem",
                 },
                 "@media (min-width: 1600px)": {
-                  fontSize: "2rem",
+                  fontSize: "1.5rem",
                 },
                 fontFamily: "Noto Sans TC",
               }}

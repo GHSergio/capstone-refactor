@@ -25,19 +25,7 @@ const CallbackPage = () => {
     setProgress((prev) => Math.min(prev + value, 100));
   };
 
-  // // 等待 token 被設置
-  // const waitForToken = async (): Promise<string | null> => {
-  //   return new Promise((resolve, reject) => {
-  //     const token = localStorage.getItem("access_token");
-  //     if (token) {
-  //       resolve(token);
-  //     } else {
-  //       reject("未找到 access token，請重新登入。");
-  //     }
-  //   });
-  // };
-
-  // 等待 token 被設置
+  // 初始token尚未設置 重複檢查幾次 -> 避免因延遲 只檢查一次 就判定為reject
   const waitForToken = async (retries = 5): Promise<string | null> => {
     return new Promise((resolve, reject) => {
       const checkToken = (attempts: number) => {

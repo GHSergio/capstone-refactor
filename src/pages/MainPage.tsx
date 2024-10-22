@@ -58,7 +58,6 @@ const MainPage: React.FC = () => {
     // 在 useEffect 作用域內宣告 timeoutId，初始為 null
     // setTimeout 返回一個 Timeout 物件，而不是純粹的數字，所以在 Node.js 中會使用 NodeJS.Timeout 作為型別。
     let timeoutId: NodeJS.Timeout | null = null;
-    console.log(timeoutId);
     // 定期檢查 token 是否即將過期
     const checkTokenExpiration = () => {
       const expiresAt = localStorage.getItem("expires");
@@ -66,9 +65,9 @@ const MainPage: React.FC = () => {
         const expiresAtTime = new Date(expiresAt).getTime();
         const currentTime = Date.now();
         const timeLeft = expiresAtTime - currentTime;
-        console.log("expiresAtTime: ", expiresAtTime);
-        console.log("currentTime: ", currentTime);
-        console.log("timeLeft: ", timeLeft);
+        // console.log("expiresAtTime: ", expiresAtTime);
+        // console.log("currentTime: ", currentTime);
+        // console.log("timeLeft: ", timeLeft);
 
         // 比較當前時間和過期時間
         if (timeLeft <= 5 * 60 * 1000) {
@@ -83,13 +82,14 @@ const MainPage: React.FC = () => {
         const nextCheck =
           timeLeft > 10 * 60 * 1000 ? 5 * 60 * 1000 : 1 * 60 * 1000;
 
-        console.log("下一次檢查的時間間隔: ", nextCheck / 1000 / 60, "分鐘");
+        // console.log("下一次檢查的時間間隔: ", nextCheck / 1000 / 60, "分鐘");
 
         // 設置下一次檢查，並保存 timeout ID
         timeoutId = setTimeout(checkTokenExpiration, nextCheck);
       }
     };
     checkTokenExpiration();
+    // console.log(timeoutId);
 
     // 確保清理定時器
     return () => {

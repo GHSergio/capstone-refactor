@@ -76,6 +76,21 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
           xs={4}
           sx={{
             p: 0.5,
+            minWidth: isMoreModalOpen
+              ? {
+                  xs: "100px",
+                  sm: "100px",
+                  md: "130px",
+                  lg: "140px",
+                  xl: "150px",
+                }
+              : {
+                  xs: "100px",
+                  sm: "120px",
+                  md: "130px",
+                  lg: "140px",
+                  xl: "150px",
+                },
             maxWidth: isMoreModalOpen
               ? {
                   xs: "30%",
@@ -86,11 +101,12 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
                 }
               : {
                   xs: "30%",
-                  sm: "24%",
-                  md: "19%",
-                  lg: "18%",
-                  xl: "17%",
+                  sm: "20%",
+                  md: "16%",
+                  lg: "15%",
+                  xl: "16%",
                 },
+
             textAlign: "center",
             marginRight: {
               xs: 1,
@@ -102,14 +118,18 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
             // 獨立處理媒體查詢的 maxWidth
             "@media (max-width: 320px)": {
               maxWidth: isMoreModalOpen ? "35%" : "30%",
+              minWidth: isMoreModalOpen ? "75px" : "80px",
             },
             "@media (min-width: 321px) and (max-width: 376px)": {
               maxWidth: isMoreModalOpen ? "29%" : "29%",
+              minWidth: isMoreModalOpen ? "75px" : "80px",
             },
             "@media (min-width: 376px) and (max-width: 600px)": {
-              maxWidth: isMoreModalOpen ? "25%" : "25%",
+              maxWidth: isMoreModalOpen ? "25%" : "10%",
+              minWidth: isMoreModalOpen ? "75px" : "85px",
             },
             "@media (min-width: 1600px) ": {
+              minWidth: isMoreModalOpen ? "230px" : "190px",
               maxWidth: isMoreModalOpen ? "12.5%" : "12%",
             },
           }}
@@ -201,20 +221,35 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
           {/* 單集介紹 */}
           <Box
             sx={{
-              width: isMoreModalOpen
+              // maxWidth: isMoreModalOpen
+              //   ? {
+              //       xs: "110%",
+              //       sm: "125%",
+              //       md: "130%",
+              //       lg: "120%",
+              //       xl: "130%",
+              //     }
+              //   : {
+              //       xs: "110%",
+              //       sm: "110%",
+              //       md: "130%",
+              //       lg: "120%",
+              //       xl: "130%",
+              //     },
+              minWidth: isMoreModalOpen
                 ? {
-                    xs: "110%",
+                    xs: "100%",
                     sm: "125%",
                     md: "130%",
-                    lg: "120%",
-                    xl: "130%",
+                    lg: "125%",
+                    xl: "135%",
                   }
                 : {
                     xs: "110%",
-                    sm: "120%",
-                    md: "130%",
-                    lg: "120%",
-                    xl: "130%",
+                    sm: "115%",
+                    md: "125%",
+                    // lg: "120%",
+                    xl: "135%",
                   },
               height: isMoreModalOpen
                 ? {
@@ -239,17 +274,20 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
                 xl: "0.5rem 0rem",
               },
               "@media (max-width: 321px)": {
-                width: isMoreModalOpen ? "90%" : "90%",
+                minWidth: isMoreModalOpen ? "85%" : "85%",
                 height: isMoreModalOpen ? "40px" : "50px",
               },
               "@media(min-width: 321px)and (max-width: 376px)": {
-                width: isMoreModalOpen ? "100%" : "100%",
+                minWidth: isMoreModalOpen ? "105%" : "105%",
                 height: "45px",
+              },
+              "@media (min-width: 376px) and (max-width: 600px)": {
+                minWidth: isMoreModalOpen ? "115%" : "115%",
               },
 
               "@media(min-width:1600px)": {
+                minWidth: isMoreModalOpen ? "135%" : "135%",
                 height: isMoreModalOpen ? "135px" : "135px",
-                width: isMoreModalOpen ? "140%" : "140%",
                 margin: isMoreModalOpen ? "0.9rem 0rem" : "0.5rem 0rem",
               },
               boxShadow: "0 0 3px 1px rgba(0,0,0,0.2)",

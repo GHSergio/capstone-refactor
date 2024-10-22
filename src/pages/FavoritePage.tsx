@@ -25,7 +25,7 @@ const FavoritePage: React.FC = () => {
   // 根據收藏的episodeId獲取每個收藏的節目詳細資料
   useEffect(() => {
     if (userFavorites && userFavorites.length > 0) {
-      console.log("準備開始獲取Episode Detail");
+      // console.log("準備開始獲取Episode Detail");
       userFavorites.forEach((favorite: Favorite) => {
         dispatch(fetchEpisodeDetail(favorite.id)).unwrap();
       });
