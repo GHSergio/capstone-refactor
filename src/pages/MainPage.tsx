@@ -137,7 +137,8 @@ const MainPage: React.FC = () => {
             item
             sm={3}
             sx={{
-              boxShadow: "0px 0px 2px 2px #C7C7C73D",
+              boxShadow: "0 0 5px 2px rgba(0, 0, 0, 0.2)",
+              // boxShadow: "0px 0px 2px 2px #C7C7C73D",
               display: { xs: "none", sm: "block" },
               height: "100%",
             }}
@@ -165,10 +166,9 @@ const MainPage: React.FC = () => {
             // display: { xs: "block", sm: "none" },
             position: { xs: "absolute", sm: "relative" },
             width: "100%",
-            height: { sm: "35vh", md: "25vh", xl: "25vh" },
+            height: { xs: "0vw", sm: "35vh", md: "25vh", xl: "25vh" },
             "@media(max-width:600px)": {
               top: 0,
-              height: "0vh",
             },
             "@media(min-width:1600px)": {
               height: "15vh",

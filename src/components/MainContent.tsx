@@ -4,7 +4,6 @@ import { RootState } from "../store/store";
 import ListPage from "../pages/ListPage";
 import FavoritePage from "../pages/FavoritePage";
 import User from "./footer/User";
-import Player from "./footer/Player";
 import ActionModal from "./modals/ActionModal";
 
 const MainContent = () => {
@@ -21,7 +20,6 @@ const MainContent = () => {
           position: "relative",
           width: "100%",
           height: "100%",
-          boxShadow: "0 0 5px 2px rgba(0, 0, 0, 0.2)",
         }}
       >
         {/* Header */}
@@ -34,10 +32,9 @@ const MainContent = () => {
             alignItems: "center",
             width: "75%",
             backgroundColor: "#F6F7F8",
-            boxShadow: "0 0 5px 2px rgba(0, 0, 0, 0.2)",
-            height: { sm: "15vh", md: "10vh" },
+            height: { sm: "11vw", md: "9vw" },
             "@media (min-width:1600px)": {
-              height: "6.5vh",
+              height: "4.5vw",
             },
             zIndex: 2,
             // border: "1px solid blue",
@@ -60,9 +57,22 @@ const MainContent = () => {
             height: { xs: "70vh", sm: "60vh" },
             padding: "1rem",
             margin: {
-              xs: "20vh auto 0 auto",
-              sm: "15vh auto 0 auto",
-              md: "10vh auto 0 auto",
+              xs: "35vw auto 0 auto",
+              sm: "10vw auto 0 auto",
+              md: "10vw auto 0 auto",
+              xl: "10vw auto 0 auto",
+            },
+            "@media (max-width:321px)": {
+              margin: "35vw auto 0 auto",
+              height: "90vw",
+            },
+            "@media (min-width:321px) and (max-width:376px)": {
+              margin: "30vw auto 0 auto",
+              height: "90vw",
+            },
+            "@media (min-width:376px) and (max-width:600px)": {
+              margin: "25vw auto 0 auto",
+              height: "78vh",
             },
             "@media (min-width:1600px)": {
               margin: "7.5vh auto 0 auto",
