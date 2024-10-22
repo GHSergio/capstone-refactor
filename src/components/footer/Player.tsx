@@ -11,7 +11,24 @@ const Player = () => {
       <Box
         sx={{
           width: "100%",
-          height: "20vh",
+          height: {
+            xs: "20vw",
+            sm: "15vw",
+            md: "15vw",
+            xl: "15vw",
+          },
+          "@media (max-width:321px)": {
+            height: "25vw",
+          },
+          "@media (min-width:321px) and (max-width:376px)": {
+            height: "20vw",
+          },
+          "@media (min-width:376px) and (max-width:600px)": {
+            height: "18vw",
+          },
+          "@media (min-width:1600px)": {
+            height: "10vw",
+          },
           bgcolor: "#91B4C1",
           borderRadius: "1rem",
           display: "flex",
