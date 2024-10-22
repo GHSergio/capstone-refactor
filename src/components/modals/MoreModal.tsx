@@ -61,10 +61,19 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
           left: "50%",
           transform: "translate(-50%, -50%)",
           width: "80%",
-          height: "85%",
+          height: "85vh",
+          // height: "auto", // 根據內容動態調整高度
+          // maxHeight: "85vh", // 設置最大高度
           bgcolor: "background.paper",
           boxShadow: 24,
           borderRadius: 2,
+          "@media (max-width: 320px)": {
+            width: "90%", // 手機顯示更窄
+            // maxHeight: "80vh", // 更小的設備高度略小一些
+          },
+          "@media (min-width: 1600px)": {
+            width: "70%", // 螢幕很大的情況下，減少寬度
+          },
         }}
       >
         {/* 關閉icon */}
@@ -104,15 +113,34 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
           sx={{
             p: { xs: 0.5, sm: 1, md: 2, lg: 2, xl: 3 },
             position: "relative",
-            height: { xs: "25%", sm: "26%", md: "23%", lg: "22%", xl: "26%" },
+
+            maxHeight: {
+              xs: "20vh",
+              sm: "22vh",
+              md: "22vh",
+              lg: "22vh",
+              xl: "23vh",
+            },
+            // 獨立處理媒體查詢的 maxWidth
+            "@media (max-width: 320px)": {
+              maxHeight: "22vh",
+            },
+            "@media (min-width: 321px) and(max-width: 375px)": {
+              maxHeight: "22vh",
+            },
+            "@media (min-width: 376px) and (max-width: 600px)": {
+              maxHeight: "22vh",
+            },
+            "@media(min-width:1600px)": {
+              maxHeight: "22vh",
+              marginRight: 3,
+            },
           }}
         >
           {/* 頻道封面 */}
           <Grid
             item
-            // xs={5}
             xs={3}
-            sm={3}
             sx={{
               p: 0.5,
               minWidth: {
@@ -123,11 +151,11 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
                 xl: "200px",
               },
               maxWidth: {
-                xs: "18%",
-                sm: "22%",
-                md: "20%",
-                lg: "19%",
-                xl: "18%",
+                xs: "18vh",
+                sm: "22vh",
+                md: "20vh",
+                lg: "19vh",
+                xl: "20vh",
               },
 
               textAlign: "center",
@@ -140,21 +168,23 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
               },
               // 獨立處理媒體查詢的 maxWidth
               "@media (max-width: 320px)": {
-                maxWidth: "18%",
+                maxWidth: "18vh",
                 minWidth: "100px",
               },
               "@media (min-width: 321px) and(max-width: 375px)": {
-                maxWidth: "18%",
+                maxWidth: "18vh",
                 minWidth: "100px",
               },
               "@media (min-width: 376px) and (max-width: 600px)": {
-                maxWidth: "18%",
+                maxWidth: "18vh",
                 minWidth: "100px",
               },
               "@media(min-width:1600px)": {
-                maxWidth: "18%",
-                marginRight: 3,
+                maxWidth: "18vh",
                 minWidth: "350px",
+                marginRight: 3,
+                // minHeight: "1vh",
+                // maxHeight: "5vh",
               },
             }}
           >
@@ -164,23 +194,22 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
               // alt={currentShow?.name}
               sx={{
                 width: "100%",
-                borderRadius: 2,
-                boxShadow: "0 0 2px 2px rgba(0,0,0,0.4)",
                 height: "0", // 使用 padding-top 來維持比例
                 paddingTop: "100%", // 1:1 比例，根據需要可以調整
                 backgroundImage: `url(${currentShow?.images?.[0]?.url})`,
                 backgroundSize: "contain",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
+                boxShadow: "0 0 2px 2px rgba(0,0,0,0.4)",
+                borderRadius: 2,
+                objectFit: "cover", // 圖片保持比例
               }}
             />
           </Grid>
-
+          {/* 頻道內容 */}
           <Grid
             item
-            // xs={6}
-            xs={9}
-            sm={9}
+            xs={8}
             sx={{
               "@media (max-width: 321px)": {
                 maxWidth: "40%",
@@ -278,14 +307,21 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
                   sm: "90%",
                   md: "95%",
                   lg: "100%",
-                  xl: "130%",
+                  xl: "100%",
                 },
-                height: {
-                  xs: "60px",
-                  sm: "85px",
-                  md: "85px",
-                  lg: "85px",
-                  xl: "105px",
+                minHeight: {
+                  xs: "10vh",
+                  sm: "10vh",
+                  md: "10vh",
+                  lg: "10vh",
+                  xl: "10vh",
+                },
+                maxHeight: {
+                  xs: "12vh",
+                  sm: "13vh",
+                  md: "12vh",
+                  lg: "12vh",
+                  xl: "12vh",
                 },
                 overflowY: "auto",
                 overflowX: "hidden",
@@ -297,29 +333,28 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
                   xl: "1.2rem",
                 },
                 "@media (max-width: 321px)": {
-                  // maxWidth: "105%",
                   minWidth: "110%",
-
-                  height: "65px",
+                  height: "14vh",
+                  maxHeight: "15vh",
                   fontSize: "0.4rem",
                 },
                 "@media(min-width: 321px)and (max-width: 376px)": {
-                  // maxWidth: "105%",
                   minWidth: "105%",
-
-                  height: "65px",
+                  height: "14vh",
+                  maxHeight: "15vh",
                   fontSize: "0.4rem",
                 },
                 "@media (min-width: 376px) and (max-width: 600px)": {
-                  // maxWidth: "125%",
                   minWidth: "125%",
-                  height: "65px",
+                  height: "14vh",
+                  maxHeight: "15vh",
                   fontSize: "0.4rem",
                 },
                 "@media (min-width: 1600px)": {
                   maxWidth: "100%",
+                  height: "13vh",
+                  maxHeight: "15vh",
                   fontSize: "1.5rem",
-                  height: "240px",
                 },
 
                 boxShadow: "0 0 3px 1px rgba(0,0,0,0.2)",
