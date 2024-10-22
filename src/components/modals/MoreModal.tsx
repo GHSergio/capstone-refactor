@@ -61,9 +61,8 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
           left: "50%",
           transform: "translate(-50%, -50%)",
           width: "80%",
-          height: "85vh",
-          // height: "auto", // 根據內容動態調整高度
-          // maxHeight: "85vh", // 設置最大高度
+          minHeight: "60vh",
+          maxHeight: "85vh",
           bgcolor: "background.paper",
           boxShadow: 24,
           borderRadius: 2,
@@ -434,23 +433,22 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
         <Box
           sx={{
             maxHeight: {
-              xs: "70%",
-              sm: "70%",
-              md: "70%",
-              // lg: "62vh",
-              xl: "70%",
+              xs: "50vh",
+              sm: "50vh",
+              md: "50vh",
+              xl: "55vh",
             },
             "@media (max-width: 321px)": {
-              maxHeight: "65%",
+              maxHeight: "50vh",
             },
             "@media(min-width: 321px)and (max-width: 376px)": {
-              maxHeight: "65%",
+              maxHeight: "50vh",
             },
             "@media (min-width: 376px) and (max-width: 600px)": {
-              maxHeight: "65%",
+              maxHeight: "50vh",
             },
             "@media(min-width:1600px)": {
-              maxHeight: "70%",
+              maxHeight: "60vh",
             },
             overflowY: "auto",
             "&::-webkit-scrollbar": {
