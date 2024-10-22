@@ -93,18 +93,18 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
                 },
             maxWidth: isMoreModalOpen
               ? {
-                  xs: "30%",
-                  sm: "18%",
-                  md: "17%",
-                  lg: "16%",
-                  xl: "16%",
+                  xs: "8vw",
+                  sm: "9vw",
+                  md: "10vw",
+                  // lg: "14vw",
+                  xl: "11.5vw",
                 }
               : {
-                  xs: "30%",
-                  sm: "20%",
-                  md: "16%",
-                  lg: "15%",
-                  xl: "16%",
+                  xs: "14vw",
+                  sm: "14vw",
+                  md: "10vw",
+                  // lg: "14vw",
+                  xl: "11.5vw",
                 },
 
             textAlign: "center",
@@ -117,20 +117,20 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
             },
             // 獨立處理媒體查詢的 maxWidth
             "@media (max-width: 320px)": {
-              maxWidth: isMoreModalOpen ? "35%" : "30%",
+              maxWidth: isMoreModalOpen ? "14vw" : "14vw",
               minWidth: isMoreModalOpen ? "75px" : "80px",
             },
             "@media (min-width: 321px) and (max-width: 376px)": {
-              maxWidth: isMoreModalOpen ? "29%" : "29%",
+              maxWidth: isMoreModalOpen ? "14vw" : "14vw",
               minWidth: isMoreModalOpen ? "75px" : "80px",
             },
             "@media (min-width: 376px) and (max-width: 600px)": {
-              maxWidth: isMoreModalOpen ? "25%" : "10%",
+              maxWidth: isMoreModalOpen ? "14vw" : "14vw",
               minWidth: isMoreModalOpen ? "75px" : "85px",
             },
             "@media (min-width: 1600px) ": {
+              maxWidth: isMoreModalOpen ? "9.5vw" : "8.5vw",
               minWidth: isMoreModalOpen ? "230px" : "190px",
-              maxWidth: isMoreModalOpen ? "12.5%" : "12%",
             },
           }}
         >

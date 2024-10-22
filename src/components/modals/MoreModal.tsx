@@ -114,25 +114,36 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
             p: { xs: 0.5, sm: 1, md: 2, lg: 2, xl: 3 },
             position: "relative",
 
+            minHeight: {
+              xs: "14vw",
+              sm: "14vw",
+              md: "14vw",
+              // lg: "14vw",
+              xl: "14vw",
+            },
             maxHeight: {
-              xs: "20vh",
-              sm: "22vh",
-              md: "22vh",
-              lg: "22vh",
-              xl: "23vh",
+              xs: "15vw",
+              sm: "15vw",
+              md: "15vw",
+              // lg: "14vw",
+              xl: "16vw",
             },
-            // 獨立處理媒體查詢的 maxWidth
-            "@media (max-width: 320px)": {
-              maxHeight: "22vh",
+            // 獨立處理媒體查詢
+            "@media (max-width: 321px)": {
+              minHeight: "30vw",
+              maxHeight: "30vw",
             },
-            "@media (min-width: 321px) and(max-width: 375px)": {
-              maxHeight: "22vh",
+            "@media (min-width: 321px) and (max-width: 376px)": {
+              minHeight: "26vw",
+              maxHeight: "26vw",
             },
             "@media (min-width: 376px) and (max-width: 600px)": {
-              maxHeight: "22vh",
+              minHeight: "22vw",
+              maxHeight: "22vw",
             },
             "@media(min-width:1600px)": {
-              maxHeight: "22vh",
+              minHeight: "15vw",
+              maxHeight: "15vw",
               marginRight: 3,
             },
           }}
@@ -151,11 +162,11 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
                 xl: "200px",
               },
               maxWidth: {
-                xs: "18vh",
-                sm: "22vh",
-                md: "20vh",
-                lg: "19vh",
-                xl: "20vh",
+                xs: "14vw",
+                sm: "14vw",
+                md: "14vw",
+                lg: "14vw",
+                xl: "14vw",
               },
 
               textAlign: "center",
@@ -167,24 +178,22 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
                 xl: 3,
               },
               // 獨立處理媒體查詢的 maxWidth
-              "@media (max-width: 320px)": {
-                maxWidth: "18vh",
+              "@media (max-width: 321px)": {
+                maxWidth: "14vw",
                 minWidth: "100px",
               },
-              "@media (min-width: 321px) and(max-width: 375px)": {
-                maxWidth: "18vh",
+              "@media (min-width: 321px) and (max-width: 376px)": {
+                maxWidth: "14vw",
                 minWidth: "100px",
               },
               "@media (min-width: 376px) and (max-width: 600px)": {
-                maxWidth: "18vh",
+                maxWidth: "14vw",
                 minWidth: "100px",
               },
               "@media(min-width:1600px)": {
-                maxWidth: "18vh",
+                maxWidth: "14vw",
                 minWidth: "350px",
                 marginRight: 3,
-                // minHeight: "1vh",
-                // maxHeight: "5vh",
               },
             }}
           >
@@ -302,27 +311,29 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
               variant="body1"
               color="text.secondary"
               sx={{
-                maxWidth: {
-                  xs: "130%",
-                  sm: "90%",
-                  md: "95%",
-                  lg: "100%",
-                  xl: "100%",
+                minWidth: {
+                  xs: "50vw",
+                  sm: "55vw",
+                  md: "55vw",
+                  // lg: "50vw",
+                  xl: "55vw",
                 },
                 minHeight: {
-                  xs: "10vh",
-                  sm: "10vh",
-                  md: "10vh",
-                  lg: "10vh",
-                  xl: "10vh",
+                  xs: "5vw",
+                  sm: "5vw",
+                  md: "5vw",
+                  lg: "5vw",
+                  xl: "5vw",
                 },
+
                 maxHeight: {
-                  xs: "12vh",
-                  sm: "13vh",
-                  md: "12vh",
-                  lg: "12vh",
-                  xl: "12vh",
+                  xs: "12vw",
+                  sm: "13vw",
+                  md: "7vw",
+                  // lg: "7vw",
+                  xl: "8vw",
                 },
+
                 overflowY: "auto",
                 overflowX: "hidden",
                 fontSize: {
@@ -333,27 +344,27 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
                   xl: "1.2rem",
                 },
                 "@media (max-width: 321px)": {
-                  minWidth: "110%",
-                  height: "14vh",
-                  maxHeight: "15vh",
+                  minWidth: "42vw",
+                  minHeight: "20vw",
+                  maxHeight: "20w",
                   fontSize: "0.4rem",
                 },
                 "@media(min-width: 321px)and (max-width: 376px)": {
-                  minWidth: "105%",
-                  height: "14vh",
-                  maxHeight: "15vh",
+                  minWidth: "40vw",
+                  minHeight: "16vw",
+                  maxHeight: "16vw",
                   fontSize: "0.4rem",
                 },
                 "@media (min-width: 376px) and (max-width: 600px)": {
-                  minWidth: "125%",
-                  height: "14vh",
-                  maxHeight: "15vh",
+                  minWidth: "45vw",
+                  minHeight: "15vw",
+                  maxHeight: "15vw",
                   fontSize: "0.4rem",
                 },
                 "@media (min-width: 1600px)": {
-                  maxWidth: "100%",
-                  height: "13vh",
-                  maxHeight: "15vh",
+                  minWidth: "50vw",
+                  minHeight: "9vw",
+                  maxHeight: "9vw",
                   fontSize: "1.5rem",
                 },
 
@@ -423,14 +434,23 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
         <Box
           sx={{
             maxHeight: {
-              xs: "65%",
-              sm: "65%",
-              md: "70%",
-              lg: "70%",
-              xl: "70%",
+              xs: "60vh",
+              sm: "60vh",
+              md: "62vh",
+              // lg: "62vh",
+              xl: "58vh",
+            },
+            "@media (max-width: 321px)": {
+              maxHeight: "58vh",
+            },
+            "@media(min-width: 321px)and (max-width: 376px)": {
+              maxHeight: "58vh",
+            },
+            "@media (min-width: 376px) and (max-width: 600px)": {
+              maxHeight: "58vh",
             },
             "@media(min-width:1600px)": {
-              maxHeight: "70%",
+              maxHeight: "60vh",
             },
             overflowY: "auto",
             "&::-webkit-scrollbar": {
