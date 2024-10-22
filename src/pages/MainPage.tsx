@@ -119,14 +119,12 @@ const MainPage: React.FC = () => {
             flexGrow: 1,
           }}
         >
-          {/* 小螢幕顯示 Navbar */}
+          {/*  Navbar */}
           <Grid
             item
             xs={12}
             sx={{
               boxShadow: "0px 0px 2px 2px #C7C7C73D",
-              // height: "100%",
-              display: { xs: "block", sm: "none" },
             }}
           >
             <Navbar />
@@ -137,7 +135,7 @@ const MainPage: React.FC = () => {
             item
             sm={3}
             sx={{
-              boxShadow: "0 0 5px 2px rgba(0, 0, 0, 0.2)",
+              boxShadow: "1px 0 10px 1px rgba(0, 0, 0, 0.2)",
               // boxShadow: "0px 0px 2px 2px #C7C7C73D",
               display: { xs: "none", sm: "block" },
               height: "100%",
@@ -166,12 +164,12 @@ const MainPage: React.FC = () => {
             // display: { xs: "block", sm: "none" },
             position: { xs: "absolute", sm: "relative" },
             width: "100%",
-            height: { xs: "0vw", sm: "35vh", md: "25vh", xl: "25vh" },
+            height: { xs: "0vw", sm: "35vw", md: "25vw", xl: "25vw" },
             "@media(max-width:600px)": {
               top: 0,
             },
             "@media(min-width:1600px)": {
-              height: "15vh",
+              height: "15vw",
             },
             bottom: 0,
           }}

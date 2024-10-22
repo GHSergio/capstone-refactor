@@ -37,18 +37,18 @@ const Sidebar: React.FC = () => {
       }}
     >
       {/* Logo 區域 */}
-      <Box sx={{ width: "80%" }}>
+      {/* <Box sx={{ width: "80%" }}>
         <img src={Logo} alt="Logo" style={{ width: "100%" }} />
-      </Box>
+      </Box> */}
 
       {/* 分隔線 */}
-      <Divider
+      {/* <Divider
         sx={{
           width: "100%",
           my: "1.5rem",
           display: { sx: "none", sm: "block" },
         }}
-      />
+      /> */}
 
       {/* 新增分類的按鈕 */}
       <Box

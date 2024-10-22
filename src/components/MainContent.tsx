@@ -1,9 +1,9 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import ListPage from "../pages/ListPage";
 import FavoritePage from "../pages/FavoritePage";
-import User from "./footer/User";
+// import User from "./footer/User";
 import ActionModal from "./modals/ActionModal";
 
 const MainContent = () => {
@@ -23,7 +23,7 @@ const MainContent = () => {
         }}
       >
         {/* Header */}
-        <Box
+        {/* <Box
           sx={{
             position: "fixed",
             right: "0px",
@@ -37,10 +37,8 @@ const MainContent = () => {
               height: "4.5vw",
             },
             zIndex: 2,
-            // border: "1px solid blue",
           }}
         >
-          {/* User */}
           <Box
             sx={{
               marginRight: "1rem",
@@ -48,7 +46,7 @@ const MainContent = () => {
           >
             <User />
           </Box>
-        </Box>
+        </Box> */}
 
         {/* 動態內容區域 */}
         <Box
@@ -58,9 +56,9 @@ const MainContent = () => {
             padding: "1rem",
             margin: {
               xs: "35vw auto 0 auto",
-              sm: "10vw auto 0 auto",
-              md: "10vw auto 0 auto",
-              xl: "10vw auto 0 auto",
+              sm: "0vw auto 0 auto",
+              md: "0vw auto 0 auto",
+              xl: "0vw auto 0 auto",
             },
             "@media (max-width:321px)": {
               margin: "35vw auto 0 auto",
@@ -75,7 +73,7 @@ const MainContent = () => {
               height: "78vh",
             },
             "@media (min-width:1600px)": {
-              margin: "7.5vh auto 0 auto",
+              margin: "0vw auto 0 auto",
               height: "78vh",
             },
           }}
@@ -83,16 +81,6 @@ const MainContent = () => {
           {currentCategoryId === "favorites" ? <FavoritePage /> : <ListPage />}
         </Box>
       </Box>
-      {/* <Box
-        sx={{
-          position: "absolute",
-          top: "40px",
-          right: "60px",
-          display: { xs: "none", sm: "block" },
-        }}
-      >
-        <User />
-      </Box> */}
     </>
   );
 };

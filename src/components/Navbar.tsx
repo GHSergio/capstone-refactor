@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { AppBar, Toolbar, IconButton, Slide, Box } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-
 import Logo from "../assets/Logo.png";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
@@ -24,7 +23,46 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <AppBar position="fixed" sx={{ backgroundColor: "#F6F7F8" }}>
+      {/* 大螢幕 */}
+      <AppBar
+        position="relative"
+        sx={{
+          backgroundColor: "#F6F7F8",
+          display: { xs: "none", sm: "block" },
+          boxShadow: "0 1px 5px 2px rgba(0,0,0,0.2)",
+        }}
+      >
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          {/* Logo */}
+          <Box
+            sx={{
+              textAlign: "center",
+            }}
+          >
+            <img src={Logo} alt="Logo" style={{ width: "220px" }} />
+          </Box>
+
+          {/* User */}
+          <Box>
+            <User />
+          </Box>
+        </Toolbar>
+      </AppBar>
+
+      {/* 小螢幕 */}
+      <AppBar
+        position="fixed"
+        sx={{
+          backgroundColor: "#F6F7F8",
+          display: { xs: "block", sm: "none" },
+        }}
+      >
         <Toolbar>
           {/* 漢堡按鈕 */}
           <IconButton
@@ -55,14 +93,14 @@ const Navbar: React.FC = () => {
             position: "fixed",
             top: "56px",
             left: 0,
-            width: "100%", 
+            width: "100%",
             maxWidth: "100vw",
-            height: "50%", 
+            height: "50%",
             backgroundColor: "#FFF",
             boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
             zIndex: 1200,
             padding: "1rem",
-            overflowY: "auto", 
+            overflowY: "auto",
           }}
         >
           {/* 新增分類的按鈕 */}
