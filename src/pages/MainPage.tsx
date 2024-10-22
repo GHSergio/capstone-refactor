@@ -136,7 +136,6 @@ const MainPage: React.FC = () => {
             sm={3}
             sx={{
               boxShadow: "1px 0 10px 1px rgba(0, 0, 0, 0.2)",
-              // boxShadow: "0px 0px 2px 2px #C7C7C73D",
               display: { xs: "none", sm: "block" },
               height: "100%",
             }}
@@ -161,14 +160,13 @@ const MainPage: React.FC = () => {
         {/* Footer */}
         <Box
           sx={{
-            // display: { xs: "block", sm: "none" },
             position: { xs: "absolute", sm: "relative" },
             width: "100%",
-            height: { xs: "0vw", sm: "35vw", md: "25vw", xl: "25vw" },
-            "@media(max-width:600px)": {
+            height: { xs: "0vw", sm: "30vw", md: "25vw", xl: "24vw" },
+            "@media (max-width:600px)": {
               top: 0,
             },
-            "@media(min-width:1600px)": {
+            "@media (min-width:1600px)": {
               height: "15vw",
             },
             bottom: 0,

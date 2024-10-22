@@ -110,7 +110,14 @@ const Footer: React.FC = () => {
 
           {/* <Player /> */}
           <Box
-            sx={{ width: { xs: "100%" }, height: { xs: "50vh", sm: "auto" } }}
+            sx={{
+              width: { xs: "100%" },
+              height: { xs: "15vw", sm: "16vw", md: "18vw", xl: "18vw" },
+              // marginTop: "0.5rem",
+              "@media (min-width:1600px)": {
+                height: "10vw",
+              },
+            }}
           >
             <Player />
           </Box>

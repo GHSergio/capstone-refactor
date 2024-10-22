@@ -45,7 +45,7 @@ const Player = () => {
   return (
     <>
       {/* 嵌入 Spotify 播放器 */}
-      <Box sx={{ width: "100%" }}>
+      <Box sx={{ width: "100%", height: "100%", marginTop: "0.1rem" }}>
         <iframe
           src={`https://open.spotify.com/embed/episode/${id}`}
           width="100%"

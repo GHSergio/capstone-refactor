@@ -71,7 +71,7 @@ const ListPage: React.FC = () => {
   };
 
   if (!currentCategory) {
-    return <Box mt={1}>請選擇一個分類。</Box>;
+    return <Box mt={5}>請選擇一個分類。</Box>;
   }
 
   return (
