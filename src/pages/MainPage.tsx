@@ -150,7 +150,6 @@ const MainPage: React.FC = () => {
             sm={9}
             sx={{
               height: "100%",
-              // overflowY: "auto",
             }}
           >
             <MainContent />
@@ -162,12 +161,22 @@ const MainPage: React.FC = () => {
           sx={{
             position: { xs: "absolute", sm: "relative" },
             width: "100%",
-            height: { xs: "0vw", sm: "30vw", md: "25vw", xl: "24vw" },
+            height: { xs: "20vw", sm: "30vw", md: "25vw", xl: "20vw" },
+            // marginBottom: "5rem",
             "@media (max-width:600px)": {
               top: 0,
             },
+            "@media (max-width: 321px)": {
+              height: "20vw",
+            },
+            "@media (min-width: 321px) and (max-width: 376px)": {
+              height: "20vw",
+            },
+            "@media (min-width: 376px) and (max-width: 600px)": {
+              height: "20vw",
+            },
             "@media (min-width:1600px)": {
-              height: "15vw",
+              height: "12vw",
             },
             bottom: 0,
           }}

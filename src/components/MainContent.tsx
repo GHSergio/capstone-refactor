@@ -36,15 +36,15 @@ const MainContent = () => {
               xl: "0vw auto 0 auto",
             },
             "@media (max-width:321px)": {
-              margin: "35vw auto 0 auto",
+              margin: "27vw auto 0 auto",
               height: "95%",
             },
             "@media (min-width:321px) and (max-width:376px)": {
-              margin: "30vw auto 0 auto",
+              margin: "20vw auto 0 auto",
               height: "95%",
             },
             "@media (min-width:376px) and (max-width:600px)": {
-              margin: "25vw auto 0 auto",
+              margin: "16vw auto 0 auto",
               height: "95%",
             },
             "@media (min-width:1600px)": {

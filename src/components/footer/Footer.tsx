@@ -113,9 +113,18 @@ const Footer: React.FC = () => {
             sx={{
               width: { xs: "100%" },
               height: { xs: "15vw", sm: "16vw", md: "18vw", xl: "18vw" },
-              // marginTop: "0.5rem",
+              marginTop: "0.5rem",
+              "@media (max-width: 321px)": {
+                height: "30vw",
+              },
+              "@media (min-width: 321px) and (max-width: 376px)": {
+                height: "30vw",
+              },
+              "@media (min-width: 376px) and (max-width: 600px)": {
+                height: "23vw",
+              },
               "@media (min-width:1600px)": {
-                height: "10vw",
+                height: "20vw",
               },
             }}
           >
