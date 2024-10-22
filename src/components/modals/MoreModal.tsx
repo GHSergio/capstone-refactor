@@ -68,7 +68,6 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
           borderRadius: 2,
           "@media (max-width: 320px)": {
             width: "90%", // 手機顯示更窄
-            // maxHeight: "80vh", // 更小的設備高度略小一些
           },
           "@media (min-width: 1600px)": {
             width: "70%", // 螢幕很大的情況下，減少寬度
@@ -314,22 +313,22 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
                   xs: "50vw",
                   sm: "55vw",
                   md: "55vw",
-                  // lg: "50vw",
+                  lg: "50vw",
                   xl: "55vw",
                 },
                 minHeight: {
-                  xs: "5vw",
-                  sm: "5vw",
-                  md: "5vw",
-                  lg: "5vw",
-                  xl: "5vw",
+                  xs: "6vw",
+                  sm: "7.5vw",
+                  md: "7.5vw",
+                  lg: "7.5vw",
+                  xl: "8vw",
                 },
 
                 maxHeight: {
                   xs: "12vw",
                   sm: "13vw",
                   md: "7vw",
-                  // lg: "7vw",
+                  lg: "7vw",
                   xl: "8vw",
                 },
 
