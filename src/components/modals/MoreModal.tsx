@@ -434,23 +434,23 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
         <Box
           sx={{
             maxHeight: {
-              xs: "60vh",
-              sm: "60vh",
-              md: "62vh",
+              xs: "70%",
+              sm: "70%",
+              md: "70%",
               // lg: "62vh",
-              xl: "58vh",
+              xl: "70%",
             },
             "@media (max-width: 321px)": {
-              maxHeight: "58vh",
+              maxHeight: "65%",
             },
             "@media(min-width: 321px)and (max-width: 376px)": {
-              maxHeight: "58vh",
+              maxHeight: "65%",
             },
             "@media (min-width: 376px) and (max-width: 600px)": {
-              maxHeight: "58vh",
+              maxHeight: "65%",
             },
             "@media(min-width:1600px)": {
-              maxHeight: "60vh",
+              maxHeight: "70%",
             },
             overflowY: "auto",
             "&::-webkit-scrollbar": {
