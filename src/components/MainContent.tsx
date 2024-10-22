@@ -52,7 +52,8 @@ const MainContent = () => {
         <Box
           sx={{
             width: "100%",
-            height: { xs: "70vh", sm: "60vh" },
+            // height: { xs: "70vh", sm: "60vh" },
+            height: { xs: "95%", sm: "95%" },
             padding: "1rem",
             margin: {
               xs: "35vw auto 0 auto",
@@ -62,19 +63,22 @@ const MainContent = () => {
             },
             "@media (max-width:321px)": {
               margin: "35vw auto 0 auto",
-              height: "95vw",
+              // height: "95vw",
+              height: "95%",
             },
             "@media (min-width:321px) and (max-width:376px)": {
               margin: "30vw auto 0 auto",
-              height: "95vw",
+              // height: "95vw",
+              height: "95%",
             },
             "@media (min-width:376px) and (max-width:600px)": {
               margin: "25vw auto 0 auto",
-              height: "80vw",
+              // height: "80vw",
+              height: "95%",
             },
             "@media (min-width:1600px)": {
               margin: "0vw auto 0 auto",
-              height: "90vw",
+              height: "95%",
             },
           }}
         >
