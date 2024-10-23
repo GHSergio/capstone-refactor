@@ -72,6 +72,27 @@ const ActionModal: React.FC = () => {
     (list) => list.id === currentCategoryId
   );
 
+  const headerStyle = {
+    fontSize: {
+      xs: "0.5rem",
+      sm: "0.7rem",
+      md: "0.9rem",
+      lg: "1rem",
+    },
+    "@media (max-width:320px)": {
+      fontSize: "0.5rem",
+    },
+    "@media (min-width:321px) and (max-width:376px)": {
+      fontSize: "0.5rem",
+    },
+    "@media (min-width:376px) and (max-width:600px)": {
+      fontSize: "0.5rem",
+    },
+    "@media (min-width:1600px)": {
+      fontSize: "2rem",
+    },
+  };
+
   const buttonStyled = {
     padding: { xs: "", sm: "0 1rem", md: "0 2rem", lg: "0 3.5rem" },
     borderRadius: "0.5rem",
@@ -81,7 +102,7 @@ const ActionModal: React.FC = () => {
     fontSize: { xs: "0.6rem", sm: "0.8rem", md: "0.8rem", lg: "1rem" },
 
     "@media (max-width:320px)": {
-      fontSize: "0.3rem",
+      fontSize: "0.4rem",
     },
     "@media (min-width:321px) and (max-width:376px)": {
       fontSize: "0.4rem",
@@ -89,14 +110,29 @@ const ActionModal: React.FC = () => {
     "@media(min-width:376px) and (max-width:600px)": {
       fontSize: "0.5rem",
     },
+    "@media (min-width:1600px)": {
+      fontSize: "2rem",
+    },
   };
 
   const searchStyled = {
     fontSize: {
-      xs: "0.4rem",
-      sm: "0.6rem",
-      md: "0.8rem",
+      xs: "0.5rem",
+      sm: "0.7rem",
+      md: "0.9rem",
       lg: "1rem",
+    },
+    "@media (max-width:320px)": {
+      fontSize: "0.5rem",
+    },
+    "@media (min-width:321px) and (max-width:376px)": {
+      fontSize: "0.5rem",
+    },
+    "@media (min-width:376px) and (max-width:600px)": {
+      fontSize: "0.5rem",
+    },
+    "@media (min-width:1600px)": {
+      fontSize: "2rem",
     },
   };
 
@@ -124,17 +160,7 @@ const ActionModal: React.FC = () => {
             alignItems: "center",
           }}
         >
-          <Typography
-            variant="h6"
-            sx={{
-              fontSize: {
-                xs: "0.6rem",
-                sm: "0.8rem",
-                md: "1rem",
-                lg: "1.25rem",
-              },
-            }}
-          >
+          <Typography variant="h6" sx={headerStyle}>
             {currentAction === "edit" && "編輯名稱"}
             {currentAction === "add" && "新增名稱"}
             {currentAction === "delete" && "刪除分類"}
@@ -143,16 +169,7 @@ const ActionModal: React.FC = () => {
             onClick={handleClose}
             sx={{ position: "absolute", right: 5 }}
           >
-            <CloseIcon
-              sx={{
-                fontSize: {
-                  xs: "0.6rem",
-                  sm: "0.8rem",
-                  md: "1rem",
-                  lg: "1.25rem",
-                },
-              }}
-            />
+            <CloseIcon sx={headerStyle} />
           </IconButton>
         </Box>
 

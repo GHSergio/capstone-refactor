@@ -241,6 +241,7 @@ const SearchModal = () => {
               overflowY: "auto",
               justifyContent: "flex-start",
               alignContent: "flex-start",
+              marginX: "auto",
             }}
           >
             {searchResults.length > 0 ? (
@@ -271,11 +272,11 @@ const SearchModal = () => {
                       height: "150px",
                     },
                     "@media (min-width:321px) and (max-width:376px)": {
-                      maxWidth: "110px",
+                      maxWidth: "115px",
                       height: "170px",
                     },
                     "@media(min-width:376px) and (max-width:600px)": {
-                      maxWidth: "130px",
+                      maxWidth: "135px",
                       height: "190px",
                     },
                   }}
