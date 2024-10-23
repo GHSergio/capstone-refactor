@@ -168,7 +168,18 @@ const User = () => {
                   md: "1.5rem",
                   lg: "2rem",
                 },
-                "@media(min-width:1600px)": { fontSize: "2.5rem" },
+                "@media (max-width:320px)": {
+                  fontSize: "0.7rem",
+                },
+                "@media (min-width:321px) and (max-width:376px)": {
+                  fontSize: "0.7rem",
+                },
+                "@media (min-width:376px) and (max-width:600px)": {
+                  fontSize: "0.7rem",
+                },
+                "@media (min-width:1600px)": {
+                  fontSize: "2rem",
+                },
               }}
             />
           </IconButton>

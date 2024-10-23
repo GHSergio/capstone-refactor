@@ -33,20 +33,12 @@ const Navbar: React.FC = () => {
           alignItems: "center",
           boxShadow: "0 1px 5px 2px rgba(0,0,0,0.2)",
           height: {
-            xs: "15vw",
+            xs: "4vw",
             sm: "8vw",
             md: "6vw",
             lg: "5vw",
           },
-          "@media (max-width:320px)": {
-            height: "5vw",
-          },
-          "@media (min-width:321px) and (max-width:376px)": {
-            height: "5vw",
-          },
-          "@media (min-width:376px) and (max-width:600px)": {
-            height: "5vw",
-          },
+
           "@media(min-width:1600px)": {
             height: "5vw",
           },
@@ -84,9 +76,26 @@ const Navbar: React.FC = () => {
         sx={{
           backgroundColor: "#F6F7F8",
           display: { xs: "block", sm: "none" },
+          "@media (max-width:320px)": {
+            height: "18vw",
+          },
+          "@media (min-width:321px) and (max-width:376px)": {
+            height: "16vw",
+          },
+          "@media (min-width:376px) and (max-width:600px)": {
+            height: "14vw",
+          },
         }}
       >
-        <Toolbar>
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+            height: "100%",
+          }}
+        >
           {/* 漢堡按鈕 */}
           <IconButton
             edge="start"
