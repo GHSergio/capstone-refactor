@@ -43,7 +43,7 @@ const User = () => {
       <Box
         sx={{
           width: {
-            xs: "4rem",
+            xs: "4.5rem",
             sm: "7rem",
             md: "8rem",
             lg: "9rem",
@@ -61,7 +61,7 @@ const User = () => {
         <Box
           sx={{
             width: "90%",
-            height: { xs: "1.25rem", sm: "2rem" },
+            height: { xs: "1.5rem", sm: "2rem" },
             "@media(min-width:1600px)": {
               height: "3rem",
             },
@@ -74,8 +74,8 @@ const User = () => {
             src={userProfile?.images?.[0]?.url || undefined}
             alt={userProfile?.display_name || ""}
             sx={{
-              width: { xs: "1.25rem", sm: "2rem" },
-              height: { xs: "1.25rem", sm: "2rem" },
+              width: { xs: "1.5rem", sm: "2rem" },
+              height: { xs: "1.5rem", sm: "2rem" },
               "@media(min-width:1600px)": {
                 width: "3rem",
                 height: "3rem",
@@ -86,7 +86,20 @@ const User = () => {
                 ? "transparent"
                 : "#4CAF50", // 綠色背景
               color: "#fff", // 文字顏色設為白色
-              fontSize: { xs: "0.5rem", sm: "1.2rem" }, // 調整文字大小
+              fontSize: { xs: "0.7rem", sm: "1.2rem" },
+
+              "@media (max-width:320px)": {
+                fontSize: "0.7rem",
+              },
+              "@media (min-width:321px) and (max-width:376px)": {
+                fontSize: "0.7rem",
+              },
+              "@media(min-width:376px) and (max-width:600px)": {
+                fontSize: "0.7rem",
+              },
+              "@media (min-width:1600px)": {
+                fontSize: "2rem",
+              },
             }}
           >
             {/* 當沒有照片時，顯示名稱的第一個字母 */}
@@ -99,9 +112,9 @@ const User = () => {
               variant="h6"
               sx={{
                 fontSize: {
-                  xs: "0.35rem",
+                  xs: "0.4rem",
                   sm: "0.6rem",
-                  md: "0.7rem",
+                  md: "0.8rem",
                   lg: "0.8rem",
                 },
                 marginLeft: {
@@ -110,7 +123,16 @@ const User = () => {
                   md: "0.5rem",
                   lg: "1rem",
                 },
-                "@media(min-width:1600px)": {
+                "@media (max-width:320px)": {
+                  fontSize: "0.4rem",
+                },
+                "@media (min-width:321px) and (max-width:376px)": {
+                  fontSize: "0.4rem",
+                },
+                "@media (min-width:376px) and (max-width:600px)": {
+                  fontSize: "0.4rem",
+                },
+                "@media (min-width:1600px)": {
                   fontSize: "1.15rem",
                   marginLeft: "1rem",
                 },

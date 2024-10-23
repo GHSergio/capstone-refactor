@@ -110,7 +110,7 @@ const MainPage: React.FC = () => {
           width: "100%",
         }}
       >
-        {/* sidebar & mainContent */}
+        {/* NavBar & sideBar & MainContent */}
         <Grid
           container
           sx={{

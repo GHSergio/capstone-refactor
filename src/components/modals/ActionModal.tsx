@@ -74,19 +74,19 @@ const ActionModal: React.FC = () => {
 
   const headerStyle = {
     fontSize: {
-      xs: "0.5rem",
-      sm: "0.7rem",
-      md: "0.9rem",
-      lg: "1rem",
+      xs: "0.8rem",
+      sm: "1rem",
+      md: "1.2rem",
+      lg: "1.5rem",
     },
     "@media (max-width:320px)": {
-      fontSize: "0.5rem",
+      fontSize: "0.8rem",
     },
     "@media (min-width:321px) and (max-width:376px)": {
-      fontSize: "0.5rem",
+      fontSize: "0.8rem",
     },
     "@media (min-width:376px) and (max-width:600px)": {
-      fontSize: "0.5rem",
+      fontSize: "0.8rem",
     },
     "@media (min-width:1600px)": {
       fontSize: "2rem",
@@ -99,16 +99,16 @@ const ActionModal: React.FC = () => {
   };
 
   const textStyled = {
-    fontSize: { xs: "0.6rem", sm: "0.8rem", md: "0.8rem", lg: "1rem" },
+    fontSize: { xs: "0.7rem", sm: "0.9rem", md: "1.15rem", lg: "1.35rem" },
 
     "@media (max-width:320px)": {
-      fontSize: "0.4rem",
+      fontSize: "0.7rem",
     },
     "@media (min-width:321px) and (max-width:376px)": {
-      fontSize: "0.4rem",
+      fontSize: "0.7rem",
     },
-    "@media(min-width:376px) and (max-width:600px)": {
-      fontSize: "0.5rem",
+    "@media (min-width:376px) and (max-width:600px)": {
+      fontSize: "0.7rem",
     },
     "@media (min-width:1600px)": {
       fontSize: "2rem",
@@ -116,20 +116,16 @@ const ActionModal: React.FC = () => {
   };
 
   const searchStyled = {
-    fontSize: {
-      xs: "0.5rem",
-      sm: "0.7rem",
-      md: "0.9rem",
-      lg: "1rem",
-    },
+    fontSize: { xs: "0.7rem", sm: "0.9rem", md: "1.15rem", lg: "1.35rem" },
+
     "@media (max-width:320px)": {
-      fontSize: "0.5rem",
+      fontSize: "0.7rem",
     },
     "@media (min-width:321px) and (max-width:376px)": {
-      fontSize: "0.5rem",
+      fontSize: "0.7rem",
     },
     "@media (min-width:376px) and (max-width:600px)": {
-      fontSize: "0.5rem",
+      fontSize: "0.7rem",
     },
     "@media (min-width:1600px)": {
       fontSize: "2rem",
