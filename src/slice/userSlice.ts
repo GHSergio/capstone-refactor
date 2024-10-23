@@ -174,9 +174,9 @@ export const fetchShow = createAsyncThunk(
   "spotify/fetchShowWithEpisodes",
   async (showId: string, { rejectWithValue }) => {
     const token = localStorage.getItem("access_token");
-    const uri = `${spotifyBaseUrl}/v1/shows/${showId}`;
+    const url = `${spotifyBaseUrl}/v1/shows/${showId}`;
     try {
-      const response = await axios.get(uri, {
+      const response = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

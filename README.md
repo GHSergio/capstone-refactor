@@ -20,20 +20,19 @@
 
 ## 部署網址
 
-- **Live Site URL**: [https://capstone-refactor.vercel.app/](https://capstone-refactor.vercel.app/)
-
-### 體驗帳號
-
 - 體驗帳號:
   ```
   spotifytest9527@gmail.com
   ```
 - 密碼:
+
   ```
   #spotifyTest#9527
   ```
 
-## 使用說明
+- **Live Site URL**: [https://capstone-refactor.vercel.app/](https://capstone-refactor.vercel.app/)
+
+## 使用說明 (下面有使用範例.gif)
 
 ### 登入 & 前往主頁面
 
@@ -73,6 +72,10 @@
 - 查看已收藏的 Episode 列表。
 - 點選書籤可將 Episode 從收藏清單中移除。
 - 點選播放可將其置換到「正在播放」。
+
+### 使用範例
+
+![使用範例](./src/assets/AlphaCast-3.gif)
 
 ## 作者
 
