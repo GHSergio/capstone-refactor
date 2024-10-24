@@ -2,7 +2,6 @@ import { Box, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import spotifyIcon from "../../assets/spotifyIcon.png";
-
 const Player = () => {
   const { currentPlayer } = useSelector((state: RootState) => state.podcast);
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import {
   Grid,
   Box,
@@ -25,9 +25,17 @@ import { Show } from "../slice/types";
 
 const ListPage: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
-  const { currentCategoryId, userCategories, showsDetail, loading } =
-    useSelector((state: RootState) => state.user);
-  const { isMoreModalOpen } = useSelector((state: RootState) => state.podcast);
+  const currentCategoryId = useSelector(
+    (state: RootState) => state.user.currentCategoryId
+  );
+  const userCategories = useSelector(
+    (state: RootState) => state.user.userCategories
+  );
+  const showsDetail = useSelector((state: RootState) => state.user.showsDetail);
+  const loading = useSelector((state: RootState) => state.user.loading);
+  const isMoreModalOpen = useSelector(
+    (state: RootState) => state.podcast.isMoreModalOpen
+  );
 
   // 取得當前分類的 savedShows (只保存了 show 的 id)
   const currentCategory = userCategories?.find(
@@ -52,23 +60,26 @@ const ListPage: React.FC = () => {
     };
 
     fetchShowsDetails();
-  }, [dispatch, currentCategory]);
+  }, [dispatch, currentCategory?.savedShows]);
 
   // 控制 MoreModal 的狀態
-  const handleMoreClick = (show: Show) => {
-    dispatch(setCurrentShow(show));
-    dispatch(setIsMoreModalOpen(true));
-  };
+  const handleMoreClick = useCallback(
+    (show: Show) => {
+      dispatch(setCurrentShow(show));
+      dispatch(setIsMoreModalOpen(true));
+    },
+    [dispatch]
+  );
 
-  const handleMoreClose = () => {
+  const handleMoreClose = useCallback(() => {
     dispatch(setIsMoreModalOpen(false));
     dispatch(setCurrentShow(null));
-  };
+  }, [dispatch]);
 
   // 搜索按鈕的處理函數
-  const handleClickSearch = () => {
+  const handleClickSearch = useCallback(() => {
     dispatch(setIsSearchModalOpen(true));
-  };
+  }, [dispatch]);
 
   if (!currentCategory) {
     return (
@@ -107,7 +118,7 @@ const ListPage: React.FC = () => {
           height: "98%",
           margin: { xs: "3rem auto", sm: "0 auto" },
           gap: 2,
-          gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(100px, 1fr))",
           alignContent: "flex-start",
           overflowY: "auto",
           "&::-webkit-scrollbar": {
@@ -137,6 +148,7 @@ const ListPage: React.FC = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                margin: "auto 0",
               }}
             >
               <Typography variant="h6" sx={{ ml: 2 }}>
@@ -153,16 +165,17 @@ const ListPage: React.FC = () => {
               sx={{
                 maxWidth: {
                   xs: "180px",
-                  sm: "160px",
-                  md: "165px",
-                  lg: "190px",
+                  sm: "150px",
+                  md: "155px",
+                  lg: "180px",
                 },
                 borderRadius: "0.5rem",
-                boxShadow: "0px 0px 40px 10px #C7C7C73D",
+                boxShadow: "0px 0px 2px 5px #C7C7C73D",
+                margin: 0.5,
                 padding: 2,
                 overflow: "hidden",
                 "@media (max-width:320px)": {
-                  maxWidth: "125px",
+                  maxWidth: "120px",
                 },
                 "@media (min-width:321px) and (max-width:376px)": {
                   maxWidth: "150px",
@@ -171,7 +184,7 @@ const ListPage: React.FC = () => {
                   maxWidth: "170px",
                 },
                 "@media (min-width:1600px)": {
-                  maxWidth: "250px",
+                  maxWidth: "245px",
                 },
               }}
             >

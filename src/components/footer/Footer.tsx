@@ -1,13 +1,17 @@
 import Player from "./Player";
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Divider, Typography, Tooltip } from "@mui/material";
 import BookmarkIcon from "../BookmarkIcon";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../store/store";
 import { addFavorite, removeFavorite } from "../../slice/userSlice";
 const Footer: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
-  const { currentPlayer } = useSelector((state: RootState) => state.podcast);
-  const { userFavorites } = useSelector((state: RootState) => state.user);
+  const currentPlayer = useSelector(
+    (state: RootState) => state.podcast.currentPlayer
+  );
+  const userFavorites = useSelector(
+    (state: RootState) => state.user.userFavorites
+  );
 
   // console.log("currentPlayer:", currentPlayer);
 
@@ -51,13 +55,22 @@ const Footer: React.FC = () => {
           }}
         >
           {/* bookmark */}
-          <Box sx={{ position: "absolute", right: 0, top: 0 }}>
-            <BookmarkIcon
-              isFavorite={isFavorite}
-              onToggleFavorite={handleToggleFavorite}
-            />
-          </Box>
-
+          <Tooltip
+            title={
+              <Typography sx={{ fontSize: "1rem" }}>(添加/移出)收藏</Typography>
+            }
+            arrow
+            placement="top"
+          >
+            <Box
+              sx={{ position: "absolute", right: 0, top: 0, cursor: "pointer" }}
+            >
+              <BookmarkIcon
+                isFavorite={isFavorite}
+                onToggleFavorite={handleToggleFavorite}
+              />
+            </Box>
+          </Tooltip>
           {/* header */}
           <Box
             sx={{

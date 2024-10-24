@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
 import {
@@ -15,26 +15,36 @@ import EpisodeList from "../components/EpisodeList";
 import AlertComponent from "../components/AlertComponent";
 import ActionModal from "../components/modals/ActionModal";
 const FavoritePage: React.FC = () => {
-  const { userFavorites, episodeDetail, loading } = useSelector(
-    (state: RootState) => state.user
+  const userFavorites = useSelector(
+    (state: RootState) => state.user.userFavorites
   );
-  const { activeEpisodeId } = useSelector((state: RootState) => state.podcast);
+  const episodeDetail = useSelector(
+    (state: RootState) => state.user.episodeDetail
+  );
+  const loading = useSelector((state: RootState) => state.user.loading);
+  const activeEpisodeId = useSelector(
+    (state: RootState) => state.podcast.activeEpisodeId
+  );
+
   const theme = useTheme();
   const dispatch: AppDispatch = useDispatch();
 
   // 根據收藏的episodeId獲取每個收藏的節目詳細資料
   useEffect(() => {
     if (userFavorites && userFavorites.length > 0) {
-      // console.log("準備開始獲取Episode Detail");
-      userFavorites.forEach((favorite: Favorite) => {
-        dispatch(fetchEpisodeDetail(favorite.id)).unwrap();
-      });
+      const promises = userFavorites.map((favorite: Favorite) =>
+        dispatch(fetchEpisodeDetail(favorite.id)).unwrap()
+      );
+      Promise.all(promises); // 並行處理所有請求
     }
   }, [dispatch, userFavorites]);
 
-  const handleSetActive = (episodeId: string) => {
-    dispatch(setActiveEpisode(episodeId));
-  };
+  const handleSetActive = useCallback(
+    (episodeId: string) => {
+      dispatch(setActiveEpisode(episodeId));
+    },
+    [dispatch]
+  );
 
   if (loading) {
     return (

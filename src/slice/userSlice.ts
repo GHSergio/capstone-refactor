@@ -20,7 +20,7 @@ export interface Favorite {
   id: string;
 }
 
-interface AlertState {
+export interface AlertState {
   open: boolean;
   message: string;
   severity: "success" | "error" | "info" | "warning";
@@ -487,12 +487,20 @@ const userSlice = createSlice({
     // fetchUserFavorites
     builder
       .addCase(fetchUserFavorites.fulfilled, (state, action) => {
-        state.userFavorites = action.payload;
-        // 保存到 localStorage
-        localStorage.setItem(
-          "user_favorites",
-          JSON.stringify(state.userFavorites || [])
-        );
+        const newFavorites = action.payload;
+        // 檢查是否有變更
+        if (
+          JSON.stringify(newFavorites) !== JSON.stringify(state.userFavorites)
+        ) {
+          // 只有當 favorites 有變化時才更新狀態與 localStorage
+          state.userFavorites = newFavorites;
+
+          // 保存到 localStorage
+          localStorage.setItem(
+            "user_favorites",
+            JSON.stringify(newFavorites || [])
+          );
+        }
       })
       .addCase(fetchUserFavorites.rejected, (state, action) => {
         handleAuthError(state, action);
@@ -501,13 +509,18 @@ const userSlice = createSlice({
     // fetchCategories
     builder
       .addCase(fetchCategories.fulfilled, (state, action) => {
-        state.userCategories = action.payload;
-        // console.log("接收到的分類?", state.userCategories);
-        // 保存到 localStorage
-        localStorage.setItem(
-          "user_categories",
-          JSON.stringify(state.userCategories || [])
-        );
+        const newCategories = action.payload;
+
+        if (
+          JSON.stringify(newCategories) !== JSON.stringify(state.userFavorites)
+        ) {
+          state.userCategories = newCategories;
+
+          localStorage.setItem(
+            "user_categories",
+            JSON.stringify(newCategories || [])
+          );
+        }
       })
       .addCase(fetchCategories.rejected, (state, action) => {
         handleAuthError(state, action);
@@ -554,18 +567,33 @@ const userSlice = createSlice({
       .addCase(addFavorite.fulfilled, (state, action) => {
         const favorite = action.payload as Favorite; // 傳回來的是 Favorite 物件
 
-        state.userFavorites?.push(favorite); // 添加到收藏陣列
+        // state.userFavorites?.push(favorite); // 添加到收藏陣列
 
-        // 更新 localStorage
-        localStorage.setItem(
-          "user_favorites",
-          JSON.stringify(state.userFavorites)
+        // // 更新 localStorage
+        // localStorage.setItem(
+        //   "user_favorites",
+        //   JSON.stringify(state.userFavorites)
+        // );
+        // 檢查是否已經在 favorites 中
+        const isAlreadyFavorite = state.userFavorites?.some(
+          (fav) => fav.id === favorite.id
         );
-        state.alert = {
-          open: true,
-          message: "添加收藏成功！",
-          severity: "success",
-        };
+
+        // 只有當 favorite 不存在時才添加
+        if (!isAlreadyFavorite) {
+          state.userFavorites?.push(favorite);
+
+          // 更新 localStorage
+          localStorage.setItem(
+            "user_favorites",
+            JSON.stringify(state.userFavorites)
+          );
+          state.alert = {
+            open: true,
+            message: "添加收藏成功！",
+            severity: "success",
+          };
+        }
       })
       .addCase(addFavorite.rejected, (state, action) => {
         // state.alert = {
@@ -580,20 +608,43 @@ const userSlice = createSlice({
     builder
       .addCase(removeFavorite.fulfilled, (state, action) => {
         const episodeId = action.payload;
+
         // 根據 id 過濾移除收藏的節目
-        state.userFavorites = state.userFavorites?.filter(
+        const newFavorites = state.userFavorites?.filter(
           (favorite) => favorite.id !== episodeId
         );
 
-        state.episodeDetail = state.episodeDetail?.filter(
-          (episode) => episode.id !== action.payload
-        );
+        // 檢查是否有變更
+        if (
+          JSON.stringify(newFavorites) !== JSON.stringify(state.userFavorites)
+        ) {
+          state.userFavorites = newFavorites;
 
-        // 更新 localStorage
-        localStorage.setItem(
-          "user_favorites",
-          JSON.stringify(state.userFavorites)
-        );
+          // 移除對應的 EpisodeDetail
+          state.episodeDetail = state.episodeDetail?.filter(
+            (episode) => episode.id !== episodeId
+          );
+
+          // 更新 localStorage
+          localStorage.setItem(
+            "user_favorites",
+            JSON.stringify(state.userFavorites)
+          );
+        }
+        // // 根據 id 過濾移除收藏的節目
+        // state.userFavorites = state.userFavorites?.filter(
+        //   (favorite) => favorite.id !== episodeId
+        // );
+
+        // state.episodeDetail = state.episodeDetail?.filter(
+        //   (episode) => episode.id !== action.payload
+        // );
+
+        // // 更新 localStorage
+        // localStorage.setItem(
+        //   "user_favorites",
+        //   JSON.stringify(state.userFavorites)
+        // );
 
         state.alert = {
           open: true,

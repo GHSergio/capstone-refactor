@@ -31,10 +31,19 @@ import AlertComponent from "../AlertComponent";
 const SearchModal = () => {
   const dispatch: AppDispatch = useDispatch();
 
-  const { isSearchModalOpen, selectedShows, searchResults } = useSelector(
-    (state: RootState) => state.podcast
+  // 將每個 state 分開訂閱
+  const isSearchModalOpen = useSelector(
+    (state: RootState) => state.podcast.isSearchModalOpen
   );
-  const { currentCategoryId } = useSelector((state: RootState) => state.user);
+  const selectedShows = useSelector(
+    (state: RootState) => state.podcast.selectedShows
+  );
+  const searchResults = useSelector(
+    (state: RootState) => state.podcast.searchResults
+  );
+  const currentCategoryId = useSelector(
+    (state: RootState) => state.user.currentCategoryId
+  );
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -53,8 +62,8 @@ const SearchModal = () => {
   // 將選中的 shows 逐個 添加到當前 category
   const handleConfirmAdd = async () => {
     if (currentCategoryId && selectedShows.length > 0) {
-      const alreadyExistsShows: string[] = []; // 保存已存在的節目名稱
-
+      // 保存已存在的節目名稱
+      const alreadyExistsShows: string[] = [];
       for (const show of selectedShows) {
         try {
           await dispatch(

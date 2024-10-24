@@ -24,15 +24,18 @@ interface MoreModalProps {
 
 const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
   const dispatch: AppDispatch = useDispatch();
-  const { currentShow, activeEpisodeId } = useSelector(
-    (state: RootState) => state.podcast
+  const currentShow = useSelector(
+    (state: RootState) => state.podcast.currentShow
   );
-  const { currentCategoryId } = useSelector((state: RootState) => state.user);
+  const activeEpisodeId = useSelector(
+    (state: RootState) => state.podcast.activeEpisodeId
+  );
+  const currentCategoryId = useSelector(
+    (state: RootState) => state.user.currentCategoryId
+  );
   const theme = useTheme();
 
   // console.log("當前的Show: ", currentShow);
-
-  // console.log(currentShow);
 
   const handleSetActive = (episodeId: string) => {
     dispatch(setActiveEpisode(episodeId));
@@ -230,7 +233,15 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
             }}
           >
             {/* Podcast頻道名稱 */}
-            <Tooltip title={currentShow?.name} arrow>
+            <Tooltip
+              title={
+                <Typography sx={{ fontSize: "1rem" }}>
+                  {currentShow?.name}
+                </Typography>
+              }
+              arrow
+              placement="top"
+            >
               <Typography
                 variant="h6"
                 gutterBottom
@@ -267,42 +278,41 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
             </Tooltip>
 
             {/* Podcast作者名稱 */}
-            <Tooltip title={currentShow?.publisher} arrow>
-              <Typography
-                variant="body1"
-                color="text.secondary"
-                gutterBottom
-                sx={{
-                  fontSize: {
-                    xs: "0.4rem",
-                    sm: "0.5rem",
-                    md: "0.8rem",
-                    lg: "0.9rem",
-                    xl: "1.2rem",
-                  },
-                  "@media (max-width: 321px)": {
-                    fontSize: "0.4rem",
-                  },
-                  "@media(min-width: 321px)and (max-width: 376px)": {
-                    fontSize: "0.4rem",
-                  },
-                  "@media (min-width: 376px) and (max-width: 600px)": {
-                    fontSize: "0.4rem",
-                  },
-                  "@media (min-width: 1600px)": {
-                    fontSize: "1.5rem",
-                  },
-                  width: "90%",
-                  marginY: { xs: 0.2, sm: 0.3, md: 0.9, lg: 0.5, xl: 0.3 },
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                  WebkitLineClamp: 1,
-                }}
-              >
-                {currentShow?.publisher}
-              </Typography>
-            </Tooltip>
+
+            <Typography
+              variant="body1"
+              color="text.secondary"
+              gutterBottom
+              sx={{
+                fontSize: {
+                  xs: "0.4rem",
+                  sm: "0.5rem",
+                  md: "0.8rem",
+                  lg: "0.9rem",
+                  xl: "1.2rem",
+                },
+                "@media (max-width: 321px)": {
+                  fontSize: "0.4rem",
+                },
+                "@media(min-width: 321px)and (max-width: 376px)": {
+                  fontSize: "0.4rem",
+                },
+                "@media (min-width: 376px) and (max-width: 600px)": {
+                  fontSize: "0.4rem",
+                },
+                "@media (min-width: 1600px)": {
+                  fontSize: "1.5rem",
+                },
+                width: "90%",
+                marginY: { xs: 0.2, sm: 0.3, md: 0.9, lg: 0.5, xl: 0.3 },
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                WebkitLineClamp: 1,
+              }}
+            >
+              {currentShow?.publisher}
+            </Typography>
 
             {/* Podcast頻道介紹 */}
             <Typography

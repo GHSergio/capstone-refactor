@@ -27,7 +27,6 @@ const CardComponent: React.FC<CardComponentProps> = ({
       sx={{
         width: "100%",
         height: "100%",
-        // backgroundColor: "#FFFFFF",
         p: 0,
       }}
     >
@@ -58,7 +57,11 @@ const CardComponent: React.FC<CardComponentProps> = ({
           }}
         >
           {/* Podcast名稱 */}
-          <Tooltip title={name} arrow>
+          <Tooltip
+            title={<Typography sx={{ fontSize: "1rem" }}>{name}</Typography>}
+            arrow
+            placement="top"
+          >
             <Typography
               variant="h6"
               component="div"
@@ -74,7 +77,13 @@ const CardComponent: React.FC<CardComponentProps> = ({
           </Tooltip>
 
           {/* 創作者名稱 */}
-          <Tooltip title={publisher} arrow>
+          <Tooltip
+            title={
+              <Typography sx={{ fontSize: "1rem" }}>{publisher}</Typography>
+            }
+            arrow
+            placement="top"
+          >
             <Typography
               variant="body1"
               color="text.secondary"
@@ -90,27 +99,35 @@ const CardComponent: React.FC<CardComponentProps> = ({
           </Tooltip>
         </CardContent>
 
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={onMoreClick}
-          sx={{
-            minWidth: 0,
-            padding: "0.2rem 0.2rem ",
-            borderRadius: "0.25rem",
-            marginTop: "0.25rem",
-          }}
+        <Tooltip
+          title={
+            <Typography sx={{ fontSize: "1rem" }}>頻道詳細介紹</Typography>
+          }
+          arrow
+          placement="top"
         >
-          <Typography
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={onMoreClick}
             sx={{
-              color: "#FFFFFF",
-              fontSize: "0.8rem",
-              lineHeight: { xs: "1rem", lg: "2rem" },
+              minWidth: 0,
+              padding: "0.2rem 0.2rem ",
+              borderRadius: "0.25rem",
+              marginTop: "0.25rem",
             }}
           >
-            更多
-          </Typography>
-        </Button>
+            <Typography
+              sx={{
+                color: "#FFFFFF",
+                fontSize: "0.8rem",
+                lineHeight: { xs: "1rem", lg: "2rem" },
+              }}
+            >
+              更多
+            </Typography>
+          </Button>
+        </Tooltip>
       </Card>
     </Box>
   );

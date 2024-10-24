@@ -26,7 +26,7 @@ const CallbackPage = () => {
   };
 
   // 初始token尚未設置 重複檢查幾次 -> 避免因延遲 只檢查一次 就判定為reject
-  const waitForToken = async (retries = 5): Promise<string | null> => {
+  const waitForToken = async (retries = 6): Promise<string | null> => {
     return new Promise((resolve, reject) => {
       const checkToken = (attempts: number) => {
         const token = localStorage.getItem("access_token");
@@ -70,6 +70,7 @@ const CallbackPage = () => {
         setError(err as string);
         setLoading(false);
         console.error("API 請求失敗: ", err);
+        return <div>發生錯誤，請重整頁面。</div>;
       }
     };
 

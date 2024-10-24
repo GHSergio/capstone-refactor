@@ -150,6 +150,7 @@ const MainPage: React.FC = () => {
             sm={9}
             sx={{
               height: "100%",
+              width: "100%",
             }}
           >
             <MainContent />

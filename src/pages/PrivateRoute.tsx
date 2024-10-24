@@ -27,8 +27,10 @@ const PrivateRoute = () => {
 
   // 檢查 localStorage 是否有 token
   useEffect(() => {
-    const acToken = localStorage.getItem("access_token");
-    setHasToken(!!acToken); // 設置是否有 token
+    setTimeout(() => {
+      const acToken = localStorage.getItem("access_token");
+      setHasToken(!!acToken); // 設置是否有 token
+    }, 1000);
   }, []);
 
   // 檢查 token 結果未定，顯示 Loading（僅在首次渲染時可能短暫顯示）

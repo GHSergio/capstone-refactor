@@ -34,10 +34,16 @@ const formatDuration = (duration_ms: number) => {
 
 const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
   const dispatch: AppDispatch = useDispatch();
-  const { userFavorites } = useSelector((state: RootState) => state.user);
-  const { currentPlayer, isMoreModalOpen } = useSelector(
-    (state: RootState) => state.podcast
+  const userFavorites = useSelector(
+    (state: RootState) => state.user.userFavorites
   );
+  const currentPlayer = useSelector(
+    (state: RootState) => state.podcast.currentPlayer
+  );
+  const isMoreModalOpen = useSelector(
+    (state: RootState) => state.podcast.isMoreModalOpen
+  );
+
   const theme = useTheme();
 
   // 檢查當前單集是否已收藏
@@ -63,10 +69,12 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
   return (
     <>
       {/* bookmark */}
-      <BookmarkIcon
-        isFavorite={isFavorite}
-        onToggleFavorite={handleToggleFavorite}
-      />
+      <Box>
+        <BookmarkIcon
+          isFavorite={isFavorite}
+          onToggleFavorite={handleToggleFavorite}
+        />
+      </Box>
 
       {/* List */}
       <Grid container p={0} spacing={0} sx={{ width: "100%" }}>
@@ -170,7 +178,13 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
           }}
         >
           {/* 單集標題 */}
-          <Tooltip title={episode.name} arrow>
+          <Tooltip
+            title={
+              <Typography sx={{ fontSize: "1rem" }}>{episode.name}</Typography>
+            }
+            arrow
+            placement="top"
+          >
             <Typography
               variant="subtitle1"
               gutterBottom
@@ -221,21 +235,6 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
           {/* 單集介紹 */}
           <Box
             sx={{
-              // maxWidth: isMoreModalOpen
-              //   ? {
-              //       xs: "110%",
-              //       sm: "125%",
-              //       md: "130%",
-              //       lg: "120%",
-              //       xl: "130%",
-              //     }
-              //   : {
-              //       xs: "110%",
-              //       sm: "110%",
-              //       md: "130%",
-              //       lg: "120%",
-              //       xl: "130%",
-              //     },
               minWidth: isMoreModalOpen
                 ? {
                     xs: "100%",

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { AppBar, Toolbar, IconButton, Slide, Box } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import Logo from "../assets/Logo.png";
@@ -11,15 +11,26 @@ import User from "./footer/User";
 
 const Navbar: React.FC = () => {
   const dispatch = useDispatch();
-  const { userCategories, currentCategoryId } = useSelector(
-    (state: RootState) => state.user
+  const userCategories = useSelector(
+    (state: RootState) => state.user.userCategories
+  );
+  const currentCategoryId = useSelector(
+    (state: RootState) => state.user.currentCategoryId
   );
 
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
+  const toggleMenu = useCallback(() => {
+    setMenuOpen((prevOpen) => !prevOpen);
+  }, []);
+
+  // 避免 setCurrentCategoryId 重複創建
+  const handleCategorySelect = useCallback(
+    (categoryId: string) => {
+      dispatch(setCurrentCategoryId(categoryId));
+    },
+    [dispatch]
+  );
 
   return (
     <>
@@ -147,14 +158,14 @@ const Navbar: React.FC = () => {
                 key={category?.id}
                 text={category?.name}
                 isActive={currentCategoryId === category?.id}
-                onClick={() => dispatch(setCurrentCategoryId(category?.id))}
+                onClick={() => handleCategorySelect(category?.id)}
               />
             ))}
             {/* 收藏清單 */}
             <SideBarItem
               text="收藏清單"
               isActive={currentCategoryId === "favorites"}
-              onClick={() => dispatch(setCurrentCategoryId("favorites"))}
+              onClick={() => handleCategorySelect("favorites")}
             />
           </Box>
         </Box>

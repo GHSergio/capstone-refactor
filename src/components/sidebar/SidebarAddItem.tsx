@@ -4,6 +4,8 @@ import {
   IconButton,
   useTheme,
   Typography,
+  Box,
+  Tooltip,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch } from "react-redux";
@@ -22,37 +24,51 @@ const SidebarAddItem: React.FC = () => {
   };
 
   return (
-    <MUIListItem
+    <Box
       onClick={handleAddCategory}
       sx={{
         width: "100%",
         display: "flex",
+        justifyContent: "space-between",
         alignItems: "center",
         color: theme.palette.secondary.main,
-        border: `2px solid ${theme.palette.secondary.main}`,
-        borderRadius: "1rem",
-        margin: "0.5rem 0",
         cursor: "pointer",
-        padding: "0.2rem",
       }}
     >
-      <IconButton sx={{ color: theme.palette.secondary.main }}>
-        <AddIcon />
-      </IconButton>
       <Typography
         variant="h6"
         sx={{
           textAlign: "center",
           color: theme.palette.secondary.main,
-          // fontSize: { xs: "70%", sm: "70%", md: "90%", lg: "100%" },
-          // "@media(min-width:1600px)": {
-          //   fontSize: "1.6rem",
-          // },
+          fontSize: { xs: "70%", sm: "100%", md: "100%", lg: "120%" },
+          "@media (min-width:1600px)": {
+            fontSize: "150%",
+          },
         }}
       >
-        新增分類
+        你的清單
       </Typography>
-    </MUIListItem>
+      <Tooltip
+        title={<Typography sx={{ fontSize: "1rem" }}>新增清單</Typography>}
+        arrow
+      >
+        <IconButton
+          sx={{
+            color: theme.palette.secondary.main,
+            padding: 0,
+          }}
+        >
+          <AddIcon
+            sx={{
+              fontSize: { xs: "70%", sm: "70%", md: "100%", lg: "100%" },
+              "@media (min-width:1600px)": {
+                fontSize: "150%",
+              },
+            }}
+          />
+        </IconButton>
+      </Tooltip>
+    </Box>
   );
 };
 

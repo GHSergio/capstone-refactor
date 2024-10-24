@@ -26,7 +26,6 @@ const MainContent = () => {
         <Box
           sx={{
             width: "100%",
-            // height: { xs: "70vh", sm: "60vh" },
             height: { xs: "95%", sm: "90%", md: "95%" },
             padding: "1rem",
             margin: {

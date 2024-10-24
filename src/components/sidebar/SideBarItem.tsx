@@ -3,7 +3,7 @@ import {
   ListItem as MUIListItem,
   IconButton,
   Menu,
-  MenuItem,
+  // MenuItem,
   Divider,
   Box,
   Typography,
@@ -29,10 +29,12 @@ const SideBarItem: React.FC<SideBarItemProps> = ({
   onClick,
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [tooltipOpen, setTooltipOpen] = useState(false);
   const dispatch = useDispatch();
 
   const handleClickDropdown = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+    setTooltipOpen(false);
   };
 
   const handleClose = () => {
@@ -54,6 +56,48 @@ const SideBarItem: React.FC<SideBarItemProps> = ({
   const handleAddShows = () => {
     dispatch(setIsSearchModalOpen(true));
     setAnchorEl(null);
+  };
+
+  const handleTooltipOpen = () => {
+    if (!anchorEl) {
+      setTooltipOpen(true); // 只有當 Menu 沒有打開時才顯示 Tooltip
+    }
+  };
+
+  const handleTooltipClose = () => {
+    setTooltipOpen(false);
+  };
+
+  const menuItemStyled = {
+    fontWeight: "bold",
+    fontSize: {
+      xs: "100%",
+      sm: "90%",
+      md: "100%",
+      xl: "110%",
+    },
+    padding: {
+      xs: "8px 8px",
+      sm: "8px 8px",
+      md: "8px 8px",
+      xl: "8px 10px",
+    },
+    "@media (max-width:321px)": {
+      fontSize: "60%",
+      padding: "8px 6px",
+    },
+    "@media (min-width:321px) and (max-width:376px)": {
+      fontSize: "70%",
+      padding: "8px 6px ",
+    },
+    "@media (min-width:376px) and (max-width:600px)": {
+      fontSize: "90%",
+      padding: "8px 6px ",
+    },
+    "@media (min-width:1600px)": {
+      fontSize: "130%",
+      padding: "15px 15px ",
+    },
   };
 
   return (
@@ -80,7 +124,9 @@ const SideBarItem: React.FC<SideBarItemProps> = ({
       }}
     >
       {/* 使用 Box + Typography 控制字體大小 */}
-      <Tooltip title={text}>
+      <Tooltip
+        title={<Typography sx={{ fontSize: "1rem" }}>{text}</Typography>}
+      >
         <Box sx={{ width: "60%" }}>
           <Typography
             variant="h6"
@@ -96,40 +142,55 @@ const SideBarItem: React.FC<SideBarItemProps> = ({
         </Box>
       </Tooltip>
 
-      <Box>
-        {text !== "收藏清單" && (
-          <>
-            <IconButton onClick={handleClickDropdown}>
-              <MoreVertIcon
-                sx={{
-                  color: isActive ? "#FEFEFE" : "inherit",
-                  fontSize: { xs: "0.8rem", sm: "1rem", md: "1.2rem" },
-                  "@media(min-width:1600px)": {
-                    fontSize: "2rem",
-                  },
-                }}
-              />
-            </IconButton>
+      <Tooltip
+        title={<Typography sx={{ fontSize: "1rem" }}>操作分類</Typography>}
+        arrow
+        open={tooltipOpen}
+        onOpen={handleTooltipOpen}
+        onClose={handleTooltipClose}
+      >
+        <Box>
+          {text !== "收藏清單" && (
+            <>
+              <IconButton onClick={handleClickDropdown}>
+                <MoreVertIcon
+                  sx={{
+                    color: isActive ? "#FEFEFE" : "inherit",
+                    fontSize: { xs: "0.8rem", sm: "0.9rem", md: "1.2rem" },
+                    "@media(min-width:1600px)": {
+                      fontSize: "2rem",
+                    },
+                    padding: 0,
+                  }}
+                />
+              </IconButton>
 
-            {/* DropDown */}
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-            >
-              <MenuItem onClick={handleEdit}>編輯名稱</MenuItem>
-              <Divider />
-              <MenuItem onClick={handleDelete}>刪除分類</MenuItem>
-              <Divider />
-              <MenuItem onClick={handleAddShows}>新增Podcast</MenuItem>
-            </Menu>
-          </>
-        )}
-      </Box>
+              {/* DropDown */}
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+              >
+                <Box sx={{ ...menuItemStyled }} onClick={handleEdit}>
+                  編輯名稱
+                </Box>
+                <Divider />
+                <Box sx={{ ...menuItemStyled }} onClick={handleDelete}>
+                  刪除分類
+                </Box>
+                <Divider />
+                <Box sx={{ ...menuItemStyled }} onClick={handleAddShows}>
+                  新增Podcast
+                </Box>
+              </Menu>
+            </>
+          )}
+        </Box>
+      </Tooltip>
     </MUIListItem>
   );
 };

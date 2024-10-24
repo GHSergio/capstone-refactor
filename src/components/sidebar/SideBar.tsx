@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Box, Typography } from "@mui/material";
 import SideBarItem from "./SideBarItem";
 import SidebarAddItem from "./SidebarAddItem";
@@ -9,8 +9,19 @@ import { setCurrentCategoryId } from "../../slice/userSlice";
 const Sidebar: React.FC = () => {
   const dispatch = useDispatch();
   // 從 userSlice 獲取播放清單和當前選中的清單 ID
-  const { userCategories, currentCategoryId } = useSelector(
-    (state: RootState) => state.user
+  const userCategories = useSelector(
+    (state: RootState) => state.user.userCategories
+  );
+  const currentCategoryId = useSelector(
+    (state: RootState) => state.user.currentCategoryId
+  );
+
+  // 使用 useCallback 包裝 dispatch 行為，避免不必要的重新創建
+  const handleCategoryClick = useCallback(
+    (categoryId: string) => {
+      dispatch(setCurrentCategoryId(categoryId));
+    },
+    [dispatch]
   );
 
   // console.log("播放列表:", userCategories);
@@ -35,7 +46,7 @@ const Sidebar: React.FC = () => {
         backgroundColor: "#F6F7F8",
         display: "flex",
         flexDirection: { xs: "row", sm: "column" },
-        alignItems: "center",
+        // alignItems: "center",
         padding: { xs: "1.5rem", sm: "0.8rem", md: "1rem", xl: "1.5rem" },
         "@media(min-width:1600px)": {
           padding: "2rem",
@@ -44,12 +55,12 @@ const Sidebar: React.FC = () => {
     >
       {/* 新增分類的按鈕 */}
       <Box
-        sx={{
-          width: { xs: "80%", sm: "90%", md: "80%", lg: "70%", xl: "60%" },
-          "@media(min-width:1600px)": {
-            width: "40%",
-          },
-        }}
+      // sx={{
+      //   width: { xs: "80%", sm: "90%", md: "80%", lg: "70%", xl: "60%" },
+      //   "@media(min-width:1600px)": {
+      //     width: "40%",
+      //   },
+      // }}
       >
         <SidebarAddItem />
       </Box>
@@ -75,14 +86,14 @@ const Sidebar: React.FC = () => {
             key={category?.id}
             text={category?.name}
             isActive={currentCategoryId === category?.id}
-            onClick={() => dispatch(setCurrentCategoryId(category?.id))}
+            onClick={() => handleCategoryClick(category?.id)}
           />
         ))}
         {/* 收藏清單 */}
         <SideBarItem
           text="收藏清單"
           isActive={currentCategoryId === "favorites"}
-          onClick={() => dispatch(setCurrentCategoryId("favorites"))}
+          onClick={() => handleCategoryClick("favorites")}
         />
       </Box>
     </Box>

@@ -24,11 +24,17 @@ import CloseIcon from "@mui/icons-material/Close";
 
 const ActionModal: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
-  const { isActionModalOpen, currentAction } = useSelector(
-    (state: RootState) => state.podcast
+  const isActionModalOpen = useSelector(
+    (state: RootState) => state.podcast.isActionModalOpen
   );
-  const { currentCategoryId, userCategories } = useSelector(
-    (state: RootState) => state.user
+  const currentAction = useSelector(
+    (state: RootState) => state.podcast.currentAction
+  );
+  const currentCategoryId = useSelector(
+    (state: RootState) => state.user.currentCategoryId
+  );
+  const userCategories = useSelector(
+    (state: RootState) => state.user.userCategories
   );
 
   const [inputValue, setInputValue] = useState("");
