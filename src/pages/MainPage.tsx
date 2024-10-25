@@ -16,12 +16,12 @@ import {
 const MainPage: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
 
+  // privateRoute先獲得acToken 才會 進入MainPage
   // 從 localStorage 提取資訊
   useEffect(() => {
     const userProfile = localStorage.getItem("user_profile");
     const userCategories = localStorage.getItem("user_categories");
     const userFavorites = localStorage.getItem("user_favorites");
-
     // 如果 localStorage 有資料，則更新到 Redux state，並確保值是有效的 JSON 字符串
     if (userProfile && userProfile !== "undefined") {
       try {
