@@ -10,6 +10,7 @@ import {
 import { AppDispatch } from "../store/store";
 import { useNavigate } from "react-router-dom";
 import { keyframes } from "@mui/system"; // 引入 MUI 的 keyframes
+import axios from "axios";
 
 const CallbackPage = () => {
   const [loading, setLoading] = useState(true);
@@ -44,6 +45,8 @@ const CallbackPage = () => {
   };
 
   useEffect(() => {
+    // throw new Error("測試錯誤：故意引發錯誤以測試 ErrorBoundary");
+
     const fetchData = async () => {
       try {
         const accessToken = await waitForToken();
@@ -66,11 +69,19 @@ const CallbackPage = () => {
           // fetchData 完成後設置 dataLoaded 為 true
           setDataLoaded(true);
         }
-      } catch (err) {
-        setError(err as string);
+      } catch (err: unknown) {
+        let errorMessage: string;
+        if (axios.isAxiosError(err) && err.response) {
+          console.log("Axios: ", axios.isAxiosError(err) && err.response);
+          errorMessage = err.response.data || err.message;
+        } else {
+          errorMessage = "發生未知錯誤，請稍後再試";
+        }
+
+        // setError(err as string);
+        setError(errorMessage);
         setLoading(false);
         console.error("API 請求失敗: ", err);
-        return <div>發生錯誤，請重整頁面。</div>;
       }
     };
 

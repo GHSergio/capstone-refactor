@@ -163,7 +163,10 @@ export const fetchCategories = createAsyncThunk(
       return response.data.categories;
     } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
-        return rejectWithValue(error.response);
+        // return rejectWithValue(error.response);
+        console.log("error.response: ", error.response);
+        const { status, data } = error.response; // 只取所需數據
+        return rejectWithValue({ status, data });
       }
     }
   }
@@ -567,14 +570,6 @@ const userSlice = createSlice({
       .addCase(addFavorite.fulfilled, (state, action) => {
         const favorite = action.payload as Favorite; // 傳回來的是 Favorite 物件
 
-        // state.userFavorites?.push(favorite); // 添加到收藏陣列
-
-        // // 更新 localStorage
-        // localStorage.setItem(
-        //   "user_favorites",
-        //   JSON.stringify(state.userFavorites)
-        // );
-        // 檢查是否已經在 favorites 中
         const isAlreadyFavorite = state.userFavorites?.some(
           (fav) => fav.id === favorite.id
         );

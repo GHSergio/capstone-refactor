@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   Modal,
   Box,
@@ -28,6 +28,15 @@ import {
 import { addShowToCategory, setAlert } from "../../slice/userSlice";
 import { Show } from "../../slice/types";
 import AlertComponent from "../AlertComponent";
+import { debounce } from "lodash";
+
+// 防抖處理 -> 放在外面可以避免每次渲染時重新創建新的防抖函式
+const debouncedSearch = debounce((keyword, dispatch) => {
+  if (keyword.length > 0) {
+    dispatch(searchShows(keyword)); // 發送 API 搜索請求
+  }
+}, 500); // 延遲500毫秒
+
 const SearchModal = () => {
   const dispatch: AppDispatch = useDispatch();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -113,11 +122,20 @@ const SearchModal = () => {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const keyword = e.target.value;
     setSearchTerm(keyword);
-    // 調用 searchShows 進行 API 搜索
-    if (keyword.length > 0) {
-      dispatch(searchShows(keyword)); // 發送 API 搜索請求
-    }
+    debouncedSearch(keyword, dispatch); // 使用防抖處理過的函數
+
+    // // 調用 searchShows 進行 API 搜索
+    // if (keyword.length > 0) {
+    //   dispatch(searchShows(keyword)); // 發送 API 搜索請求
+    // }
   };
+
+  // 清理防抖定時器
+  useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, []);
 
   const handleShowSelect = (show: Show) => {
     // 選擇匹配的 show 並添加到 selectedShows
