@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Modal,
   Box,
@@ -30,6 +30,7 @@ import { Show } from "../../slice/types";
 import AlertComponent from "../AlertComponent";
 const SearchModal = () => {
   const dispatch: AppDispatch = useDispatch();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // 將每個 state 分開訂閱
   const isSearchModalOpen = useSelector(
@@ -50,6 +51,14 @@ const SearchModal = () => {
   // console.log("searchResults:", searchResults);
   // console.log("當前分類: ", currentCategoryId);
   // console.log("被選中的shows: ", selectedShows);
+
+  useEffect(() => {
+    if (isSearchModalOpen) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 10); // 增加10毫秒的延遲
+    }
+  }, [isSearchModalOpen]);
 
   // 清空 搜尋結果 & 挑中的shows
   const handleSearchModalClose = () => {
@@ -204,6 +213,7 @@ const SearchModal = () => {
             }}
           >
             <TextField
+              inputRef={inputRef} // 連結 ref 到輸入框
               fullWidth
               placeholder="輸入關鍵字..."
               value={searchTerm}

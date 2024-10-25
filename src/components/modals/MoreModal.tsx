@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Modal,
   Box,
@@ -14,16 +13,19 @@ import closeIcon from "../../assets/closeIcon.png";
 import EpisodeList from "./../EpisodeList";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../store/store";
-import { setActiveEpisode } from "../../slice/podcastSlice";
+import {
+  setActiveEpisode,
+  setIsMoreModalOpen,
+  setCurrentShow,
+} from "../../slice/podcastSlice";
 import { removeShowFromCategory } from "../../slice/userSlice";
 import { Episode } from "../../slice/types";
-interface MoreModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
 
-const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
+const MoreModal: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
+  const isMoreModalOpen = useSelector(
+    (state: RootState) => state.podcast.isMoreModalOpen
+  );
   const currentShow = useSelector(
     (state: RootState) => state.podcast.currentShow
   );
@@ -37,6 +39,11 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
 
   // console.log("當前的Show: ", currentShow);
 
+  const handleMoreClose = () => {
+    dispatch(setIsMoreModalOpen(false));
+    dispatch(setCurrentShow(null));
+  };
+
   const handleSetActive = (episodeId: string) => {
     dispatch(setActiveEpisode(episodeId));
   };
@@ -49,14 +56,18 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
           showId: currentShow.id,
         })
       );
-      onClose();
+      handleMoreClose();
     } else {
       console.error("currentListId 或 currentShowId 為 null，無法刪除");
     }
   };
 
   return (
-    <Modal open={isOpen} onClose={onClose} aria-labelledby="modal-title">
+    <Modal
+      open={isMoreModalOpen}
+      onClose={handleMoreClose}
+      aria-labelledby="modal-title"
+    >
       <Box
         sx={{
           position: "absolute",
@@ -70,10 +81,10 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
           boxShadow: 24,
           borderRadius: 2,
           "@media (max-width: 320px)": {
-            width: "90%", // 手機顯示更窄
+            width: "90%",
           },
           "@media (min-width: 1600px)": {
-            width: "70%", // 螢幕很大的情況下，減少寬度
+            width: "70%",
           },
         }}
       >
@@ -87,7 +98,7 @@ const MoreModal: React.FC<MoreModalProps> = ({ isOpen, onClose }) => {
             zIndex: 1,
           }}
         >
-          <IconButton onClick={onClose}>
+          <IconButton onClick={handleMoreClose}>
             <Box
               component="img"
               src={closeIcon}

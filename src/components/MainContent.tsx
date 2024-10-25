@@ -3,11 +3,12 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import ListPage from "../pages/ListPage";
 import FavoritePage from "../pages/FavoritePage";
-// import User from "./footer/User";
 import ActionModal from "./modals/ActionModal";
 
 const MainContent = () => {
-  const { currentCategoryId } = useSelector((state: RootState) => state.user);
+  const currentCategoryId = useSelector(
+    (state: RootState) => state.user.currentCategoryId
+  );
 
   return (
     <>

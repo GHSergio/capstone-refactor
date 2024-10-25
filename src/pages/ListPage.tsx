@@ -33,9 +33,6 @@ const ListPage: React.FC = () => {
   );
   const showsDetail = useSelector((state: RootState) => state.user.showsDetail);
   const loading = useSelector((state: RootState) => state.user.loading);
-  const isMoreModalOpen = useSelector(
-    (state: RootState) => state.podcast.isMoreModalOpen
-  );
 
   // 取得當前分類的 savedShows (只保存了 show 的 id)
   const currentCategory = userCategories?.find(
@@ -70,11 +67,6 @@ const ListPage: React.FC = () => {
     },
     [dispatch]
   );
-
-  const handleMoreClose = useCallback(() => {
-    dispatch(setIsMoreModalOpen(false));
-    dispatch(setCurrentShow(null));
-  }, [dispatch]);
 
   // 搜索按鈕的處理函數
   const handleClickSearch = useCallback(() => {
@@ -277,10 +269,8 @@ const ListPage: React.FC = () => {
         )}
       </Grid>
 
-      {/* 顯示 MoreModal */}
-      {isMoreModalOpen && (
-        <MoreModal isOpen={isMoreModalOpen} onClose={handleMoreClose} />
-      )}
+      {/* 只負責將state改為true -> 將open & onClose 都直接在Modal定義*/}
+      <MoreModal />
       <SearchModal />
       <ActionModal />
       {/* MUI Alert 提示 */}

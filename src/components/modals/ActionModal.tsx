@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Modal,
   Box,
@@ -24,6 +24,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 const ActionModal: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
+  const inputRef = useRef<HTMLInputElement>(null);
   const isActionModalOpen = useSelector(
     (state: RootState) => state.podcast.isActionModalOpen
   );
@@ -38,6 +39,12 @@ const ActionModal: React.FC = () => {
   );
 
   const [inputValue, setInputValue] = useState("");
+
+  useEffect(() => {
+    setTimeout(() => {
+      inputRef?.current?.focus();
+    }, 10);
+  }, [isActionModalOpen]);
 
   const handleClose = () => {
     dispatch(setIsActionModalOpen(false));
@@ -181,6 +188,7 @@ const ActionModal: React.FC = () => {
         <Box sx={{ flex: 1, p: 0 }}>
           {currentAction === "edit" && (
             <TextField
+              inputRef={inputRef}
               fullWidth
               placeholder={currentList?.name || ""}
               value={inputValue}
@@ -208,6 +216,7 @@ const ActionModal: React.FC = () => {
 
           {currentAction === "add" && (
             <TextField
+              inputRef={inputRef}
               fullWidth
               // label="新增分類名稱"
               value={inputValue}

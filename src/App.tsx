@@ -23,24 +23,6 @@ function AppRouter() {
 
       {/* 404 Route, 導向回 /login */}
       <Route path="*" element={<Navigate to="/login" replace />} />
-
-      {/* <Route
-        path="/callback"
-        element={
-          <PrivateRoute>
-            <CallbackPage />
-          </PrivateRoute>
-        }
-      />
-
-      <Route
-        path="/main"
-        element={
-          <PrivateRoute>
-            <MainPage />
-          </PrivateRoute>
-        }
-      /> */}
     </Routes>
   );
 }
