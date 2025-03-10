@@ -120,9 +120,9 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ isPaused }) => {
                 md: "1.6rem",
                 lg: "2rem",
               },
-              "@media(min-width:1600px)": {
-                fontSize: "3rem",
-              },
+              // "@media(min-width:1600px)": {
+              //   fontSize: "3rem",
+              // },
               fontFamily: "Noto Sans TC",
               fontWeight: 700,
             }}
@@ -139,9 +139,9 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ isPaused }) => {
                 md: "0.7rem",
                 lg: "0.9rem",
               },
-              "@media(min-width:1600px)": {
-                fontSize: "1.5rem",
-              },
+              // "@media(min-width:1600px)": {
+              //   fontSize: "1.5rem",
+              // },
               marginTop: { xs: "0.5rem", lg: "1.2rem" },
               fontFamily: "Poppins",
             }}
@@ -199,9 +199,9 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ isPaused }) => {
           gap: "1.25vw",
           position: "absolute",
           bottom: { xs: 50, sm: 70, md: 120, lg: 137 },
-          "@media(min-width:1600px)": {
-            bottom: 230,
-          },
+          // "@media(min-width:1600px)": {
+          //   bottom: 230,
+          // },
         }}
       >
         {images.map((_, index) => (

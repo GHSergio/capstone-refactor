@@ -77,13 +77,39 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
       </Box>
 
       {/* List */}
-      <Grid container p={0} spacing={0} sx={{ width: "100%" }}>
+      <Grid
+        container
+        p={0}
+        spacing={2}
+        sx={{
+          flexWrap: "nowrap",
+          alignItems: "center",
+          width: isMoreModalOpen
+            ? {
+                xs: "100%",
+                sm: "95%",
+                md: "100%",
+                lg: "100%",
+                xl: "100%",
+              }
+            : {
+                xs: "100%",
+                sm: "95%",
+                md: "100%",
+                lg: "100%",
+                xl: "100%",
+              },
+          "@media (max-width: 320px)": { width: "95%" },
+          "@media (min-width: 321px) and (max-width: 376px)": {},
+          "@media (min-width: 376px) and (max-width: 599px)": {},
+        }}
+      >
         {/* 單集封面 */}
         <Grid
           item
-          xs={4}
+          xs={3}
+          sm={3}
           sx={{
-            p: 0.5,
             minWidth: isMoreModalOpen
               ? {
                   xs: "100px",
@@ -93,58 +119,78 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
                   xl: "150px",
                 }
               : {
-                  xs: "100px",
+                  xs: "90px",
                   sm: "120px",
                   md: "130px",
                   lg: "140px",
-                  xl: "150px",
+                  xl: "165px",
                 },
             maxWidth: isMoreModalOpen
               ? {
-                  xs: "8vw",
-                  sm: "9vw",
-                  md: "10vw",
-                  // lg: "14vw",
-                  xl: "11.5vw",
+                  xs: "100px",
+                  sm: "100px",
+                  md: "130px",
+                  lg: "140px",
+                  xl: "150px",
                 }
               : {
-                  xs: "14vw",
-                  sm: "14vw",
-                  md: "10vw",
-                  // lg: "14vw",
-                  xl: "11.5vw",
+                  xs: "90px",
+                  sm: "120px",
+                  md: "130px",
+                  lg: "140px",
+                  xl: "165px",
                 },
-
+            height: isMoreModalOpen
+              ? {
+                  xs: "100px",
+                  sm: "100px",
+                  md: "130px",
+                  lg: "140px",
+                  xl: "150px",
+                }
+              : {
+                  xs: "90px",
+                  sm: "120px",
+                  md: "130px",
+                  lg: "140px",
+                  xl: "165px",
+                },
+            marginLeft: isMoreModalOpen
+              ? {
+                  xs: "0.5rem",
+                  sm: "0.3rem",
+                  md: "0.2rem",
+                  lg: "0rem",
+                  xl: "0rem",
+                }
+              : {
+                  xs: "0.5rem",
+                  sm: "0.3rem",
+                  md: "0.2rem",
+                  lg: "0rem",
+                  xl: "0rem",
+                },
             textAlign: "center",
-            marginRight: {
-              xs: 1,
-              sm: 1,
-              md: 2,
-              lg: 2,
-              xl: 2,
-            },
             // 獨立處理媒體查詢的 maxWidth
             "@media (max-width: 320px)": {
-              maxWidth: isMoreModalOpen ? "14vw" : "14vw",
               minWidth: isMoreModalOpen ? "75px" : "80px",
+              maxWidth: isMoreModalOpen ? "75px" : "80px",
+              height: isMoreModalOpen ? "75px" : "80px",
             },
             "@media (min-width: 321px) and (max-width: 376px)": {
-              maxWidth: isMoreModalOpen ? "14vw" : "14vw",
               minWidth: isMoreModalOpen ? "75px" : "80px",
+              maxWidth: isMoreModalOpen ? "75px" : "80px",
+              height: isMoreModalOpen ? "75px" : "80px",
             },
-            "@media (min-width: 376px) and (max-width: 600px)": {
-              maxWidth: isMoreModalOpen ? "14vw" : "14vw",
-              minWidth: isMoreModalOpen ? "75px" : "85px",
-            },
-            "@media (min-width: 1600px) ": {
-              maxWidth: isMoreModalOpen ? "9.5vw" : "8.5vw",
-              minWidth: isMoreModalOpen ? "230px" : "190px",
+            "@media (min-width: 376px) and (max-width: 599px)": {
+              minWidth: isMoreModalOpen ? "75px" : "80px",
+              maxWidth: isMoreModalOpen ? "75px" : "80px",
+              height: isMoreModalOpen ? "75px" : "80px",
             },
           }}
         >
           <Box
             sx={{
-              width: "100%",
               borderRadius: 2,
               boxShadow: "0 0 2px 2px rgba(0,0,0,0.4)",
               height: "0",
@@ -160,21 +206,12 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
         {/* 單集內容 */}
         <Grid
           item
-          xs={7}
+          xs={9}
+          sm={9}
           sx={{
-            width: isMoreModalOpen
-              ? {
-                  xs: "100%",
-                  sm: "115%",
-                  md: "120%",
-                  lg: "120%",
-                  xl: "120%",
-                }
-              : { xs: "100%", sm: "115%", md: "120%", lg: "120%", xl: "120%" },
-
-            "@media(min-width:1600px)": {
-              width: isMoreModalOpen ? "150%" : "150%",
-            },
+            flex: "1",
+            display: "flex",
+            flexDirection: "column",
           }}
         >
           {/* 單集標題 */}
@@ -189,44 +226,54 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
               variant="subtitle1"
               gutterBottom
               sx={{
+                marginBottom: "0",
+                width: "90%",
                 fontSize: isMoreModalOpen
                   ? {
                       xs: "0.45rem",
                       sm: "0.7rem",
                       md: "0.9rem",
-                      lg: "1rem",
-                      xl: "1.15rem",
+                      lg: "1.15rem",
+                      xl: "1.25rem",
                     }
                   : {
                       xs: "0.5rem",
                       sm: "0.7rem",
                       md: "0.9rem",
-                      lg: "1rem",
-                      xl: "1.15rem",
+                      lg: "0.9rem",
+                      xl: "1rem",
                     },
-                lineHeight: {
-                  xs: "10px",
-                  sm: "15px",
-                  md: "25px",
-                  // lg: "25px",
-                  xl: "25px",
-                },
+                // maxWidth: isMoreModalOpen
+                //   ? {
+                //       xs: "100%",
+                //       sm: "90%",
+                //       md: "95%",
+                //       lg: "100%",
+                //       xl: "100%",
+                //     }
+                //   : {
+                //       xs: "90%",
+                //       sm: "80%",
+                //       md: "85%",
+                //       lg: "95%",
+                //       xl: "95%",
+                //     },
+                // lineHeight: {
+                //   xs: "10px",
+                //   sm: "15px",
+                //   md: "25px",
+                //   lg: "25px",
+                //   xl: "25px",
+                // },
                 fontWeight: "500",
-                width: "100%",
                 WebkitLineClamp: 1,
                 whiteSpace: "nowrap",
-                overflow: "hidden",
                 textOverflow: "ellipsis",
+                overflowX: "hidden",
 
-                "@media (max-width: 321px)": {
-                  width: "90%",
-                },
+                "@media (max-width: 321px)": {},
                 "@media(min-width: 321px)and (max-width: 376px)": {},
-                "@media (min-width: 376px) and (max-width: 600px)": {},
-                "@media(min-width:1600px)": {
-                  fontSize: isMoreModalOpen ? "1.5rem" : "1.5rem",
-                  lineHeight: isMoreModalOpen ? "30px" : "30px",
-                },
+                "@media (min-width: 376px) and (max-width: 599px)": {},
               }}
             >
               {episode.name}
@@ -235,63 +282,43 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
           {/* 單集介紹 */}
           <Box
             sx={{
-              minWidth: isMoreModalOpen
-                ? {
-                    xs: "100%",
-                    sm: "125%",
-                    md: "130%",
-                    lg: "125%",
-                    xl: "135%",
-                  }
-                : {
-                    xs: "110%",
-                    sm: "115%",
-                    md: "125%",
-                    // lg: "120%",
-                    xl: "135%",
-                  },
+              width: "100%",
               height: isMoreModalOpen
                 ? {
                     xs: "45px",
-                    sm: "55px",
+                    sm: "60px",
                     md: "60px",
                     lg: "60px",
                     xl: "90px",
                   }
                 : {
-                    xs: "50px",
-                    sm: "60px",
-                    md: "65px",
+                    xs: "45px",
+                    sm: "55px",
+                    md: "55px",
                     lg: "60px",
-                    xl: "90px",
+                    xl: "75px",
                   },
               overflowY: "auto",
+              overflowX: "hidden",
               margin: {
                 xs: "0.25rem 0rem",
                 sm: "0.3rem 0rem",
                 md: "0.4rem 0rem",
+                lg: "0.5rem 0rem",
                 xl: "0.5rem 0rem",
               },
               "@media (max-width: 321px)": {
-                minWidth: isMoreModalOpen ? "85%" : "85%",
-                height: isMoreModalOpen ? "40px" : "50px",
+                height: isMoreModalOpen ? "40px" : "40px",
               },
               "@media(min-width: 321px)and (max-width: 376px)": {
-                minWidth: isMoreModalOpen ? "105%" : "105%",
                 height: "45px",
               },
-              "@media (min-width: 376px) and (max-width: 600px)": {
-                minWidth: isMoreModalOpen ? "115%" : "115%",
-              },
+              "@media (min-width: 376px) and (max-width: 599px)": {},
 
-              "@media(min-width:1600px)": {
-                minWidth: isMoreModalOpen ? "135%" : "135%",
-                height: isMoreModalOpen ? "135px" : "135px",
-                margin: isMoreModalOpen ? "0.9rem 0rem" : "0.5rem 0rem",
-              },
               boxShadow: "0 0 3px 1px rgba(0,0,0,0.2)",
               borderRadius: "0.3rem",
-              padding: "0.1rem",
+              padding: "0.15rem",
+              textAlign: "center",
               "&::-webkit-scrollbar": {
                 width: {
                   xs: "0.3rem",
@@ -320,9 +347,6 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
               color="text.secondary"
               gutterBottom
               sx={{
-                display: "-webkit-box",
-                WebkitBoxOrient: "vertical",
-                overflowY: "auto",
                 fontSize: isMoreModalOpen
                   ? {
                       xs: "0.4rem",
@@ -338,9 +362,6 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
                       lg: "0.8rem",
                       xl: "1rem",
                     },
-                "@media(min-width:1600px)": {
-                  fontSize: isMoreModalOpen ? "1.5rem" : "1.5rem",
-                },
               }}
             >
               {episode.description}
@@ -362,8 +383,8 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
                   xs: "0.05rem",
                   sm: "0.1rem",
                   md: "0.1rem",
-                  lg: "0.5rem",
-                  xl: "0.2rem",
+                  lg: "0.1rem",
+                  xl: "0.1rem",
                 },
                 bgcolor: theme.palette.primary.main,
                 marginRight: { xs: 0.5, md: 1 },
@@ -382,10 +403,10 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
                         }
                       : {
                           xs: "0.4rem",
-                          sm: "0.9rem",
-                          md: "1.15rem",
+                          sm: "1rem",
+                          md: "1rem",
                           lg: "1rem",
-                          xl: "1.35rem",
+                          xl: "1.25rem",
                         },
                   }}
                 />
@@ -395,17 +416,17 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
                     fontSize: isMoreModalOpen
                       ? {
                           xs: "0.5rem",
-                          sm: "0.9rem",
-                          md: "1.15rem",
+                          sm: "1rem",
+                          md: "1rem",
                           lg: "1rem",
-                          xl: "1.35rem",
+                          xl: "1.25rem",
                         }
                       : {
                           xs: "0.5rem",
-                          sm: "0.9rem",
-                          md: "1.15rem",
+                          sm: "1rem",
+                          md: "1rem",
                           lg: "1rem",
-                          xl: "1.35rem",
+                          xl: "1.25rem",
                         },
                   }}
                 />
@@ -417,21 +438,27 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
               sx={{
                 fontSize: isMoreModalOpen
                   ? {
-                      xs: "0.3rem",
-                      sm: "0.45rem",
-                      md: "0.6rem",
+                      xs: "0.5rem",
+                      sm: "0.6rem",
+                      md: "0.7rem",
                       lg: "0.8rem",
                       xl: "0.8rem",
                     }
                   : {
-                      xs: "0.3rem",
-                      sm: "0.45rem",
-                      md: "0.6rem",
+                      xs: "0.5rem",
+                      sm: "0.6rem",
+                      md: "0.7rem",
                       lg: "0.8rem",
                       xl: "0.8rem",
                     },
-                "@media (min-width: 1600px) ": {
-                  fontSize: isMoreModalOpen ? "1.25rem" : "1.25rem",
+                "@media (max-width: 321px)": {
+                  fontSize: isMoreModalOpen ? "0.5rem" : "0.5rem",
+                },
+                "@media(min-width: 321px)and (max-width: 376px)": {
+                  fontSize: isMoreModalOpen ? "0.5rem" : "0.5rem",
+                },
+                "@media (min-width: 376px) and (max-width: 599px)": {
+                  fontSize: isMoreModalOpen ? "0.5rem" : "0.5rem",
                 },
               }}
             >

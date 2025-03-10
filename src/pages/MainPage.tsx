@@ -108,6 +108,8 @@ const MainPage: React.FC = () => {
           height: "100vh",
           margin: "0 auto",
           width: "100%",
+          maxWidth: "1440px", // 限制內容區塊最大寬度
+          minWidth: "320px",
         }}
       >
         {/* NavBar & sideBar & MainContent */}
@@ -176,9 +178,9 @@ const MainPage: React.FC = () => {
             "@media (min-width: 376px) and (max-width: 600px)": {
               height: "20vw",
             },
-            "@media (min-width:1600px)": {
-              height: "12vw",
-            },
+            // "@media (max-width:1440px)": {
+            //   height: "12vw",
+            // },
             bottom: 0,
           }}
         >

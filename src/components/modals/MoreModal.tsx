@@ -80,11 +80,9 @@ const MoreModal: React.FC = () => {
           bgcolor: "background.paper",
           boxShadow: 24,
           borderRadius: 2,
+          maxWidth: "1000px",
           "@media (max-width: 320px)": {
             width: "90%",
-          },
-          "@media (min-width: 1600px)": {
-            width: "70%",
           },
         }}
       >
@@ -105,14 +103,11 @@ const MoreModal: React.FC = () => {
               alt="close"
               sx={{
                 width: {
-                  xs: "0.5rem",
+                  xs: "0.6rem",
                   sm: "0.7rem",
                   md: "1rem",
                   lg: "1.5rem",
                   xl: "2rem",
-                },
-                "@media (min-width: 1600px)": {
-                  width: "2.5rem",
                 },
               }}
             />
@@ -122,42 +117,23 @@ const MoreModal: React.FC = () => {
         {/* Header 部分 */}
         <Grid
           container
+          spacing={2}
           sx={{
-            p: { xs: 0.5, sm: 1, md: 2, lg: 2, xl: 3 },
+            flexWrap: "nowrap",
+            p: { xs: 1, sm: 1, md: 2, lg: 2, xl: 3 },
             position: "relative",
-
-            minHeight: {
-              xs: "14vw",
-              sm: "14vw",
-              md: "14vw",
-              // lg: "14vw",
-              xl: "14vw",
-            },
-            maxHeight: {
-              xs: "15vw",
-              sm: "15vw",
-              md: "15vw",
-              // lg: "14vw",
-              xl: "16vw",
+            width: "100%",
+            height: {
+              xs: "90px",
+              sm: "140px",
+              md: "170px",
+              lg: "200px",
+              xl: "220px",
             },
             // 獨立處理媒體查詢
-            "@media (max-width: 321px)": {
-              minHeight: "30vw",
-              maxHeight: "30vw",
-            },
-            "@media (min-width: 321px) and (max-width: 376px)": {
-              minHeight: "26vw",
-              maxHeight: "26vw",
-            },
-            "@media (min-width: 376px) and (max-width: 600px)": {
-              minHeight: "22vw",
-              maxHeight: "22vw",
-            },
-            "@media(min-width:1600px)": {
-              minHeight: "15vw",
-              maxHeight: "15vw",
-              marginRight: 3,
-            },
+            "@media (max-width: 321px)": {},
+            "@media (min-width: 321px) and (max-width: 376px)": {},
+            "@media (min-width: 376px) and (max-width: 599px)": {},
           }}
         >
           {/* 頻道封面 */}
@@ -165,47 +141,50 @@ const MoreModal: React.FC = () => {
             item
             xs={3}
             sx={{
-              p: 0.5,
               minWidth: {
                 xs: "100px",
-                sm: "120px",
-                md: "130px",
-                lg: "200px",
-                xl: "200px",
+                sm: "140px",
+                md: "160px",
+                lg: "180px",
+                xl: "190px",
               },
               maxWidth: {
-                xs: "14vw",
-                sm: "14vw",
-                md: "14vw",
-                lg: "14vw",
-                xl: "14vw",
+                xs: "100px",
+                sm: "140px",
+                md: "160px",
+                lg: "180px",
+                xl: "190px",
               },
-
+              height: {
+                xs: "100px",
+                sm: "140px",
+                md: "160px",
+                lg: "180px",
+                xl: "190px",
+              },
               textAlign: "center",
-              marginRight: {
-                xs: 0.75,
+              marginLeft: {
+                xs: 1,
                 sm: 1,
-                md: 2,
-                lg: 2,
-                xl: 3,
+                md: 0,
+                lg: 0,
+                xl: 0,
               },
               // 獨立處理媒體查詢的 maxWidth
               "@media (max-width: 321px)": {
-                maxWidth: "14vw",
-                minWidth: "100px",
+                minWidth: "90px",
+                maxWidth: "90px",
+                height: "90px",
               },
               "@media (min-width: 321px) and (max-width: 376px)": {
-                maxWidth: "14vw",
-                minWidth: "100px",
+                minWidth: "90px",
+                maxWidth: "90px",
+                height: "90px",
               },
-              "@media (min-width: 376px) and (max-width: 600px)": {
-                maxWidth: "14vw",
-                minWidth: "100px",
-              },
-              "@media(min-width:1600px)": {
-                maxWidth: "14vw",
-                minWidth: "350px",
-                marginRight: 3,
+              "@media (min-width: 376px) and (max-width: 599px)": {
+                minWidth: "90px",
+                maxWidth: "90px",
+                height: "90px",
               },
             }}
           >
@@ -227,20 +206,15 @@ const MoreModal: React.FC = () => {
               }}
             />
           </Grid>
+
           {/* 頻道內容 */}
           <Grid
             item
-            xs={8}
+            xs={9}
             sx={{
-              "@media (max-width: 321px)": {
-                maxWidth: "40%",
-              },
-              "@media(min-width: 321px)and (max-width: 376px)": {
-                maxWidth: "50%",
-              },
-              "@media (min-width: 376px) and (max-width: 600px)": {
-                maxWidth: "45%",
-              },
+              "@media (max-width: 321px)": {},
+              "@media(min-width: 321px)and (max-width: 376px)": {},
+              "@media (min-width: 376px) and (max-width: 599px)": {},
             }}
           >
             {/* Podcast頻道名稱 */}
@@ -259,7 +233,7 @@ const MoreModal: React.FC = () => {
                 sx={{
                   fontSize: {
                     xs: "0.5rem",
-                    sm: "0.7rem",
+                    sm: "0.8rem",
                     md: "1rem",
                     lg: "1.25rem",
                     xl: "1.5rem",
@@ -272,12 +246,10 @@ const MoreModal: React.FC = () => {
                   "@media(min-width: 321px)and (max-width: 376px)": {
                     fontSize: "0.5rem",
                   },
-                  "@media (min-width: 376px) and (max-width: 600px)": {
+                  "@media (min-width: 376px) and (max-width: 599px)": {
                     fontSize: "0.5rem",
                   },
-                  "@media (min-width: 1600px)": {
-                    fontSize: "2rem",
-                  },
+
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   whiteSpace: "nowrap",
@@ -297,7 +269,7 @@ const MoreModal: React.FC = () => {
               sx={{
                 fontSize: {
                   xs: "0.4rem",
-                  sm: "0.5rem",
+                  sm: "0.6rem",
                   md: "0.8rem",
                   lg: "0.9rem",
                   xl: "1.2rem",
@@ -308,12 +280,10 @@ const MoreModal: React.FC = () => {
                 "@media(min-width: 321px)and (max-width: 376px)": {
                   fontSize: "0.4rem",
                 },
-                "@media (min-width: 376px) and (max-width: 600px)": {
+                "@media (min-width: 376px) and (max-width: 599px)": {
                   fontSize: "0.4rem",
                 },
-                "@media (min-width: 1600px)": {
-                  fontSize: "1.5rem",
-                },
+
                 width: "90%",
                 marginY: { xs: 0.2, sm: 0.3, md: 0.9, lg: 0.5, xl: 0.3 },
                 overflow: "hidden",
@@ -325,34 +295,26 @@ const MoreModal: React.FC = () => {
               {currentShow?.publisher}
             </Typography>
 
-            {/* Podcast頻道介紹 */}
+            {/* Podcast 頻道介紹 */}
             <Typography
               variant="body1"
               color="text.secondary"
               sx={{
-                minWidth: {
-                  xs: "50vw",
-                  sm: "55vw",
-                  md: "55vw",
-                  lg: "50vw",
-                  xl: "55vw",
+                textAlign: "center",
+                width: {
+                  xs: "95%",
+                  sm: "90%",
+                  md: "95%",
+                  lg: "95%",
+                  xl: "95%",
                 },
-                minHeight: {
-                  xs: "6vw",
-                  sm: "7.5vw",
-                  md: "7.5vw",
-                  lg: "7.5vw",
-                  xl: "8vw",
+                height: {
+                  xs: "45px",
+                  sm: "75px",
+                  md: "75px",
+                  lg: "90px",
+                  xl: "85px",
                 },
-
-                maxHeight: {
-                  xs: "12vw",
-                  sm: "13vw",
-                  md: "8vw",
-                  lg: "8vw",
-                  xl: "8vw",
-                },
-
                 overflowY: "auto",
                 overflowX: "hidden",
                 fontSize: {
@@ -360,31 +322,19 @@ const MoreModal: React.FC = () => {
                   sm: "0.5rem",
                   md: "0.7rem",
                   lg: "0.8rem",
-                  xl: "1.2rem",
+                  xl: "1rem",
                 },
                 "@media (max-width: 321px)": {
-                  minWidth: "42vw",
-                  minHeight: "20vw",
-                  maxHeight: "20w",
+                  width: "70%",
                   fontSize: "0.4rem",
                 },
                 "@media(min-width: 321px)and (max-width: 376px)": {
-                  minWidth: "40vw",
-                  minHeight: "16vw",
-                  maxHeight: "16vw",
+                  width: "70%",
                   fontSize: "0.4rem",
                 },
-                "@media (min-width: 376px) and (max-width: 600px)": {
-                  minWidth: "45vw",
-                  minHeight: "15vw",
-                  maxHeight: "15vw",
+                "@media (min-width: 376px) and (max-width: 599px)": {
+                  width: "85%",
                   fontSize: "0.4rem",
-                },
-                "@media (min-width: 1600px)": {
-                  minWidth: "50vw",
-                  minHeight: "9vw",
-                  maxHeight: "9vw",
-                  fontSize: "1.5rem",
                 },
 
                 boxShadow: "0 0 3px 1px rgba(0,0,0,0.2)",
@@ -424,21 +374,30 @@ const MoreModal: React.FC = () => {
                 color: "#FF5050",
                 borderColor: "#FF5050",
                 position: "absolute",
-                bottom: "0px",
-                right: "10px",
+                bottom: 0,
+                right: 0,
                 padding: "0.05rem 0.2rem",
                 borderRadius: "0.5rem",
                 fontSize: {
-                  xs: "0.3rem",
+                  xs: "0.4rem",
                   sm: "0.6rem",
                   md: "0.7rem",
                   lg: "0.8rem",
                   xl: "1.2rem",
                 },
-                "@media (min-width: 1600px)": {
-                  fontSize: "1.5rem",
-                },
                 fontFamily: "Noto Sans TC",
+                "@media (max-width: 321px)": {
+                  bottom: "-10%",
+                  right: "-2%",
+                },
+                "@media (min-width: 321px) and (max-width: 376px)": {
+                  bottom: "-10%",
+                  right: "-2%",
+                },
+                "@media (min-width: 376px) and (max-width: 599px)": {
+                  bottom: "-10%",
+                  right: "-1%",
+                },
               }}
               onClick={handleDelete}
             >
@@ -464,11 +423,11 @@ const MoreModal: React.FC = () => {
             "@media(min-width: 321px)and (max-width: 376px)": {
               maxHeight: "50vh",
             },
-            "@media (min-width: 376px) and (max-width: 600px)": {
+            "@media (min-width: 376px) and (max-width: 599px)": {
               maxHeight: "50vh",
             },
-            "@media(min-width:1600px)": {
-              maxHeight: "60vh",
+            "@media (max-width:1440px)": {
+              maxHeight: "55vh",
             },
             overflowY: "auto",
             "&::-webkit-scrollbar": {
@@ -503,14 +462,14 @@ const MoreModal: React.FC = () => {
                 sx={{
                   width: "100%",
                   height: {
-                    xs: "90px",
-                    sm: "120px",
+                    xs: "100px",
+                    sm: "140px",
                     md: "150px",
                     lg: "170px",
                     xl: "200px",
-                    "@media(min-width:1600px)": {
-                      height: "280px",
-                    },
+                  },
+                  "@media(min-width:1440px)": {
+                    height: "220px",
                   },
                   mb: { xs: 1, sm: 1, md: 2, lg: 2 },
                   p: { xs: 0.5, sm: 1, md: 1, lg: 2 },

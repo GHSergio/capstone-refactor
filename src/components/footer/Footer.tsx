@@ -125,7 +125,13 @@ const Footer: React.FC = () => {
           <Box
             sx={{
               width: { xs: "100%" },
-              height: { xs: "15vw", sm: "16vw", md: "18vw", xl: "18vw" },
+              height: {
+                xs: "15vw",
+                sm: "16vw",
+                md: "18vw",
+                lg: "18vw",
+                xl: "18vw",
+              },
               marginTop: "0.5rem",
               "@media (max-width: 321px)": {
                 height: "30vw",
@@ -136,9 +142,9 @@ const Footer: React.FC = () => {
               "@media (min-width: 376px) and (max-width: 600px)": {
                 height: "23vw",
               },
-              "@media (min-width:1600px)": {
-                height: "20vw",
-              },
+              // "@media (min-width:1600px)": {
+              //   height: "20vw",
+              // },
             }}
           >
             <Player />

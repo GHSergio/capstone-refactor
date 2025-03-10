@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Modal,
   Box,
@@ -69,6 +69,13 @@ const SearchModal = () => {
     }
   }, [isSearchModalOpen]);
 
+  // 清理防抖定時器
+  useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, []);
+
   // 清空 搜尋結果 & 挑中的shows
   const handleSearchModalClose = () => {
     dispatch(setIsSearchModalOpen(false));
@@ -119,23 +126,17 @@ const SearchModal = () => {
     }
   };
 
+  // 添加debounce
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const keyword = e.target.value;
     setSearchTerm(keyword);
-    debouncedSearch(keyword, dispatch); // 使用防抖處理過的函數
+    debouncedSearch(keyword, dispatch);
 
     // // 調用 searchShows 進行 API 搜索
     // if (keyword.length > 0) {
     //   dispatch(searchShows(keyword)); // 發送 API 搜索請求
     // }
   };
-
-  // 清理防抖定時器
-  useEffect(() => {
-    return () => {
-      debouncedSearch.cancel();
-    };
-  }, []);
 
   const handleShowSelect = (show: Show) => {
     // 選擇匹配的 show 並添加到 selectedShows

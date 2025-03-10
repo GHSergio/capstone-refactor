@@ -162,9 +162,9 @@ const ListPage: React.FC = () => {
                   lg: "180px",
                 },
                 borderRadius: "0.5rem",
-                boxShadow: "0px 0px 2px 5px #C7C7C73D",
+                // boxShadow: "0px 0px 2px 5px #C7C7C73D",
                 margin: 0.5,
-                padding: 2,
+                // padding: 2,
                 overflow: "hidden",
                 "@media (max-width:320px)": {
                   maxWidth: "120px",
@@ -175,9 +175,9 @@ const ListPage: React.FC = () => {
                 "@media(min-width:376px) and (max-width:600px)": {
                   maxWidth: "170px",
                 },
-                "@media (min-width:1600px)": {
-                  maxWidth: "245px",
-                },
+                // "@media (max-width:1440px)": {
+                //   maxWidth: "170px",
+                // },
               }}
             >
               <CardComponent
@@ -211,11 +211,17 @@ const ListPage: React.FC = () => {
                 image={listNull}
                 sx={{
                   margin: "0 auto",
-                  width: { xs: "4rem", sm: "5rem", md: "6rem", lg: "7rem" },
-                  "@media(min-width:1600px)": {
-                    fontSize: "3rem",
-                    width: "8rem",
+                  width: {
+                    xs: "4rem",
+                    sm: "5rem",
+                    md: "6rem",
+                    lg: "7rem",
+                    xl: "7rem",
                   },
+                  // "@media (max-width:1440px)": {
+                  //   fontSize: "3rem",
+                  //   width: "8rem",
+                  // },
                 }}
               />
               <Typography
@@ -236,11 +242,12 @@ const ListPage: React.FC = () => {
                     sm: "0.5rem 2rem",
                     md: "0.7rem 3rem",
                     lg: "0.7rem 4rem",
+                    xl: "0.7rem 4rem",
                   },
-                  "@media(min-width:1600px)": {
-                    padding: "1rem",
-                    width: "15rem",
-                  },
+                  // "@media (max-width:1440px)": {
+                  //   padding: "1rem",
+                  //   width: "15rem",
+                  // },
                   "&:hover": {
                     backgroundColor: "#FF7F50",
                   },
@@ -254,10 +261,11 @@ const ListPage: React.FC = () => {
                       sm: "0.6rem",
                       md: "0.8rem",
                       lg: "1rem",
+                      xl: "1rem",
                     },
-                    "@media(min-width:1600px)": {
-                      fontSize: "1.5rem",
-                    },
+                    // "@media (max-width:1440px)": {
+                    //   fontSize: "1.5rem",
+                    // },
                     color: "#FFFFFF",
                   }}
                 >

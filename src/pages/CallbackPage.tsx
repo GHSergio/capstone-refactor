@@ -154,6 +154,8 @@ const CallbackPage = () => {
         justifyContent: "center",
         height: "100vh",
         backgroundColor: "rgba(0, 0, 0, 0.5)",
+        maxWidth: "1440px",
+        maxHeight: "996px",
       }}
     >
       {loading ? (

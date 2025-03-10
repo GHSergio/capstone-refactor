@@ -49,10 +49,6 @@ const Navbar: React.FC = () => {
             md: "6vw",
             lg: "5vw",
           },
-
-          "@media(min-width:1600px)": {
-            height: "5vw",
-          },
         }}
       >
         <Toolbar
@@ -62,6 +58,7 @@ const Navbar: React.FC = () => {
             alignItems: "center",
             width: "100%",
             height: "100%",
+            // position: "relative",
           }}
         >
           {/* Logo */}
@@ -75,7 +72,8 @@ const Navbar: React.FC = () => {
           </Box>
 
           {/* User */}
-          <Box>
+          {/* <Box sx={{ position: "relative" }}> */}
+          <Box sx={{ ml: "auto" }}>
             <User />
           </Box>
         </Toolbar>
@@ -87,13 +85,14 @@ const Navbar: React.FC = () => {
         sx={{
           backgroundColor: "#F6F7F8",
           display: { xs: "block", sm: "none" },
+
           "@media (max-width:320px)": {
             height: "18vw",
           },
           "@media (min-width:321px) and (max-width:376px)": {
             height: "16vw",
           },
-          "@media (min-width:376px) and (max-width:600px)": {
+          "@media (min-width:376px) and (max-width:599px)": {
             height: "14vw",
           },
         }}
@@ -103,6 +102,7 @@ const Navbar: React.FC = () => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            textAlign: "center",
             width: "100%",
             height: "100%",
           }}
@@ -123,7 +123,7 @@ const Navbar: React.FC = () => {
           </Box>
 
           {/* User */}
-          <Box>
+          <Box sx={{ ml: "auto" }}>
             <User />
           </Box>
         </Toolbar>
@@ -134,11 +134,10 @@ const Navbar: React.FC = () => {
         <Box
           sx={{
             position: "fixed",
-            top: "56px",
+            top: "60px",
             left: 0,
             width: "100%",
-            maxWidth: "100vw",
-            height: "50%",
+            height: "20%",
             backgroundColor: "#FFF",
             boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
             zIndex: 1200,

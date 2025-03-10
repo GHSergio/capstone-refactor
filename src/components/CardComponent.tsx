@@ -27,7 +27,7 @@ const CardComponent: React.FC<CardComponentProps> = ({
       sx={{
         width: "100%",
         height: "100%",
-        p: 0,
+        boxShadow: "0px 0px 2px 5px rgba(27, 29, 13, 0.24)",
       }}
     >
       <Card
@@ -35,7 +35,10 @@ const CardComponent: React.FC<CardComponentProps> = ({
           width: "100%",
           height: "100%",
           margin: "0 auto",
-          boxShadow: "none",
+          p: 3,
+          // boxShadow: "none",
+          // boxShadow: "0px 0px 2px 5px rgba(27, 29, 13, 0.24)",
+          backgroundColor: "rgba(120, 170, 40, 0.2)",
         }}
       >
         <CardMedia

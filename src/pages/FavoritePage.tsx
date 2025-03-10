@@ -75,6 +75,7 @@ const FavoritePage: React.FC = () => {
           maxHeight: "100%",
           overflowY: "auto",
           marginTop: { xs: "15vw", sm: "0vh" },
+          // marginBottom: { xs: "15vw", sm: "0vh" },
           "&::-webkit-scrollbar": {
             width: { xs: "0.2rem", sm: "0.3rem", md: "0.4rem", xl: "0.5rem" },
           },
@@ -106,19 +107,16 @@ const FavoritePage: React.FC = () => {
                     md: "150px",
                     lg: "170px",
                     xl: "200px",
-                    // 獨立處理媒體查詢的 maxWidth
-                    "@media (max-width: 321px)": {
-                      height: "95px",
-                    },
-                    "@media (min-width: 321px) and(max-width: 376px)": {
-                      height: "120px",
-                    },
-                    "@media (min-width: 376px) and (max-width: 600px)": {
-                      height: "100px",
-                    },
-                    "@media(min-width:1600px)": {
-                      height: "250px",
-                    },
+                  },
+                  // 獨立處理媒體查詢的 maxWidth
+                  "@media (max-width: 321px)": {
+                    height: "95px",
+                  },
+                  "@media (min-width: 321px) and(max-width: 376px)": {
+                    height: "120px",
+                  },
+                  "@media (min-width: 376px) and (max-width: 599px)": {
+                    height: "100px",
                   },
                   mb: { xs: 1, sm: 1, md: 2, lg: 2 },
                   p: { xs: 0.5, sm: 1, md: 1, lg: 2 },
@@ -128,7 +126,6 @@ const FavoritePage: React.FC = () => {
                     : "3px solid rgba(0,0,0,0.2)",
                   position: "relative",
                   cursor: "pointer",
-                  boxShadow: "0 0 5px 3px rgba(0,0,0,0.2)",
                 }}
                 onClick={() => handleSetActive(episode.id)}
               >
@@ -151,10 +148,12 @@ const FavoritePage: React.FC = () => {
               src={listNull}
               alt="listNull"
               sx={{
-                width: { xs: "4rem", sm: "5rem", md: "6rem", lg: "7rem" },
-                "@media(min-width:1600px)": {
-                  fontSize: "3rem",
-                  width: "8rem",
+                width: {
+                  xs: "4rem",
+                  sm: "5rem",
+                  md: "6rem",
+                  lg: "7rem",
+                  xl: "7rem",
                 },
               }}
             />

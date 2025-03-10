@@ -37,10 +37,12 @@ const LoginPage: React.FC = () => {
       sx={{
         display: "flex",
         height: "100vh",
-        width: "100vw",
+        width: "100%",
         margin: "0 auto",
         textAlign: "center",
         boxShadow: "0 0 5px 2px rgba(0,0,0,0.7)",
+        maxWidth: "1440px",
+        maxHeight: "996px",
       }}
     >
       {/* 左邊區域 */}
