@@ -312,6 +312,7 @@ const EpisodeList: React.FC<EpisodeListProps> = ({ episode }) => {
               },
               "@media(min-width: 321px)and (max-width: 376px)": {
                 height: "45px",
+                width: "90%",
               },
               "@media (min-width: 376px) and (max-width: 599px)": {},
 
