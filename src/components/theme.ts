@@ -47,48 +47,42 @@ const theme = createTheme({
     fontFamily: "Noto Sans TC",
     h6: {
       fontWeight: 700,
-      "@media (max-width:320px)": {
-        fontSize: "0.9rem",
-      },
-      "@media (min-width:375px)": {
-        fontSize: "0.9rem",
-      },
-      "@media (min-width:425px)": {
-        fontSize: "0.9rem",
-      },
-      "@media (min-width:600px)": {
-        fontSize: "0.8em",
-      },
-      "@media (min-width:900px)": {
-        fontSize: "1.1rem",
-      },
-      "@media (min-width:1200px)": {
-        fontSize: "1.5rem",
-      },
-      "@media (min-width:1600px)": {
-        fontSize: "2rem",
-      },
+      // "@media (max-width:320px)": {
+      //   fontSize: "0.9rem",
+      // },
+      // "@media (min-width:375px)": {
+      //   fontSize: "0.9rem",
+      // },
+      // "@media (min-width:425px)": {
+      //   fontSize: "0.9rem",
+      // },
+      // "@media (min-width:600px)": {
+      //   fontSize: "0.8em",
+      // },
+      // "@media (min-width:900px)": {
+      //   fontSize: "1.1rem",
+      // },
+      // "@media (min-width:1200px)": {
+      //   fontSize: "1.5rem",
+      // },
     },
     body1: {
       fontWeight: 400,
-      "@media (max-width:320px)": {
-        fontSize: "0.8rem",
-      },
-      "@media (min-width:375px)": {
-        fontSize: "0.8rem",
-      },
-      "@media (min-width:600px)": {
-        fontSize: "0.8em",
-      },
-      "@media (min-width:900px)": {
-        fontSize: "1rem",
-      },
-      "@media (min-width:1200px)": {
-        fontSize: "1.2rem",
-      },
-      "@media (min-width:1600px)": {
-        fontSize: "1.5rem",
-      },
+      // "@media (max-width:320px)": {
+      //   fontSize: "0.8rem",
+      // },
+      // "@media (min-width:375px)": {
+      //   fontSize: "0.8rem",
+      // },
+      // "@media (min-width:600px)": {
+      //   fontSize: "0.8em",
+      // },
+      // "@media (min-width:900px)": {
+      //   fontSize: "1rem",
+      // },
+      // "@media (min-width:1200px)": {
+      //   fontSize: "1.2rem",
+      // },
     },
   },
   breakpoints: {

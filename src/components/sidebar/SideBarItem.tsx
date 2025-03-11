@@ -74,12 +74,14 @@ const SideBarItem: React.FC<SideBarItemProps> = ({
       xs: "100%",
       sm: "90%",
       md: "100%",
+      lg: "100%",
       xl: "110%",
     },
     padding: {
       xs: "8px 8px",
       sm: "8px 8px",
       md: "8px 8px",
+      lg: "100%",
       xl: "8px 10px",
     },
     "@media (max-width:321px)": {
@@ -90,13 +92,9 @@ const SideBarItem: React.FC<SideBarItemProps> = ({
       fontSize: "70%",
       padding: "8px 6px ",
     },
-    "@media (min-width:376px) and (max-width:600px)": {
+    "@media (min-width:376px) and (max-width:599px)": {
       fontSize: "90%",
       padding: "8px 6px ",
-    },
-    "@media (min-width:1600px)": {
-      fontSize: "130%",
-      padding: "15px 15px ",
     },
   };
 
@@ -121,6 +119,7 @@ const SideBarItem: React.FC<SideBarItemProps> = ({
           md: "0.4rem 0",
           xl: "0.5rem 0",
         },
+        // fontSize: "1rem",
       }}
     >
       {/* 使用 Box + Typography 控制字體大小 */}
@@ -129,12 +128,14 @@ const SideBarItem: React.FC<SideBarItemProps> = ({
       >
         <Box sx={{ width: "60%" }}>
           <Typography
-            variant="h6"
+            variant="h5"
             sx={{
               WebkitLineClamp: 1,
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
+              fontSize: "0.9rem",
+              fontWeight: "bold",
             }}
           >
             {text}
@@ -156,10 +157,9 @@ const SideBarItem: React.FC<SideBarItemProps> = ({
                 <MoreVertIcon
                   sx={{
                     color: isActive ? "#FEFEFE" : "inherit",
-                    fontSize: { xs: "0.8rem", sm: "0.9rem", md: "1.2rem" },
-                    "@media(min-width:1600px)": {
-                      fontSize: "2rem",
-                    },
+                    // fontSize: "1rem",
+                    // fontSize: { xs: "0.8rem", sm: "0.9rem", md: "1.2rem" },
+
                     padding: 0,
                   }}
                 />

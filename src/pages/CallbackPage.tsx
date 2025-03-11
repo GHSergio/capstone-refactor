@@ -156,6 +156,7 @@ const CallbackPage = () => {
         backgroundColor: "rgba(0, 0, 0, 0.5)",
         maxWidth: "1440px",
         maxHeight: "996px",
+        margin: "0 auto",
       }}
     >
       {loading ? (
@@ -205,13 +206,9 @@ const CallbackPage = () => {
                     fontSize: "1.5rem",
                     margin: "0.35rem",
                   },
-                  "@media(min-width:376px) and (max-width:600px)": {
+                  "@media(min-width:376px) and (max-width:599px)": {
                     fontSize: "1.8rem",
                     margin: "0.35rem",
-                  },
-                  "@media(min-width:1600px)": {
-                    fontSize: "12rem",
-                    margin: "1.8rem",
                   },
                 }}
               >
@@ -273,11 +270,8 @@ const CallbackPage = () => {
               "@media (min-width:321px) and (max-width:376px)": {
                 fontSize: "0.7rem",
               },
-              "@media(min-width:376px) and (max-width:600px)": {
+              "@media(min-width:376px) and (max-width:599px)": {
                 fontSize: "0.8rem",
-              },
-              "@media(min-width:1600px)": {
-                fontSize: "4rem",
               },
             }}
           >

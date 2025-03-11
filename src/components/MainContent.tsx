@@ -43,7 +43,7 @@ const MainContent = () => {
               padding: "0.2rem",
             },
             "@media (min-width:376px) and (max-width:599px)": {
-              margin: "20% auto 0 auto",
+              margin: "25% auto 0 auto",
               height: "95%",
               padding: "0.2rem",
             },

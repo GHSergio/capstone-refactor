@@ -57,9 +57,6 @@ const Sidebar: React.FC = () => {
       <Box
       // sx={{
       //   width: { xs: "80%", sm: "90%", md: "80%", lg: "70%", xl: "60%" },
-      //   "@media(min-width:1600px)": {
-      //     width: "40%",
-      //   },
       // }}
       >
         <SidebarAddItem />

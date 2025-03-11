@@ -35,10 +35,22 @@ const CardComponent: React.FC<CardComponentProps> = ({
           width: "100%",
           height: "100%",
           margin: "0 auto",
-          p: 3,
-          // boxShadow: "none",
-          // boxShadow: "0px 0px 2px 5px rgba(27, 29, 13, 0.24)",
           backgroundColor: "rgba(120, 170, 40, 0.2)",
+          padding: {
+            xs: "16px",
+          },
+          "@media (max-width: 321px)": {
+            fontSize: "1rem",
+            padding: "12px",
+          },
+          "@media(min-width: 321px)and (max-width: 376px)": {
+            fontSize: "1.25rem",
+            padding: "12px",
+          },
+          "@media (min-width: 376px) and (max-width: 599px)": {
+            fontSize: "1.25rem",
+            padding: "12px",
+          },
         }}
       >
         <CardMedia
@@ -57,6 +69,7 @@ const CardComponent: React.FC<CardComponentProps> = ({
         <CardContent
           sx={{
             padding: 0,
+            marginTop: 1,
           }}
         >
           {/* Podcast名稱 */}
@@ -69,10 +82,19 @@ const CardComponent: React.FC<CardComponentProps> = ({
               variant="h6"
               component="div"
               sx={{
-                fontSize: "0.9rem",
+                fontSize: "1.15rem",
                 textOverflow: "ellipsis",
                 overflow: "hidden",
                 whiteSpace: "nowrap",
+                "@media (max-width: 321px)": {
+                  fontSize: "0.9rem",
+                },
+                "@media(min-width: 321px)and (max-width: 376px)": {
+                  fontSize: "0.9rem",
+                },
+                "@media (min-width: 376px) and (max-width: 599px)": {
+                  fontSize: "0.9rem",
+                },
               }}
             >
               {name}
@@ -88,13 +110,22 @@ const CardComponent: React.FC<CardComponentProps> = ({
             placement="top"
           >
             <Typography
-              variant="body1"
+              variant="h6"
               color="text.secondary"
               sx={{
-                fontSize: "0.75rem",
+                fontSize: "0.8rem",
                 textOverflow: "ellipsis",
                 overflow: "hidden",
                 whiteSpace: "nowrap",
+                "@media (max-width: 321px)": {
+                  fontSize: "0.7rem",
+                },
+                "@media(min-width: 321px)and (max-width: 376px)": {
+                  fontSize: "0.7rem",
+                },
+                "@media (min-width: 376px) and (max-width: 599px)": {
+                  fontSize: "0.7rem",
+                },
               }}
             >
               {publisher}
@@ -114,17 +145,33 @@ const CardComponent: React.FC<CardComponentProps> = ({
             color="secondary"
             onClick={onMoreClick}
             sx={{
-              minWidth: 0,
-              padding: "0.2rem 0.2rem ",
+              padding: "0.2rem 0.4rem",
               borderRadius: "0.25rem",
               marginTop: "0.25rem",
+              "@media (max-width: 321px)": {
+                fontSize: "0.8rem",
+              },
+              "@media(min-width: 321px)and (max-width: 376px)": {
+                fontSize: "0.8rem",
+              },
+              "@media (min-width: 376px) and (max-width: 599px)": {
+                fontSize: "0.8rem",
+              },
             }}
           >
             <Typography
               sx={{
                 color: "#FFFFFF",
-                fontSize: "0.8rem",
-                lineHeight: { xs: "1rem", lg: "2rem" },
+                fontSize: "1rem",
+                "@media (max-width: 321px)": {
+                  fontSize: "0.8rem",
+                },
+                "@media(min-width: 321px)and (max-width: 376px)": {
+                  fontSize: "0.8rem",
+                },
+                "@media (min-width: 376px) and (max-width: 599px)": {
+                  fontSize: "0.8rem",
+                },
               }}
             >
               更多

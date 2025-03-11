@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  ListItem as MUIListItem,
+  // ListItem as MUIListItem,
   IconButton,
   useTheme,
   Typography,
@@ -36,14 +36,12 @@ const SidebarAddItem: React.FC = () => {
       }}
     >
       <Typography
-        variant="h6"
+        variant="h5"
         sx={{
           textAlign: "center",
           color: theme.palette.secondary.main,
-          fontSize: { xs: "70%", sm: "100%", md: "100%", lg: "120%" },
-          "@media (min-width:1600px)": {
-            fontSize: "150%",
-          },
+          fontSize: { xs: "1rem" },
+          fontWeight: "bold",
         }}
       >
         你的清單
@@ -60,9 +58,12 @@ const SidebarAddItem: React.FC = () => {
         >
           <AddIcon
             sx={{
-              fontSize: { xs: "70%", sm: "70%", md: "100%", lg: "100%" },
-              "@media (min-width:1600px)": {
-                fontSize: "150%",
+              fontSize: {
+                xs: "100%",
+                sm: "100%",
+                md: "100%",
+                lg: "100%",
+                xl: "100%",
               },
             }}
           />

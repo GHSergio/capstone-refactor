@@ -53,7 +53,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ isPaused }) => {
           position: "absolute",
           top: { xs: 60, sm: 70, md: 80, lg: 90, xl: 100 },
           width: "32vw",
-          maxWidth: "900px",
+          maxWidth: "720px",
           borderRadius: "0.8rem",
           overflow: "hidden",
           filter: "blur(41.8502px)",
@@ -78,7 +78,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ isPaused }) => {
           position: "absolute",
           top: { xs: 60, sm: 70, md: 80, lg: 90, xl: 100 },
           width: "30vw",
-          maxWidth: "900px",
+          maxWidth: "720px",
           borderRadius: "0.8rem",
           overflow: "hidden",
         }}
@@ -100,9 +100,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ isPaused }) => {
         sx={{
           position: "absolute",
           top: { xs: 160, sm: 260, md: 380, lg: 492 },
-          "@media(min-width:1600px)": {
-            top: 950,
-          },
+
           width: "35vw",
           display: "flex",
           flexDirection: "column",
@@ -120,9 +118,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ isPaused }) => {
                 md: "1.6rem",
                 lg: "2rem",
               },
-              // "@media(min-width:1600px)": {
-              //   fontSize: "3rem",
-              // },
+
               fontFamily: "Noto Sans TC",
               fontWeight: 700,
             }}
@@ -139,9 +135,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ isPaused }) => {
                 md: "0.7rem",
                 lg: "0.9rem",
               },
-              // "@media(min-width:1600px)": {
-              //   fontSize: "1.5rem",
-              // },
+
               marginTop: { xs: "0.5rem", lg: "1.2rem" },
               fontFamily: "Poppins",
             }}
@@ -155,7 +149,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ isPaused }) => {
       <Box
         sx={{
           position: "absolute",
-          width: "48vw",
+          width: "95%",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
@@ -199,9 +193,6 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ isPaused }) => {
           gap: "1.25vw",
           position: "absolute",
           bottom: { xs: 50, sm: 70, md: 120, lg: 137 },
-          // "@media(min-width:1600px)": {
-          //   bottom: 230,
-          // },
         }}
       >
         {images.map((_, index) => (
